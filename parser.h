@@ -50,22 +50,14 @@ public:
 
     DataSet::Test CreateTest( QByteArray array);
 
-    DataSet::AggSize QBAtoAggSize(QByteArray &in);
-    tm QBAtoDateTime(QByteArray &in);
-    DataSet::Density QBAtoDensity(QByteArray &in);
-    DataSet::Moh QBAtoMoh(QByteArray &in);
-    DataSet::Power QBAtoPower(QByteArray &in);
-    DataSet::Units QBAtoUnits(QByteArray &in);
-    std::vector<long> QBAtoVectorADC(QByteArray &in);
-    DataSet::Weight QBAtoWeight(QByteArray &in);
-
+    QString ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test);
+    QString ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test);
     QDateTime ToQDateTime(std::vector<DataSet::Test>::iterator itr_test);
-    QString ToQStrAggsize(std::vector<DataSet::Test>::iterator itr_test);
-    QString ToQStrDensity(std::vector<DataSet::Test>::iterator itr_test);
-    QString ToQStrMoh(std::vector<DataSet::Test>::iterator itr_test);
-    QString ToQStrPower(std::vector<DataSet::Test>::iterator itr_test);
+    QString ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test);
+    QString ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test);
+    QString ToQStrRate(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test);
-    QString ToQStrWeight(std::vector<DataSet::Test>::iterator itr_test);
+    QString ToQStrWave(std::vector<DataSet::Test>::iterator itr_test);
 
     DataSet* Data;
 
@@ -74,6 +66,15 @@ private:
 
     qint64 HexQByteArraytoInt(QByteArray &in);
     QByteArray RemoveAscii(QByteArray &in);
+
+    DataSet::AmpGain QBAtoAmpGain(QByteArray &in);
+    DataSet::Calc QBAtoCalc(QByteArray &in);
+    tm QBAtoDateTime(QByteArray &in);
+    DataSet::EMethod QBAtoEMethod(QByteArray &in);
+    DataSet::Pulse QBAtoPulse(QByteArray &in);
+    DataSet::Rate QBAtoRate(QByteArray &in);
+    DataSet::Units QBAtoUnits(QByteArray &in);
+    DataSet::Wave QBAtoWave(QByteArray &in);
 
     //for Constructor
     static int ADCZeroLength(void){return(1);}
