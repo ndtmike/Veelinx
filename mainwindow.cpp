@@ -96,14 +96,14 @@ void MainWindow::about()
     QString s;
     QTextStream toabout(&s);
 
-    toabout << tr("The <b>Windsorlinx Software</b> is used with the <br>") <<
-               tr("<b><i>James Instruments Inc.</i></b> Windsor Probe HP Z-WP-1000.<br><br>")<<
+    toabout << tr("The <b>Veelinx Software</b> is used with the <br>") <<
+               tr("<b><i>James Instruments Inc.</i></b> V-Meter MK IV.<br><br>")<<
                tr("USA: +1773.4636565<br>")<<
                tr("Europe: +31.548.659032<br>")<<
                tr("Email: <a href=\"mailto:info@ndtjames.com?Subject=Windsorlinx\" target=\"_top\">info@ndtjames.com</a><br>")<<
                tr("Web: <a href=\"http://www.ndtjames.com\">http://www.ndtjames.com</a><br>")<<
-               tr("Copyright 2016<br>")<<
-               tr("Windsorlinx is based in part on the work of the <a href=\"http://qwt.sf.net\"> Qwt project (http://qwt.sf.net)");
+               tr("Copyright 2017<br>")<<
+               tr("Veelinx is based in part on the work of the <a href=\"http://qwt.sf.net\"> Qwt project (http://qwt.sf.net)");
 
     QMessageBox::information(this, tr("About Windsorlinx"), s);
 }

@@ -48,7 +48,7 @@ public:
     std::vector<DataSet::Test>::iterator GetBeginItr();
     std::vector<DataSet::Test>::iterator GetEndItr();
 
-    DataSet::Test CreateTest( QByteArray array);
+    DataSet::Test CreateTest( QStringList sl);
 
     QString ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test);
@@ -67,14 +67,14 @@ private:
     qint64 HexQByteArraytoInt(QByteArray &in);
     QByteArray RemoveAscii(QByteArray &in);
 
-    DataSet::AmpGain QBAtoAmpGain(QByteArray &in);
-    DataSet::Calc QBAtoCalc(QByteArray &in);
-    tm QBAtoDateTime(QByteArray &in);
-    DataSet::EMethod QBAtoEMethod(QByteArray &in);
-    DataSet::Pulse QBAtoPulse(QByteArray &in);
-    DataSet::Rate QBAtoRate(QByteArray &in);
-    DataSet::Units QBAtoUnits(QByteArray &in);
-    DataSet::Wave QBAtoWave(QByteArray &in);
+    DataSet::AmpGain QStringtoAmpGain(QString in);
+    DataSet::Calc QStringtoCalc(QString in);
+    tm QStringtoDateTime(QString in);
+    DataSet::EMethod QStringtoEMethod(QString in);
+//    DataSet::Pulse QStringtoPulse(QString in);
+//    DataSet::Rate QStringtoRate(QString in);
+    DataSet::Units QStringtoUnits(QString in);
+    DataSet::Wave QStringtoWave(QString in);
 
     //for Constructor
     static int ADCZeroLength(void){return(1);}

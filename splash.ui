@@ -17,7 +17,7 @@
    <enum>Qt::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string notr="true">Windsorlinx</string>
+   <string notr="true">Veelinx</string>
   </property>
   <property name="windowIcon">
    <iconset>

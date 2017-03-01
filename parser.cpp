@@ -18,16 +18,15 @@
 
 Parser::Parser( QWidget*, const QByteArray &in ) //no parameter for QWidget Pointer it is not used
 {
-    QByteArray copy = in;
+//    QByteArray copy = in;
+    QString strcopy = QString::QString( in );
+    QStringList strlistcopy = strcopy.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+
     Data = new DataSet;
 
-    copy = copy.remove(0,1);  //remove number of sets
-    for(qint64 i=0; copy.size() > 0 ; i+=DataSetSize()){
-        QByteArray d = copy.left(DataSetSize());
-        copy = copy.remove(0,(int)DataSetSize());
-        DataSet::Test newtest = CreateTest(d);
-        Data->AddTest(newtest);
-    }
+    DataSet::Test newtest = CreateTest(strlistcopy);
+
+    Data->AddTest(newtest);
 }
 
 Parser::~Parser()
@@ -44,16 +43,28 @@ std::vector<DataSet::Test>::iterator Parser::GetEndItr()
     return(Data->GetEndItr());
 }
 
-DataSet::Test Parser::CreateTest(QByteArray array)
+DataSet::Test Parser::CreateTest(QStringList sl)
 {
-    QByteArray clean = array;
-    QByteArray qbatime, qbapwr, qbadensity, qbaweight,
-            qbamoh, qbaunits, qbaaggsize;
-    tm test_time;
-
     DataSet::Test return_test;
+    int n;//index
 
+    n = sl.indexOf(QRegExp("Gain:"));
+    return_test.TestProp.PropAmpGain = QStringtoAmpGain( sl.at(n));
 
+    n=sl.indexOf(QRegExp("Measured"));
+    return_test.TestProp.PropCalc = QStringtoCalc( sl.at(n));
+
+    n = sl.indexOf(QRegExp("Date/Time:"));
+    return_test.TestTime = QStringtoDateTime( sl.at(n) );
+
+    n=sl.indexOf(QRegExp("Young's modulus:"));
+    return_test.TestProp.PropEMethod = QStringtoEMethod(sl.at(n));
+
+    n=sl.indexOf(QRegExp("feet/second"));
+    return_test.TestProp.PropEMethod = QStringtoEMethod(sl.at(n));
+
+    n=sl.indexOf(QRegExp("WAVE TYPE:"));
+    return_test.TestProp.PropWave = QStringtoWave(sl.at(n));
 
     return(return_test);
 }
@@ -68,11 +79,6 @@ QByteArray Parser::RemoveAscii(QByteArray &in){
     return(out);
 }
 
-DataSet::AmpGain Parser::QBAtoAmpGain(QByteArray &in)
-{
-
-}
-
 qint64 Parser::HexQByteArraytoInt(QByteArray &in)
 {
     QByteArray data = in;
@@ -84,7 +90,22 @@ qint64 Parser::HexQByteArraytoInt(QByteArray &in)
     return(out);
 }
 
-tm Parser::QBAtoDateTime(QByteArray &in)
+DataSet::AmpGain Parser::QStringtoAmpGain(QString in)
+{
+    DataSet::AmpGain return_value;
+
+    return(return_value);
+}
+
+DataSet::Calc Parser::QStringtoCalc(QString in)
+{
+    DataSet::Calc return_value;
+
+    return(return_value);
+}
+
+
+tm Parser::QStringtoDateTime(QString in)
 {
     qint64 month, day, year, hour, minute;
     tm return_tm;
@@ -92,35 +113,44 @@ tm Parser::QBAtoDateTime(QByteArray &in)
     return(return_tm);
 }
 
-DataSet::Wave Parser::QBAtoWave(QByteArray &in)
+DataSet::EMethod Parser::QStringtoEMethod(QString in)
 {
+    DataSet::EMethod return_value;
 
+    return(return_value);
 }
 
-DataSet::Rate Parser::QBAtoRate(QByteArray &in)
-{
 
+DataSet::Wave Parser::QStringtoWave(QString in)
+{
+    DataSet::Wave return_value;
+
+    return(return_value);
 }
 
-DataSet::Pulse Parser::QBAtoPulse(QByteArray &in)
+/*
+DataSet::Rate Parser::QStringtoRate(QString in)
 {
+    DataSet::Rate return_value;
 
+    return(return_value);
 }
 
-DataSet::Units Parser::QBAtoUnits(QByteArray &in)
+DataSet::Pulse Parser::QStringtoPulse(QString in)
 {
+    DataSet::Pulse return_value;
 
+    return(return_value);
+}
+*/
+
+DataSet::Units Parser::QStringtoUnits(QString in)
+{
+    DataSet::Units return_value;
+
+    return(return_value);
 }
 
-DataSet::Calc Parser::QBAtoCalc(QByteArray &in)
-{
-
-}
-
-DataSet::EMethod Parser::QBAtoEMethod(QByteArray &in)
-{
-
-}
 
 
 QDateTime Parser::ToQDateTime(std::vector<DataSet::Test>::iterator itr_test)
@@ -138,35 +168,49 @@ QDateTime Parser::ToQDateTime(std::vector<DataSet::Test>::iterator itr_test)
 
 QString Parser::ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QString return_string;
 
+    return(return_string);
 }
 
 QString Parser::ToQStrWave(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QString return_string;
 
+    return(return_string);
 }
 
 QString Parser::ToQStrRate(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QString return_string;
 
+    return(return_string);
 }
 
 QString Parser::ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QString return_string;
 
+    return(return_string);
 }
 
 QString Parser::ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QString return_string;
 
+    return(return_string);
 }
 
 QString Parser::ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QString return_string;
 
+    return(return_string);
 }
 
 QString Parser::ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QString return_string;
 
+    return(return_string);
 }
