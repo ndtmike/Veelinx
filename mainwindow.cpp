@@ -288,7 +288,7 @@ void MainWindow::LNGLoadTranslator()
 }
 void MainWindow::loadExampleFile()
 {
-    saveFileName = "C:/Users/Mike/Documents/Projects/Windsorlinx/Example File/Example1.txt";
+    saveFileName = "C:/Users/Mike/Documents/Projects/Veelinx/ExampleFile/ReviewDataSet-2013_04_02 15_43_03.txt";
     QFile file(saveFileName);
     file.open(QFile::ReadOnly | QFile::Text);
     QTextStream load(&file);

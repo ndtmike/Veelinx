@@ -64,6 +64,8 @@ public:
 private:
     static qint64 DataSetSize(void){return(16);}
 
+    std::vector<long> CreateADC( QStringList sl );
+    DataSet::Prop CreateProp(QStringList sl);
     qint64 HexQByteArraytoInt(QByteArray &in);
     QByteArray RemoveAscii(QByteArray &in);
 
@@ -72,7 +74,7 @@ private:
     tm QStringtoDateTime(QString in);
     DataSet::EMethod QStringtoEMethod(QString in);
 //    DataSet::Pulse QStringtoPulse(QString in);
-//    DataSet::Rate QStringtoRate(QString in);
+    DataSet::Rate QStringtoRate(QString in);
     DataSet::Units QStringtoUnits(QString in);
     DataSet::Wave QStringtoWave(QString in);
 

@@ -33,7 +33,7 @@ class DataSet
 public:
     enum AmpGain{ Gain_1, GAIN_5, GAIN_10, GAIN_25, GAIN_50, GAIN_100, GAIN_250, GAIN_500 };
     enum Wave{ PWave, SWave };
-    enum Rate{ RATE_250MHZ, RATE_500MHZ, RATE_1000MHZ, RATE_2000MHZ };
+    enum Rate{ RATE_250KHZ, RATE_500KHZ, RATE_1000KHZ, RATE_2000KHZ };
     enum Units{ Imperial, Metric};
     enum Pulse{ PulsePerSeq_1, PulsePerSeq_3, PulsePerSeq_10};
     enum Calc{ Dist, Vel };
