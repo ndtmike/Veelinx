@@ -54,9 +54,9 @@ public:
     QString ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test);
     QDateTime ToQDateTime(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test);
-    QString ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test);
+//    QString ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrRate(std::vector<DataSet::Test>::iterator itr_test);
-    QString ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test);
+//    QString ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrWave(std::vector<DataSet::Test>::iterator itr_test);
 
     DataSet* Data;
@@ -75,34 +75,8 @@ private:
     DataSet::EMethod QStringtoEMethod(QString in);
 //    DataSet::Pulse QStringtoPulse(QString in);
     DataSet::Rate QStringtoRate(QString in);
-    DataSet::Units QStringtoUnits(QString in);
+//    DataSet::Units QStringtoUnits(QString in);
     DataSet::Wave QStringtoWave(QString in);
-
-    //for Constructor
-    static int ADCZeroLength(void){return(1);}
-    static int ADCZeroPos(void){return(11);}
-    static int ADCFullScaleLength(void){return(1);}
-    static int ADCFullScalePos(void){return(12);}
-    static int ADCData0Length(void){return(1);}
-    static int ADCData0Pos(void){return(13);}
-    static int ADCData1Length(void){return(1);}
-    static int ADCData1Pos(void){return(14);}
-    static int ADCData2Length(void){return(1);}
-    static int ADCData2Pos(void){return(15);}
-    static int AggSizeLength(void){return(1);}
-    static int AggSizePos(void){return(10);}
-    static int DensityLength(void){return(1);}
-    static int DensityPos(void){return(6);}
-    static int HexToDec(void){return(16);}
-    static int MohLength(void){return(1);}
-    static int MohPos(void){return(8);}
-    static int PWRLength(void){return(1);}
-    static int PWRPos(void){return(5);}
-    static int TimeLength(void){return(5);}
-    static int WeightLength(void){return(1);}
-    static int WeightPos(void){return(7);}
-    static int UnitsLength(void){return(1);}
-    static int UnitsPos(void){return(9);}
 };
 
 #endif // PARSER_H

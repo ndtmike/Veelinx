@@ -57,6 +57,12 @@ MainWindow::MainWindow(QWidget *parent) :
     serial = new QSerialPort(this);
     serialTimeOut = new QTimer(this);
 
+    CurrentLocale = QLocale::system(); //standardized number strings
+    QString systemlocale = CurrentLocale.name();
+    CurrentLocale = QLocale(systemlocale);
+    QLocale::setDefault(CurrentLocale);
+    Translator = new QTranslator(this);
+
     initActionsConnections();
     saveFileName = "";
 
@@ -175,22 +181,24 @@ void MainWindow::cleanData()//main function that takes raw data and transforms t
     Parser p( this, Data );
 
     qint64 i = 0;
+
     for( std::vector<DataSet::Test>::iterator itr = p.Data->GetBeginItr();
-         itr != p.Data->GetEndItr();++i,++itr){
+         itr != p.Data->GetEndItr();++i,++itr ){
 
         QLocale::setDefault(CurrentLocale);
         LNGLoadTranslator();
 
-        display << tr("Test Number: ")<< i+1 <<'\n'
+ QString test = p.ToQStrRate(itr);
+
+        display << "James Instruments Inc. V-Meter MK IV Veelinx 1.0"<< '\n'
+                << tr("Test Number: ")<< i+1 <<'\t'
                 << p.ToQDateTime(itr).toString(CurrentLocale.timeFormat(QLocale::ShortFormat))<<' '
                 << p.ToQDateTime(itr).toString(CurrentLocale.dateFormat(QLocale::ShortFormat))/*("MM/dd/yyyy hh:mm")*/ <<'\n'
-/*                << tr("Power: ") << p.ToQStrPower(itr) << '\t'
-                << tr("Density: ") << p.ToQStrDensity(itr) << '\n'
-                << tr("Moh: ") << p.ToQStrMoh( itr ) << '\t'
-                << tr("Units: ") << p.ToQStrUnits( itr ) << '\n'
-                << tr("Aggregate Size: ") << p.ToQStrAggsize( itr ) << '\n'
-                << tr("Concrete Weight: ") << p.ToQStrWeight( itr ) << '\n' << '\n'*/
-                << resultsFormat( p , itr );
+                << tr("Amplifier Gain ") << p.ToQStrAmpGain(itr) << '\t'
+                << tr("Calculate: ") << p.ToQStrCalc(itr) << '\n'
+                << tr("E Method: ")<< p.ToQStrEMethod(itr) << '\t'
+                << tr("Wave Type: ")<< p.ToQStrWave(itr) << '\n'
+                << tr("Capture Rate: ")<< p.ToQStrRate(itr) << '\n';
     }
     console->setPlainText( buffer );
     DataUpload = true;

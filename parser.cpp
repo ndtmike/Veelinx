@@ -18,7 +18,6 @@
 
 Parser::Parser( QWidget*, const QByteArray &in ) //no parameter for QWidget Pointer it is not used
 {
-//    QByteArray copy = in;
     QString strcopy = QString::QString( in );
     QStringList strlistcopy = strcopy.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
 
@@ -71,8 +70,22 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     n=sl.indexOf(QRegExp(".*Young's modulus:.*"));
     return_prop.PropEMethod = QStringtoEMethod(sl.at(n));
 
+    n=sl.indexOf(QRegExp(".*Capture.*"));
+    return_prop.PropRate = QStringtoRate(sl.at(n));
+
     n=sl.indexOf(QRegExp(".*feet/second.*"));
-    return_prop.PropEMethod = QStringtoEMethod(sl.at(n));
+    if(n != -1 ){
+        return_prop.PropUnits = DataSet::Imperial;
+    }else{
+        return_prop.PropUnits = DataSet::Metric;
+    }
+
+    n=sl.indexOf(QRegExp(".*Measured P-VELOCITY:.*"));
+    if(n != -1 ){
+        return_prop.PropCalc = DataSet::Vel;
+    }else{
+        return_prop.PropCalc = DataSet::Dist;
+    }
 
     n=sl.indexOf(QRegExp(".*WAVE TYPE:.*"));
     return_prop.PropWave = QStringtoWave(sl.at(n));
@@ -85,15 +98,20 @@ DataSet::Test Parser::CreateTest(QStringList sl)
 {
     DataSet::Test return_test;
     int n;//index
+    bool ok = true;
 
     QStringList header = sl.mid(0,8);
-    QStringList adc_data = sl.mid(9,sl.size()-9);
+    QStringList adc_data = sl.mid(8,sl.size()-8);
 
     return_test.TestProp = CreateProp( header);
-    return_test.ADC = CreateADC(adc_data);
 
-    n = sl.indexOf(QRegExp(".*Date/Time:.*"));
+    n = header.indexOf(QRegExp(".*Date/Time:.*"));
     return_test.TestTime = QStringtoDateTime( sl.at(n) );
+
+    n = header.indexOf(QRegExp(".*Transit Time:.*"));
+    return_test.TransitTime = sl.at(n).mid(14,6).toDouble( &ok );
+
+    return_test.ADC = CreateADC(adc_data);
 
     return(return_test);
 }
@@ -130,15 +148,15 @@ DataSet::AmpGain Parser::QStringtoAmpGain(QString in)
     }else if( in.contains(" 10 ")){
         return_value = DataSet::GAIN_10;
     }else if( in.contains(" 25 ")){
-        return_value = DataSet::GAIN_10;
+        return_value = DataSet::GAIN_25;
     }else if( in.contains(" 50 ")){
-        return_value = DataSet::GAIN_10;
+        return_value = DataSet::GAIN_50;
     }else if( in.contains(" 100 ")){
-        return_value = DataSet::GAIN_10;
+        return_value = DataSet::GAIN_100;
     }else if( in.contains(" 250 ")){
-        return_value = DataSet::GAIN_10;
+        return_value = DataSet::GAIN_250;
     }else if( in.contains(" 500 ")){
-        return_value = DataSet::GAIN_10;
+        return_value = DataSet::GAIN_500;
     }
 
     return(return_value);
@@ -204,11 +222,11 @@ DataSet::EMethod Parser::QStringtoEMethod(QString in)
 {
     DataSet::EMethod return_value;
 
-    if( in.contains(" SIMPLE ")){
+    if( in.contains("SIMPLE")){
         return_value = DataSet::SimpleE;
-    }else if( in.contains(" ARBITRARY ")){
+    }else if( in.contains("ARBITRARY")){
         return_value = DataSet::ArbMu;
-    }else if( in.contains(" DERIVED ")){
+    }else if( in.contains("DERIVED")){
         return_value = DataSet::DerivedMu;
     }
 
@@ -228,13 +246,13 @@ DataSet::Rate Parser::QStringtoRate(QString in)
 {
     DataSet::Rate return_value;
 
-    if( in.contains(" 250 kHz ")){
+    if( in.contains(tr(" 250 kHz "))){
         return_value = DataSet::RATE_250KHZ;
-    }else if( in.contains(" 500 kHz ")){
+    }else if( in.contains(tr(" 500 kHz "))){
         return_value = DataSet::RATE_500KHZ;
-    }else if( in.contains(" 1.0 mHz ")){
+    }else if( in.contains(tr(" 1.0 mHz "))){
         return_value = DataSet::RATE_1000KHZ;
-    }else if( in.contains(" 2.0 mHz ")){
+    }else if( in.contains(tr(" 2.0 mHz "))){
         return_value = DataSet::RATE_2000KHZ;
     }
 
@@ -245,23 +263,14 @@ DataSet::Wave Parser::QStringtoWave(QString in)
 {
     DataSet::Wave return_value;
 
-    if( in.contains(" 'P' ")){
+    if( in.contains("'P'")){
         return_value = DataSet::PWave;
-    }else if( in.contains(" 'S' ")){
+    }else if( in.contains("'S'")){
         return_value = DataSet::SWave;
     }
 
     return(return_value);
 }
-
-DataSet::Units Parser::QStringtoUnits(QString in)
-{
-    DataSet::Units return_value;
-
-    return(return_value);
-}
-
-
 
 QDateTime Parser::ToQDateTime(std::vector<DataSet::Test>::iterator itr_test)
 {
@@ -280,6 +289,32 @@ QString Parser::ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
 
+    switch (Data->GetTest( itr_test ).TestProp.PropAmpGain) {
+    case DataSet::Gain_1:
+         return_string = tr(" 1 ");
+         break;
+    case DataSet::GAIN_5:
+        return_string = tr(" 5 ");
+        break;
+    case DataSet::GAIN_10:
+         return_string = tr(" 10 ");
+         break;
+    case DataSet::GAIN_25:
+        return_string = tr(" 25 ");
+        break;
+    case DataSet::GAIN_50:
+         return_string = tr(" 50 ");
+         break;
+    case DataSet::GAIN_100:
+        return_string = tr(" 100 ");
+        break;
+    case DataSet::GAIN_250:
+         return_string = tr(" 250 ");
+         break;
+    case DataSet::GAIN_500:
+        return_string = tr(" 500 ");
+        break;
+    }
     return(return_string);
 }
 
@@ -287,6 +322,14 @@ QString Parser::ToQStrWave(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
 
+    switch (Data->GetTest( itr_test ).TestProp.PropWave) {
+    case DataSet::Gain_1:
+         return_string = tr(" 'P' ");
+         break;
+    case DataSet::GAIN_5:
+        return_string = tr(" 'S' ");
+        break;
+    }
     return(return_string);
 }
 
@@ -295,9 +338,23 @@ QString Parser::ToQStrRate(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
 
+    switch (Data->GetTest( itr_test ).TestProp.PropRate) {
+    case DataSet::RATE_250KHZ:
+         return_string = tr(" 250 KHz ");
+         break;
+    case  DataSet::RATE_500KHZ:
+        return_string = tr(" 500 KHz ");
+        break;
+    case  DataSet::RATE_1000KHZ:
+        return_string = tr(" 1.0 MHz ");
+        break;
+    case DataSet::RATE_2000KHZ:
+         return_string = tr(" 2.0 MHz ");
+         break;
+    }
     return(return_string);
 }
-
+/*
 QString Parser::ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
@@ -311,10 +368,19 @@ QString Parser::ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test)
 
     return(return_string);
 }
-
+*/
 QString Parser::ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
+
+    switch (Data->GetTest( itr_test ).TestProp.PropCalc) {
+    case DataSet::Dist:
+         return_string = tr(" Distance ");
+         break;
+    case  DataSet::Vel:
+        return_string = tr(" Velocity ");
+        break;
+    }
 
     return(return_string);
 }
@@ -323,5 +389,16 @@ QString Parser::ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
 
+    switch (Data->GetTest( itr_test ).TestProp.PropEMethod) {
+    case DataSet::SimpleE:
+         return_string = tr(" SIMPLE ");
+         break;
+    case  DataSet::ArbMu:
+        return_string = tr(" ARBITRARY ");
+        break;
+    case  DataSet::DerivedMu:
+        return_string = tr(" DERIVED ");
+        break;
+    }
     return(return_string);
 }

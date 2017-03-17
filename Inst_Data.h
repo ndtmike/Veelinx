@@ -45,7 +45,7 @@ public:
         Wave PropWave;
         Rate PropRate;
         Units PropUnits;
-        Pulse PropPulse;
+//        Pulse PropPulse;
         Calc PropCalc;
         EMethod PropEMethod;
     };
