@@ -56,8 +56,10 @@ public:
     QString ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test);
 //    QString ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrRate(std::vector<DataSet::Test>::iterator itr_test);
+    QString ToQStrTransitTime(std::vector<DataSet::Test>::iterator itr_test);
 //    QString ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrWave(std::vector<DataSet::Test>::iterator itr_test);
+
 
     DataSet* Data;
 

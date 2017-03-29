@@ -18,7 +18,7 @@
 
 Parser::Parser( QWidget*, const QByteArray &in ) //no parameter for QWidget Pointer it is not used
 {
-    QString strcopy = QString::QString( in );
+    QString strcopy( in );
     QStringList strlistcopy = strcopy.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
 
     Data = new DataSet;
@@ -70,24 +70,24 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     n=sl.indexOf(QRegExp(".*Young's modulus:.*"));
     return_prop.PropEMethod = QStringtoEMethod(sl.at(n));
 
-    n=sl.indexOf(QRegExp(".*Capture.*"));
+    n=sl.indexOf(QRegExp(".*Rate:.*"));
     return_prop.PropRate = QStringtoRate(sl.at(n));
 
-    n=sl.indexOf(QRegExp(".*feet/second.*"));
+    n=sl.indexOf(QRegExp(".*feet/second"));
     if(n != -1 ){
         return_prop.PropUnits = DataSet::Imperial;
     }else{
         return_prop.PropUnits = DataSet::Metric;
     }
 
-    n=sl.indexOf(QRegExp(".*Measured P-VELOCITY:.*"));
+    n=sl.indexOf(QRegExp("Measured P-VELOCITY:.*"));
     if(n != -1 ){
         return_prop.PropCalc = DataSet::Vel;
     }else{
         return_prop.PropCalc = DataSet::Dist;
     }
 
-    n=sl.indexOf(QRegExp(".*WAVE TYPE:.*"));
+    n=sl.indexOf(QRegExp("WAVE TYPE:.*"));
     return_prop.PropWave = QStringtoWave(sl.at(n));
 
     return(return_prop);
@@ -108,8 +108,8 @@ DataSet::Test Parser::CreateTest(QStringList sl)
     n = header.indexOf(QRegExp(".*Date/Time:.*"));
     return_test.TestTime = QStringtoDateTime( sl.at(n) );
 
-    n = header.indexOf(QRegExp(".*Transit Time:.*"));
-    return_test.TransitTime = sl.at(n).mid(14,6).toDouble( &ok );
+    n = header.indexOf(QRegExp("Transit Time:.*"));
+    return_test.TransitTime = sl.at(n).mid(14,7).toDouble( &ok );
 
     return_test.ADC = CreateADC(adc_data);
 
@@ -191,27 +191,29 @@ tm Parser::QStringtoDateTime(QString in)
     return_tm.tm_mon = working_int;
 
     current_pos += 3;
-    working_qstring = in.mid( current_pos, 2 );//month
+    working_qstring = in.mid( current_pos, 2 );//day
     working_int = working_qstring.toInt( &ok );
     return_tm.tm_mday = working_int;
 
     current_pos += 3;
-    working_qstring = in.mid( current_pos, 2 );//month
+    working_qstring = in.mid( current_pos, 2 );//year
     working_int = working_qstring.toInt( &ok );
     return_tm.tm_year = working_int;
 
     current_pos += 3;
-    working_qstring = in.mid( current_pos, 2 );//month
+    working_qstring = in.mid( current_pos, 2 );//hour
     working_int = working_qstring.toInt( &ok );
+    if(in.indexOf("PM") != -1)
+        working_int +=12;
     return_tm.tm_hour = working_int;
 
     current_pos += 3;
-    working_qstring = in.mid( current_pos, 2 );//month
+    working_qstring = in.mid( current_pos, 2 );//min
     working_int = working_qstring.toInt( &ok );
     return_tm.tm_min = working_int;
 
     current_pos += 3;
-    working_qstring = in.mid( current_pos, 2 );//month
+    working_qstring = in.mid( current_pos, 2 );//sec
     working_int = working_qstring.toInt( &ok );
     return_tm.tm_sec = working_int;
 
@@ -340,10 +342,10 @@ QString Parser::ToQStrRate(std::vector<DataSet::Test>::iterator itr_test)
 
     switch (Data->GetTest( itr_test ).TestProp.PropRate) {
     case DataSet::RATE_250KHZ:
-         return_string = tr(" 250 KHz ");
+         return_string = tr(" 250 kHz ");
          break;
     case  DataSet::RATE_500KHZ:
-        return_string = tr(" 500 KHz ");
+        return_string = tr(" 500 kHz ");
         break;
     case  DataSet::RATE_1000KHZ:
         return_string = tr(" 1.0 MHz ");
@@ -353,6 +355,14 @@ QString Parser::ToQStrRate(std::vector<DataSet::Test>::iterator itr_test)
          break;
     }
     return(return_string);
+}
+
+QString Parser::ToQStrTransitTime(std::vector<DataSet::Test>::iterator itr_test)
+{
+    double return_double = Data->GetTest( itr_test ).TransitTime;
+    QString return_string = QString( "%1" ).arg(return_double, 3, 'f', 1);
+
+    return( return_string );
 }
 /*
 QString Parser::ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test)
