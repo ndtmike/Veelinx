@@ -45,7 +45,6 @@ public:
         Wave PropWave;
         Rate PropRate;
         Units PropUnits;
-//        Pulse PropPulse;
         Calc PropCalc;
         EMethod PropEMethod;
     };
@@ -69,7 +68,7 @@ private:
 
     std::vector <Test> TestData;
 
-    //return vector constants for length and strenght
+    //return vector constants for length and strength
 
     // for TestStrength
 
@@ -77,7 +76,7 @@ private:
     static double MPAtoPSI(void){return(145.0);}
 
     //Calculate Standard Tables
-    double CalStdTable(double b, double m, double length, double min);
+    //double CalStdTable(double b, double m, double length, double min);
 };
 
 #endif // INST_DATA_H

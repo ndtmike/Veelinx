@@ -50,16 +50,15 @@ public:
 
     DataSet::Test CreateTest( QStringList sl);
 
+    QStringList ToQSLADC( std::vector<DataSet::Test>::iterator itr_test );
     QString ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test);
     QDateTime ToQDateTime(std::vector<DataSet::Test>::iterator itr_test);
+    QString ToQStrDensity(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test);
-//    QString ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrRate(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrTransitTime(std::vector<DataSet::Test>::iterator itr_test);
-//    QString ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrWave(std::vector<DataSet::Test>::iterator itr_test);
-
 
     DataSet* Data;
 
@@ -74,8 +73,8 @@ private:
     DataSet::AmpGain QStringtoAmpGain(QString in);
     DataSet::Calc QStringtoCalc(QString in);
     tm QStringtoDateTime(QString in);
+    unsigned QStringtoDensity(QString in);
     DataSet::EMethod QStringtoEMethod(QString in);
-//    DataSet::Pulse QStringtoPulse(QString in);
     DataSet::Rate QStringtoRate(QString in);
 //    DataSet::Units QStringtoUnits(QString in);
     DataSet::Wave QStringtoWave(QString in);

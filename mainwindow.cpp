@@ -196,12 +196,16 @@ void MainWindow::cleanData()//main function that takes raw data and transforms t
                 << tr("Transit Time: ")<< p.ToQStrTransitTime(itr) << ' ' << QChar(0xB5) << 's' << '\n'
                 << tr("Capture Rate: ")<< p.ToQStrRate(itr) << '\t'
                 << tr("Amplifier Gain ") << p.ToQStrAmpGain(itr) << '\t'
-                << tr("Density: ") << '\n'
+                << tr("Density: ") << p.ToQStrDensity(itr) << '\n'
                 << tr("Wave Type: ")<< p.ToQStrWave(itr) << '\n'
                 << tr("Calculate: ") << p.ToQStrCalc(itr) << '\t'
                 << tr("E Method: ")<< p.ToQStrEMethod(itr) << '\t';
     }
+
     console->setPlainText( buffer );
+
+
+
     DataUpload = true;
 }
 
@@ -210,6 +214,8 @@ void MainWindow::copy()
     console->selectAll();
     console->copy();
 }
+
+
 
 void MainWindow::closeSerialPort()
 {

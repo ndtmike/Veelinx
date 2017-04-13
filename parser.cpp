@@ -90,6 +90,9 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     n=sl.indexOf(QRegExp("WAVE TYPE:.*"));
     return_prop.PropWave = QStringtoWave(sl.at(n));
 
+    n=sl.indexOf(QRegExp(".*Density:.*"));
+    return_prop.PropDensity = QStringtoDensity( sl.at(n) );
+
     return(return_prop);
 }
 
@@ -115,6 +118,7 @@ DataSet::Test Parser::CreateTest(QStringList sl)
 
     return(return_test);
 }
+
 
 QByteArray Parser::RemoveAscii(QByteArray &in){
 
@@ -220,6 +224,16 @@ tm Parser::QStringtoDateTime(QString in)
     return(return_tm);
 }
 
+unsigned Parser::QStringtoDensity(QString in)
+{
+    bool ok = false;
+    int pos = in.indexOf(QString("Density:"));
+    QString return_string = in.mid( pos + 8, 5 );
+    unsigned return_unsigned = return_string.toUInt( &ok );
+
+    return(return_unsigned);
+}
+
 DataSet::EMethod Parser::QStringtoEMethod(QString in)
 {
     DataSet::EMethod return_value;
@@ -235,14 +249,6 @@ DataSet::EMethod Parser::QStringtoEMethod(QString in)
     return(return_value);
 }
 
-/*
-DataSet::Pulse Parser::QStringtoPulse(QString in)
-{
-    DataSet::Pulse return_value;
-
-    return(return_value);
-}
-*/
 
 DataSet::Rate Parser::QStringtoRate(QString in)
 {
@@ -272,19 +278,6 @@ DataSet::Wave Parser::QStringtoWave(QString in)
     }
 
     return(return_value);
-}
-
-QDateTime Parser::ToQDateTime(std::vector<DataSet::Test>::iterator itr_test)
-{
-    tm test_time;
-    QDateTime return_time;
-
-    DataSet::Test current_test = Data->GetTest( itr_test );
-    test_time = current_test.TestTime;
-    return_time.setDate( QDate( test_time.tm_year + 1900, test_time.tm_mon , test_time.tm_mday ) );
-    return_time.setTime( QTime( test_time.tm_hour, test_time.tm_min ) );
-
-    return(return_time);
 }
 
 QString Parser::ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test)
@@ -320,6 +313,68 @@ QString Parser::ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test)
     return(return_string);
 }
 
+QStringList Parser::ToQSLADC(std::vector<DataSet::Test>::iterator itr_test)
+{
+
+}
+
+QString Parser::ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test)
+{
+    QString return_string;
+
+    switch (Data->GetTest( itr_test ).TestProp.PropCalc) {
+    case DataSet::Dist:
+         return_string = tr(" Distance ");
+         break;
+    case  DataSet::Vel:
+        return_string = tr(" Velocity ");
+        break;
+    }
+
+    return(return_string);
+}
+
+QDateTime Parser::ToQDateTime(std::vector<DataSet::Test>::iterator itr_test)
+{
+    tm test_time;
+    QDateTime return_time;
+
+    DataSet::Test current_test = Data->GetTest( itr_test );
+    test_time = current_test.TestTime;
+    return_time.setDate( QDate( test_time.tm_year + 1900, test_time.tm_mon , test_time.tm_mday ) );
+    return_time.setTime( QTime( test_time.tm_hour, test_time.tm_min ) );
+
+    return(return_time);
+}
+
+QString Parser::ToQStrDensity(std::vector<DataSet::Test>::iterator itr_test)
+{
+    QString return_string = "";
+    QTextStream stream( &return_string );
+
+    stream<< Data->GetTest(itr_test).TestProp.PropDensity;
+
+    return( return_string );
+}
+
+QString Parser::ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test)
+{
+    QString return_string;
+
+    switch (Data->GetTest( itr_test ).TestProp.PropEMethod) {
+    case DataSet::SimpleE:
+         return_string = tr(" SIMPLE ");
+         break;
+    case  DataSet::ArbMu:
+        return_string = tr(" ARBITRARY ");
+        break;
+    case  DataSet::DerivedMu:
+        return_string = tr(" DERIVED ");
+        break;
+    }
+    return(return_string);
+}
+
 QString Parser::ToQStrWave(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
@@ -334,7 +389,6 @@ QString Parser::ToQStrWave(std::vector<DataSet::Test>::iterator itr_test)
     }
     return(return_string);
 }
-
 
 QString Parser::ToQStrRate(std::vector<DataSet::Test>::iterator itr_test)
 {
@@ -364,51 +418,5 @@ QString Parser::ToQStrTransitTime(std::vector<DataSet::Test>::iterator itr_test)
 
     return( return_string );
 }
-/*
-QString Parser::ToQStrPulse(std::vector<DataSet::Test>::iterator itr_test)
-{
-    QString return_string;
 
-    return(return_string);
-}
 
-QString Parser::ToQStrUnits(std::vector<DataSet::Test>::iterator itr_test)
-{
-    QString return_string;
-
-    return(return_string);
-}
-*/
-QString Parser::ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test)
-{
-    QString return_string;
-
-    switch (Data->GetTest( itr_test ).TestProp.PropCalc) {
-    case DataSet::Dist:
-         return_string = tr(" Distance ");
-         break;
-    case  DataSet::Vel:
-        return_string = tr(" Velocity ");
-        break;
-    }
-
-    return(return_string);
-}
-
-QString Parser::ToQStrEMethod(std::vector<DataSet::Test>::iterator itr_test)
-{
-    QString return_string;
-
-    switch (Data->GetTest( itr_test ).TestProp.PropEMethod) {
-    case DataSet::SimpleE:
-         return_string = tr(" SIMPLE ");
-         break;
-    case  DataSet::ArbMu:
-        return_string = tr(" ARBITRARY ");
-        break;
-    case  DataSet::DerivedMu:
-        return_string = tr(" DERIVED ");
-        break;
-    }
-    return(return_string);
-}
