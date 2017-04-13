@@ -175,8 +175,9 @@ bool MainWindow::checkSerialPort()
 
 void MainWindow::cleanData()//main function that takes raw data and transforms to usable
 {
-    QString buffer;
+    QString buffer = "";
     QTextStream display( &buffer );
+    QStringList datalist;
 
     Parser p( this, Data );
 
@@ -199,12 +200,11 @@ void MainWindow::cleanData()//main function that takes raw data and transforms t
                 << tr("Density: ") << p.ToQStrDensity(itr) << '\n'
                 << tr("Wave Type: ")<< p.ToQStrWave(itr) << '\n'
                 << tr("Calculate: ") << p.ToQStrCalc(itr) << '\t'
-                << tr("E Method: ")<< p.ToQStrEMethod(itr) << '\t';
+                << tr("E Method: ")<< p.ToQStrEMethod(itr) << '\t'
+                << '\n'<<'\n'
+                << p.ToQSLADC(itr).join('\n');
     }
-
     console->setPlainText( buffer );
-
-
 
     DataUpload = true;
 }

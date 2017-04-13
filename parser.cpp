@@ -315,7 +315,18 @@ QString Parser::ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test)
 
 QStringList Parser::ToQSLADC(std::vector<DataSet::Test>::iterator itr_test)
 {
+    QStringList return_list;
 
+    std::vector<long> lng_buffer = Data->GetTest(itr_test).ADC;
+
+    for(std::vector<long>::iterator vi = lng_buffer.begin();
+        vi != lng_buffer.end(); ++ vi){
+        long x= *vi;
+        QString str = "";
+        return_list << str.setNum( x,10 );
+    }
+
+    return(return_list);
 }
 
 QString Parser::ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test)
