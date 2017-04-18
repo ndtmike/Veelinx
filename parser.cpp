@@ -316,14 +316,35 @@ QString Parser::ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test)
 QStringList Parser::ToQSLADC(std::vector<DataSet::Test>::iterator itr_test)
 {
     QStringList return_list;
+    double time = 0.0;
+    double interval = 0.1;
+
+    switch(Data->GetTest(itr_test).TestProp.PropRate){
+    case DataSet::RATE_250KHZ:
+        interval = 1/250000.0;
+        break;
+    case DataSet::RATE_500KHZ:
+        interval = 1/500000.0;
+        break;
+    case DataSet::RATE_1000KHZ:
+        interval = 1/1000000.0;
+        break;
+    case DataSet::RATE_2000KHZ:
+        interval = 1/2000000.0;
+        break;
+    }
 
     std::vector<long> lng_buffer = Data->GetTest(itr_test).ADC;
+
+    return_list << tr("Time (sec)") + '\t' + tr("Signal");
 
     for(std::vector<long>::iterator vi = lng_buffer.begin();
         vi != lng_buffer.end(); ++ vi){
         long x= *vi;
-        QString str = "";
-        return_list << str.setNum( x,10 );
+        QString stradc = "";
+        QString strtime = "";
+        return_list << strtime.setNum(time,'g',6) + '\t' + stradc.setNum( x,10 );
+        time = time + interval;
     }
 
     return(return_list);
