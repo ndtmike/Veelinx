@@ -47,6 +47,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -56,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(console);
     serial = new QSerialPort(this);
     serialTimeOut = new QTimer(this);
+    GraphData = new DataPlot(this);
 
     CurrentLocale = QLocale::system(); //standardized number strings
     QString systemlocale = CurrentLocale.name();
@@ -207,6 +209,8 @@ void MainWindow::cleanData()//main function that takes raw data and transforms t
     console->setPlainText( buffer );
 
     DataUpload = true;
+
+//    TestPlot();
 }
 
 void MainWindow::copy()
@@ -258,7 +262,7 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
 void MainWindow::help()
 {
     QProcess* help = new QProcess(this);
-    help->start("hh.exe Windsorlinx.chm");
+    help->start("hh.exe Veelinx.chm");
 }
 /*
  * sets translator object to German
@@ -311,6 +315,7 @@ void MainWindow::loadExampleFile()
     Data.append( buffer );
     cleanData();
     file.close();
+    GraphData->show();
 }
 
 void MainWindow::initActionsConnections()

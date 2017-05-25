@@ -67,7 +67,7 @@
 #include "Inst_Data.h"
 #include "parser.h"
 #include "splash.h"
-
+#include "dataplot.h"
 
 //#define TEST_REG
 
@@ -122,6 +122,7 @@ private:
     QByteArray Data;
     bool DataUpload;
     bool foundSerialPort;
+    DataPlot *GraphData;
     QSerialPort *serial;
     QTimer *serialTimeOut;
     QTranslator* Translator;
