@@ -26,7 +26,7 @@
 DataPlot::DataPlot( QWidget* )
 {
     createClasses();
-//    SetPlotParameters();
+    SetPlotParameters();
 //    SetGridParameters();
 //    SetCurveParameters();
 //    SetRCurveParameters();
@@ -144,14 +144,23 @@ bool DataPlot::loadPlotDataPoints(const QString& line)
 }
 
 /*
+ * a constructor function to set general grid parameters
+ */
+
+void DataPlot::SetGridParameters()
+{
+    Grid->attach(this);
+}
+
+/*
  * a constructor function to set general chart parameters
  * */
-/*
+
 void DataPlot::SetPlotParameters()
 {
-    setTitle(tr("V-Meter Signal"));
-    setAxisTitle( QwtPlot::xBottom, "Aggrameter Value");
-    setAxisTitle( QwtPlot::yLeft, "Moisture Value");
+    setTitle(QObject::tr("V-Meter Signal"));
+    setAxisTitle( QwtPlot::xBottom, QObject::tr("Time"));
+    setAxisTitle( QwtPlot::yLeft, QObject::tr("Signal"));
     setCanvasBackground( Qt::white );
     insertLegend( new QwtLegend() );
 
@@ -166,15 +175,6 @@ void DataPlot::SetCurveParameters()
     Curve->setStyle(QwtPlotCurve::NoCurve);
     Curve->setRenderHint( QwtPlotItem::RenderAntialiased, true );
     Curve->setSymbol( Symbol );
-}
-
-/*
- * a constructor function to set general grid parameters
- */
-/*
-void DataPlot::SetGridParameters()
-{
-    Grid->attach(this);
 }
 
 /*

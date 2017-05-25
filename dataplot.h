@@ -16,6 +16,7 @@
 #define DATAPLOT_H
 
 #include <QtCore>
+#include <QTranslator>
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -45,9 +46,10 @@ private:
     qreal maxX(const QVector<QPointF>& in);
     qreal maxY(const QVector<QPointF>& in);
     void SetCurveParameters();
+*/
     void SetGridParameters();
     void SetPlotParameters();
-*/
+
     QwtPlotCurve* Curve;
     QwtPlotCurve* rCurve;
     QwtPlotGrid* Grid;
