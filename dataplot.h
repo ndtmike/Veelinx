@@ -15,8 +15,6 @@
 #ifndef DATAPLOT_H
 #define DATAPLOT_H
 
-#include <QtCore>
-#include <QTranslator>
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -26,27 +24,30 @@
 #include <qwt_legend.h>
 #include <qwt_plot_textlabel.h>
 #include <QPointF>
-#include <QMessageBox>
-#include <QDialog>
+
 #include <QtCore>
+#include <QDialog>
+#include <QMessageBox>
+#include <QTranslator>
+
 
 class DataPlot : public QwtPlot
 {
+    Q_OBJECT
 public:
-    explicit DataPlot(QWidget *parent = 0);
+    explicit DataPlot(QWidget *parent = NULL );
     ~DataPlot();
-
-//    void createPoints(const QString& rawdata);
+    void SetData( const QPolygonF data);
 
 private:
 
     void createClasses();
-/*    void displayGraph(const QVector<QPointF>& points);
-    bool loadPlotDataPoints(const QString& line);
-    qreal maxX(const QVector<QPointF>& in);
-    qreal maxY(const QVector<QPointF>& in);
+
+    qreal MaxX(const QVector<QPointF>& in);
+    qreal MaxY(const QVector<QPointF>& in);
+    qreal MinY(const QVector<QPointF>& in);
+
     void SetCurveParameters();
-*/
     void SetGridParameters();
     void SetPlotParameters();
 
@@ -54,7 +55,7 @@ private:
     QwtPlotCurve* rCurve;
     QwtPlotGrid* Grid;
     QwtPlot* Plot;
-    QPolygonF plotDataPoints;
+    QPolygonF PlotDataPoints;
     QwtSymbol* rSymbol;
     QwtSymbol* Symbol;
 

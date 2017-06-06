@@ -70,25 +70,31 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     TARGET_ARCH=$${QMAKE_HOST.arch}
 }
 
-contains(TARGET_ARCH, x86_64) {
-    ARCHITECTURE = x64
-    message(" WIN64 Compile ")
-    win32:CONFIG(release, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC64\lib -lqwt
-    else:win32:CONFIG(debug, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC64\lib -lqwtd
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../MinGW/lib/ -lqwt
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../MinGW/lib/ -lqwtd
 
-    INCLUDEPATH += C:\qwt-6.1.3-MSVC64\include
-    DEPENDPATH += C:\qwt-6.1.3-MSVC64\include
+INCLUDEPATH += $$PWD/../MinGW/include
+DEPENDPATH += $$PWD/../MinGW/include
 
-    message( $$LIBS )
-    message( $$INCLUDEPATH )
-} else {
-    ARCHITECTURE = x86
-    message(" WIN32 Compile ")
-    win32:CONFIG(release, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC32\lib -lqwt
-    else:win32:CONFIG(debug, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC32\lib -lqwtd
+#contains(TARGET_ARCH, x86_64) {
+#    ARCHITECTURE = x64
+#    message(" WIN64 Compile ")
+#    win32:CONFIG(release, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC64\lib -lqwt
+#    else:win32:CONFIG(debug, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC64\lib -lqwtd
 
-    INCLUDEPATH += C:\qwt-6.1.3-MSVC32\include
-    DEPENDPATH += C:\qwt-6.1.3-MSVC32\include
-    message( $$LIBS )
-    message( $$INCLUDEPATH)
-}
+#    INCLUDEPATH += C:\qwt-6.1.3-MSVC64\include
+#    DEPENDPATH += C:\qwt-6.1.3-MSVC64\include
+
+#    message( $$LIBS )
+#    message( $$INCLUDEPATH )
+#} else {
+#    ARCHITECTURE = x86
+#    message(" WIN32 Compile ")
+#    win32:CONFIG(release, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC32\lib -lqwt
+#    else:win32:CONFIG(debug, debug|release): LIBS += -LC:\qwt-6.1.3-MSVC32\lib -lqwtd
+
+#    INCLUDEPATH += C:\qwt-6.1.3-MSVC32\include
+#    DEPENDPATH += C:\qwt-6.1.3-MSVC32\include
+#    message( $$LIBS )
+#    message( $$INCLUDEPATH)
+#}

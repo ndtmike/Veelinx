@@ -67,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initActionsConnections();
     saveFileName = "";
+    resize(1200, 800);
 
     connect(serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
@@ -92,6 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete GraphData;
     closeSerialPort();
     delete connectTimer;
     delete ui;
@@ -128,6 +130,12 @@ void MainWindow::changeEvent(QEvent *e)
         QMainWindow::changeEvent(e);
     }
 }
+
+void MainWindow::closeEvent (QCloseEvent* /*event*/)
+{
+    GraphData->close();
+}
+
 
 bool MainWindow::checkSerialPort()
 {
@@ -205,12 +213,11 @@ void MainWindow::cleanData()//main function that takes raw data and transforms t
                 << tr("E Method: ")<< p.ToQStrEMethod(itr) << '\t'
                 << '\n'<<'\n'
                 << p.ToQSLADC(itr).join('\n');
+
+        GraphData->SetData(p.ToQPFADC(itr));
     }
     console->setPlainText( buffer );
-
     DataUpload = true;
-
-//    TestPlot();
 }
 
 void MainWindow::copy()
@@ -313,7 +320,8 @@ void MainWindow::loadExampleFile()
     QTextStream load(&file);
     QString buffer = load.readAll();
     Data.append( buffer );
-    cleanData();
+    cleanData(); // loads data
+    GraphData->show();
     file.close();
     GraphData->show();
 }

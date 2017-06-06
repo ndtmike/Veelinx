@@ -94,6 +94,8 @@ public:
 
 protected:
 
+   void closeEvent(QCloseEvent *) Q_DECL_OVERRIDE;
+
 private slots:
     void about();
     void changeEvent(QEvent *e);

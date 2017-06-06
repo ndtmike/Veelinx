@@ -23,15 +23,14 @@
  * Mostly Sets Parameters
 */
 
-DataPlot::DataPlot( QWidget* )
+DataPlot::DataPlot(QWidget *parent )
 {
     createClasses();
     SetPlotParameters();
-//    SetGridParameters();
-//    SetCurveParameters();
-//    SetRCurveParameters();
+    SetGridParameters();
+    SetCurveParameters();
 
-//    plotDataPoints<< QPointF (0.0,0.0);
+    PlotDataPoints<< QPointF (1.0,1.0) <<QPointF (-1.0, -1.0);
 }
 
 /*
@@ -56,91 +55,24 @@ void DataPlot::createClasses()
     Symbol = new QwtSymbol( QwtSymbol::Ellipse,
                 QBrush( Qt::red ),
                 QPen( Qt::red, 2 ),
-                QSize( 8, 8 ) );
-    rCurve = new QwtPlotCurve;
-    rSymbol = new QwtSymbol(QwtSymbol::Ellipse,
-                            QBrush( Qt::red ),
-                            QPen( Qt::red, 2 ),
-                            QSize( 8, 8 ));
-}
-
-/*
-*loads the datapoint vector with data
-*/
-/*
-void DataPlot::createPoints(const QString& rawdata)
-{
-    QString line = "";
-    QStringList datalines = rawdata.split("\n", QString::SkipEmptyParts);
-    QStringList noheader = datalines.filter(tr("Direct"));
-
-
-    plotDataPoints.clear();
-    foreach (line, noheader) {
-        if(!loadPlotDataPoints(line)) return;
-    }
-    displayGraph(plotDataPoints);
-}
-
-/*
- * Shows the graph
- * Sets some parameters that are data dependant
-*/
-/*
-void DataPlot::displayGraph(const QVector<QPointF>& points)
-{
-    setAxisScale(QwtPlot::yLeft, minAxisScale(), maxY(points));
-    setAxisScale(QwtPlot::xBottom, minAxisScale(), maxX(points));
-    Curve->setSamples( points );
-    Curve->attach(this);
-
-    //createRegLine(plotDataPoints);
-
-    resize( 1200, 800 );
-    replot();
-    show();
-    setFocus();
-    raise();
+                QSize( 4, 4 ) );
 }
 
 /*
  * loads datapoints from string
 */
-/*
-bool DataPlot::loadPlotDataPoints(const QString& line)
+
+void DataPlot::SetData(const QPolygonF data)
 {
-    bool success = false, ok = false, second = false;
-    double dr = 0.0;
-    double dm = 0.0;
-    QString buffer;
-    QStringList list = line.split(" ");
+    PlotDataPoints = data;
 
-    foreach(buffer, list){
-        buffer.toDouble( &ok );
-        if(ok == true && second == true ){//found second valid double
-            QTextStream bufferstream(& buffer); //strange bug makes two versions of bufferstream
-            bufferstream >> dm;
-            success = true;
-            break;
-        }
-        if(ok == true && second == false){//found the first valid double
-            QTextStream bufferstream(& buffer);  //strange bug makes two versions of bufferstream
-            second = true;
-            bufferstream >> dr;
-            bufferstream.flush();
-        }
-    }
+    setAxisScale(QwtPlot::yLeft, MinY(PlotDataPoints), MaxY(PlotDataPoints));
+    setAxisScale(QwtPlot::xBottom, minAxisScale(), MaxX(PlotDataPoints));
+    Curve->setSamples( PlotDataPoints );
+    Curve->attach(this);
 
-    if(ok == false){
-        QMessageBox::information(this, "Aggralinx", tr("Bad Data File"));
-    }
-
-    if(second == false){
-        QMessageBox::information(this,"Aggralinx",tr("Data Not Entered"));
-    }
-
-    plotDataPoints << QPointF(dr,dm);
-    return(success);
+    resize( 1200, 800 );
+    replot();
 }
 
 /*
@@ -165,14 +97,14 @@ void DataPlot::SetPlotParameters()
     insertLegend( new QwtLegend() );
 
 }
+
 /*
  * a constructor function to set general curve parameters
  */
-/*
 void DataPlot::SetCurveParameters()
 {
     Curve->setTitle( "Data Points" );
-    Curve->setStyle(QwtPlotCurve::NoCurve);
+    Curve->setStyle(QwtPlotCurve::Lines);
     Curve->setRenderHint( QwtPlotItem::RenderAntialiased, true );
     Curve->setSymbol( Symbol );
 }
@@ -180,8 +112,8 @@ void DataPlot::SetCurveParameters()
 /*
  * to set scale of chart
  */
-/*
-qreal DataPlot::maxY(const QVector<QPointF> &in)
+
+qreal DataPlot::MaxY(const QVector<QPointF> &in)
 {
     qreal rvalue = 0.0;
     qreal test = 0.0;
@@ -193,12 +125,23 @@ qreal DataPlot::maxY(const QVector<QPointF> &in)
     }
     return(rvalue);
 }
+qreal DataPlot::MinY(const QVector<QPointF> &in)
+{
+    qreal rvalue = 0.0;
+    qreal test = 0.0;
+    QVector<QPointF> buffer = in;
 
+    for(int i = 0; i<in.size();++i){
+        test = buffer[i].ry();
+        rvalue = qMin( test, rvalue);
+    }
+    return(rvalue);
+}
 /*
  * to set scale of chart
  */
-/*
-qreal DataPlot::maxX(const QVector<QPointF> &in)
+
+qreal DataPlot::MaxX(const QVector<QPointF> &in)
 {
     qreal rvalue = 0.0;
     qreal test = 0.0;
@@ -209,5 +152,5 @@ qreal DataPlot::maxX(const QVector<QPointF> &in)
         rvalue = qMax( test, rvalue);
     }
     return(rvalue);
-} */
+}
 

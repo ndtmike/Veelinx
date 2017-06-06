@@ -15,21 +15,24 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <math.h>
 #include <ctime>
-#include <QString>
-#include <QFile>
-#include <QList>
-#include <QTextStream>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QDateTime>
-#include <QVector>
-#include <QtCore>
-#include <QDebug>
-#include <QDate>
-
+#include <math.h>
 #include <vector>
+
+#include <QtCore>
+#include <QDate>
+#include <QDebug>
+#include <QDateTime>
+#include <QFile>
+#include <QFileDialog>
+#include <QList>
+#include <QMessageBox>
+#include <QPolygonF>
+#include <QString>
+#include <QTextStream>
+#include <QVector>
+
+
 
 #include "Inst_Data.h"
 
@@ -50,6 +53,7 @@ public:
 
     DataSet::Test CreateTest( QStringList sl);
 
+    QPolygonF ToQPFADC(std::vector<DataSet::Test>::iterator itr_test);
     QStringList ToQSLADC( std::vector<DataSet::Test>::iterator itr_test );
     QString ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test);
     QString ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test);
