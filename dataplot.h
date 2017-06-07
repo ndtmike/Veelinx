@@ -29,6 +29,7 @@
 #include <QDialog>
 #include <QMessageBox>
 #include <QTranslator>
+#include <QVBoxLayout>
 
 
 class DataPlot : public QwtPlot

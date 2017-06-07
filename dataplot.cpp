@@ -52,10 +52,10 @@ void DataPlot::createClasses()
 {
     Curve = new QwtPlotCurve;
     Grid = new QwtPlotGrid;
-    Symbol = new QwtSymbol( QwtSymbol::Ellipse,
-                QBrush( Qt::red ),
-                QPen( Qt::red, 2 ),
-                QSize( 4, 4 ) );
+//    Symbol = new QwtSymbol( QwtSymbol::Ellipse,
+//                QBrush( Qt::red ),
+//                QPen( Qt::red, 2 ),
+//                QSize( 4, 4 ) );
 }
 
 /*
@@ -67,6 +67,8 @@ void DataPlot::SetData(const QPolygonF data)
     PlotDataPoints = data;
 
     setAxisScale(QwtPlot::yLeft, MinY(PlotDataPoints), MaxY(PlotDataPoints));
+    setAxisScale(QwtPlot::yRight, MinY(PlotDataPoints), MaxY(PlotDataPoints));
+    enableAxis(QwtPlot::yRight, true);
     setAxisScale(QwtPlot::xBottom, minAxisScale(), MaxX(PlotDataPoints));
     Curve->setSamples( PlotDataPoints );
     Curve->attach(this);
@@ -93,9 +95,10 @@ void DataPlot::SetPlotParameters()
     setTitle(QObject::tr("V-Meter Signal"));
     setAxisTitle( QwtPlot::xBottom, QObject::tr("Time"));
     setAxisTitle( QwtPlot::yLeft, QObject::tr("Signal"));
+    setAxisTitle(QwtPlot::yRight, "");
     setCanvasBackground( Qt::white );
-    insertLegend( new QwtLegend() );
 
+ //   insertLegend( new QwtLegend() );
 }
 
 /*
@@ -103,7 +106,7 @@ void DataPlot::SetPlotParameters()
  */
 void DataPlot::SetCurveParameters()
 {
-    Curve->setTitle( "Data Points" );
+    Curve->setTitle( "" );
     Curve->setStyle(QwtPlotCurve::Lines);
     Curve->setRenderHint( QwtPlotItem::RenderAntialiased, true );
     Curve->setSymbol( Symbol );
