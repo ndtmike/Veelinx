@@ -20,7 +20,8 @@ SOURCES += \
     parser.cpp \
     splash.cpp \
     dataplot.cpp \
-    Inst_Data.cpp
+    inst_data.cpp \
+    control_dialog.cpp
 
 
 HEADERS += \
@@ -29,12 +30,14 @@ HEADERS += \
     parser.h \
     splash.h \
     dataplot.h \
-    Inst_Data.h
+    inst_data.h \
+    control_dialog.h
 
 
 FORMS += \
     mainwindow.ui \
-    splash.ui
+    splash.ui \
+    control_dialog.ui
 
 RESOURCES += \
     terminal.qrc

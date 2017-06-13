@@ -68,6 +68,7 @@
     </widget>
     <addaction name="menuLanguage"/>
     <addaction name="actionPlot"/>
+    <addaction name="actionControl"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
@@ -184,6 +185,14 @@
   <action name="actionEnglish">
    <property name="text">
     <string>English</string>
+   </property>
+  </action>
+  <action name="actionControl">
+   <property name="text">
+    <string>&amp;Control</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

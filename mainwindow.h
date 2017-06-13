@@ -64,13 +64,22 @@
 #include <vector>
 
 #include "console.h"
-#include "Inst_Data.h"
+#include "control_dialog.h"
+#include "dataplot.h"
+#include "inst_data.h"
 #include "parser.h"
 #include "splash.h"
-#include "dataplot.h"
 
+//test Regular Operation
 //#define TEST_REG
 
+//test Graph
+//#define TEST_GRAPH
+
+//test Control Dialog one Dialog at a time
+#ifndef TEST_GRAPH
+#define TEST_CD
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -116,9 +125,11 @@ private slots:
     void readData();
     bool saveAs();
     void showSplash();
+    void showControl();
 
 private:
 
+    Control_Dialog* CD;
     QTimer* connectTimer;
     Console *console;
     QByteArray Data;

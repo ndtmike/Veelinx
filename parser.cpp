@@ -148,19 +148,19 @@ DataSet::AmpGain Parser::QStringtoAmpGain(QString in)
     if( in.contains(" 1 ")){
         return_value = DataSet::Gain_1;
     }else if( in.contains(" 5 ")){
-        return_value = DataSet::GAIN_5;
+        return_value = DataSet::Gain_5;
     }else if( in.contains(" 10 ")){
-        return_value = DataSet::GAIN_10;
+        return_value = DataSet::Gain_10;
     }else if( in.contains(" 25 ")){
-        return_value = DataSet::GAIN_25;
+        return_value = DataSet::Gain_25;
     }else if( in.contains(" 50 ")){
-        return_value = DataSet::GAIN_50;
+        return_value = DataSet::Gain_50;
     }else if( in.contains(" 100 ")){
-        return_value = DataSet::GAIN_100;
+        return_value = DataSet::Gain_100;
     }else if( in.contains(" 250 ")){
-        return_value = DataSet::GAIN_250;
+        return_value = DataSet::Gain_250;
     }else if( in.contains(" 500 ")){
-        return_value = DataSet::GAIN_500;
+        return_value = DataSet::Gain_500;
     }
 
     return(return_value);
@@ -288,25 +288,25 @@ QString Parser::ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test)
     case DataSet::Gain_1:
          return_string = tr(" 1 ");
          break;
-    case DataSet::GAIN_5:
+    case DataSet::Gain_5:
         return_string = tr(" 5 ");
         break;
-    case DataSet::GAIN_10:
+    case DataSet::Gain_10:
          return_string = tr(" 10 ");
          break;
-    case DataSet::GAIN_25:
+    case DataSet::Gain_25:
         return_string = tr(" 25 ");
         break;
-    case DataSet::GAIN_50:
+    case DataSet::Gain_50:
          return_string = tr(" 50 ");
          break;
-    case DataSet::GAIN_100:
+    case DataSet::Gain_100:
         return_string = tr(" 100 ");
         break;
-    case DataSet::GAIN_250:
+    case DataSet::Gain_250:
          return_string = tr(" 250 ");
          break;
-    case DataSet::GAIN_500:
+    case DataSet::Gain_500:
         return_string = tr(" 500 ");
         break;
     }
@@ -444,10 +444,10 @@ QString Parser::ToQStrWave(std::vector<DataSet::Test>::iterator itr_test)
     QString return_string;
 
     switch (Data->GetTest( itr_test ).TestProp.PropWave) {
-    case DataSet::Gain_1:
+    case DataSet::PWave:
          return_string = tr(" 'P' ");
          break;
-    case DataSet::GAIN_5:
+    case DataSet::SWave:
         return_string = tr(" 'S' ");
         break;
     }

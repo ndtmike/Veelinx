@@ -55,8 +55,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     console = new Console;
     setCentralWidget(console);
+
     serial = new QSerialPort(this);
     serialTimeOut = new QTimer(this);
+
     GraphData = new DataPlot(this);
 
     CurrentLocale = QLocale::system(); //standardized number strings
@@ -67,7 +69,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initActionsConnections();
     saveFileName = "";
-    resize(1200, 800);
 
     connect(serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
@@ -226,8 +227,6 @@ void MainWindow::copy()
     console->copy();
 }
 
-
-
 void MainWindow::closeSerialPort()
 {
     if (serial->isOpen())
@@ -271,6 +270,27 @@ void MainWindow::help()
     QProcess* help = new QProcess(this);
     help->start("hh.exe Veelinx.chm");
 }
+
+void MainWindow::initActionsConnections()
+{
+    ui->actionQuit->setEnabled(true);
+    ui->actionPlot->setEnabled(false);
+    ui->actionSaveAs->setEnabled(false);
+    ui->action_Open->setEnabled(true);
+
+    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
+    connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
+    connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
+    connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(help()));
+    connect(ui->action_Open, SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(cleanData()));
+    connect(ui->actionDeutche, SIGNAL(triggered()), this, SLOT(lngDeutche()));
+    connect(ui->actionEnglish, SIGNAL(triggered()), this, SLOT(lngEnglish()));
+    connect(ui->actionEspanol, SIGNAL(triggered()), this, SLOT(lngEspanol()));
+    connect(ui->actionControl, SIGNAL(triggered()), this, SLOT(showControl()));
+}
+
 /*
  * sets translator object to German
  */
@@ -321,28 +341,14 @@ void MainWindow::loadExampleFile()
     QString buffer = load.readAll();
     Data.append( buffer );
     cleanData(); // loads data
-    GraphData->show();
     file.close();
+
+#ifdef TEST_GRAPH
     GraphData->show();
-}
-
-void MainWindow::initActionsConnections()
-{
-    ui->actionQuit->setEnabled(true);
-    ui->actionPlot->setEnabled(false);
-    ui->actionSaveAs->setEnabled(false);
-    ui->action_Open->setEnabled(true);
-
-    connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
-    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
-    connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
-    connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
-    connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(help()));
-    connect(ui->action_Open, SIGNAL(triggered()), this, SLOT(openFile()));
-    connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(cleanData()));
-    connect(ui->actionDeutche, SIGNAL(triggered()), this, SLOT(lngDeutche()));
-    connect(ui->actionEnglish, SIGNAL(triggered()), this, SLOT(lngEnglish()));
-    connect(ui->actionEspanol, SIGNAL(triggered()), this, SLOT(lngEspanol()));
+#endif
+#ifdef TEST_CD
+    showControl();
+#endif
 }
 
 void MainWindow::openFile()
@@ -465,6 +471,14 @@ bool MainWindow::saveFile(const QString &fileName)
     QApplication::restoreOverrideCursor();
 #endif
     return true;
+}
+
+void MainWindow::showControl()
+{
+    CD = new Control_Dialog(this);
+    CD->setModal( true );
+    if(CD->exec() == QDialog::Accepted)
+        QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);
 }
 
 void MainWindow::showSplash()
