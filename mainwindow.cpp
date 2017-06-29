@@ -475,10 +475,13 @@ bool MainWindow::saveFile(const QString &fileName)
 
 void MainWindow::showControl()
 {
+    QString AmpGainTest = "";
     CD = new Control_Dialog(this);
     CD->setModal( true );
-    if(CD->exec() == QDialog::Accepted)
+    if(CD->exec() == QDialog::Accepted){
         QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);
+        CD->Return_Control_Dialog();
+    }
 }
 
 void MainWindow::showSplash()

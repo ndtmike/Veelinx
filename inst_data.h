@@ -43,8 +43,9 @@ public:
         AmpGain PropAmpGain;
         unsigned PropDensity;
         Wave PropWave;
-        Rate PropRate;
+        Rate PropCaptureRate;
         Units PropUnits;
+        Pulse PropPulseRate;
         Calc PropCalc;
         EMethod PropEMethod;
     };

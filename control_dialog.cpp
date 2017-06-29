@@ -25,14 +25,14 @@ Control_Dialog::~Control_Dialog()
 }
 void Control_Dialog::Set_comboBoxAmpGain(){
 
-    ui->comboBoxAmpGain->addItem("1x Gain", DataSet::Gain_1);
-    ui->comboBoxAmpGain->addItem("5x Gain", DataSet::Gain_5);
-    ui->comboBoxAmpGain->addItem("10x Gain", DataSet::Gain_10);
-    ui->comboBoxAmpGain->addItem("25x Gain", DataSet::Gain_25);
-    ui->comboBoxAmpGain->addItem("50x Gain", DataSet::Gain_50);
-    ui->comboBoxAmpGain->addItem("100x Gain", DataSet::Gain_100);
-    ui->comboBoxAmpGain->addItem("250x Gain", DataSet::Gain_250);
-    ui->comboBoxAmpGain->addItem("500x Gain", DataSet::Gain_500);
+    ui->comboBoxAmpGain->addItem("1x Gain");
+    ui->comboBoxAmpGain->addItem("5x Gain");
+    ui->comboBoxAmpGain->addItem("10x Gain");
+    ui->comboBoxAmpGain->addItem("25x Gain");
+    ui->comboBoxAmpGain->addItem("50x Gain");
+    ui->comboBoxAmpGain->addItem("100x Gain");
+    ui->comboBoxAmpGain->addItem("250x Gain");
+    ui->comboBoxAmpGain->addItem("500x Gain");
 
 }
 
@@ -76,4 +76,181 @@ void Control_Dialog::Set_comboBoxUnits()
     ui->comboBoxUnits->addItem("Metric");
 }
 
+DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
+{
+    int intvar;
+    DataSet::AmpGain retampgain;
+    intvar = ui->comboBoxAmpGain->currentIndex();
 
+    switch (intvar) {
+    case 0:
+        retampgain = DataSet::Gain_1;
+        break;
+    case 1:
+        retampgain = DataSet::Gain_5;
+        break;
+    case 2:
+        retampgain = DataSet::Gain_10;
+        break;
+    case 3:
+        retampgain = DataSet::Gain_25;
+        break;
+    case 4:
+        retampgain = DataSet::Gain_50;
+        break;
+    case 5:
+        retampgain = DataSet::Gain_100;
+        break;
+    case 6:
+        retampgain = DataSet::Gain_250;
+        break;
+    case 7:
+        retampgain = DataSet::Gain_500;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("%1").arg(intvar));
+        break;
+    }
+    return(retampgain);
+}
+
+DataSet::Calc Control_Dialog::Ret_comboBoxCalc()
+{
+    int intvar;
+    DataSet::Calc retcalc;
+    intvar = ui->comboBoxAmpGain->currentIndex();
+    switch (intvar) {
+    case 0:
+        retcalc = DataSet::Vel;
+        break;
+    case 1:
+        retcalc = DataSet::Dist;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("%1").arg(intvar));
+        break;
+    }
+    return(retcalc);
+}
+
+DataSet::Rate Control_Dialog::Ret_comboBoxCaptureRate()
+{
+    int intvar;
+    DataSet::Rate retrate;
+    intvar = ui->comboBoxAmpGain->currentIndex();
+    switch (intvar) {
+    case 0:
+        retrate = DataSet::RATE_250KHZ;
+        break;
+    case 1:
+        retrate = DataSet::RATE_500KHZ;
+        break;
+    case 2:
+        retrate = DataSet::RATE_1000KHZ;
+        break;
+    case 3:
+        retrate = DataSet::RATE_2000KHZ;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("%1").arg(intvar));
+        break;
+    }
+    return(retrate);
+}
+
+DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
+{
+    int intvar;
+    DataSet::EMethod retemethod;
+    intvar = ui->comboBoxAmpGain->currentIndex();
+    switch (intvar) {
+    case 0:
+        retemethod = DataSet::ArbMu;
+        break;
+    case 1:
+        retemethod = DataSet::DerivedMu;
+        break;
+    case 2:
+        retemethod = DataSet::SimpleE;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("%1").arg(intvar));
+        break;
+    }
+    return(retemethod);
+}
+
+DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
+{
+    int intvar;
+    DataSet::Pulse retpulse;
+    intvar = ui->comboBoxAmpGain->currentIndex();
+    switch (intvar) {
+    case 0:
+        retpulse = DataSet::PulsePerSeq_1;
+        break;
+    case 1:
+        retpulse = DataSet::PulsePerSeq_3;
+        break;
+    case 2:
+        retpulse = DataSet::PulsePerSeq_10;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("%1").arg(intvar));
+        break;
+    }
+    return(retpulse);
+}
+
+DataSet::Wave Control_Dialog::Ret_comboBoxWaveType()
+{
+    int intvar;
+    DataSet::Wave retwave;
+    intvar = ui->comboBoxAmpGain->currentIndex();
+    switch (intvar) {
+    case 0:
+        retwave = DataSet::PWave;
+        break;
+    case 1:
+        retwave = DataSet::SWave;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("%1").arg(intvar));
+        break;
+    }
+    return(retwave);
+}
+
+DataSet::Units Control_Dialog::Ret_comboBoxUnits()
+{
+    int intvar;
+    DataSet::Units retunits;
+    intvar = ui->comboBoxAmpGain->currentIndex();
+    switch (intvar) {
+    case 0:
+        retunits = DataSet::Imperial;
+        break;
+    case 1:
+        retunits = DataSet::Metric;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("%1").arg(intvar));
+        break;
+    }
+    return(retunits);
+}
+
+/*DataSet::Prop*/void Control_Dialog::Return_Control_Dialog()
+{
+    DataSet::Prop returnprop;
+
+    returnprop.PropAmpGain = Ret_comboBoxAmpGain();
+    returnprop.PropCalc = Ret_comboBoxCalc();
+    returnprop.PropRate = Ret_comboBoxCaptureRate();
+    returnprop.PropEMethod = Ret_comboBoxEMethod();
+    returnprop. = Ret_comboBoxPulseRate();
+
+    returnprop.PropAmpGain = returngain;
+
+   return(returnprop);
+}

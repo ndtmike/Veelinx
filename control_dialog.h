@@ -2,6 +2,7 @@
 #define CONTROL_DIALOG_H
 
 #include <QDialog>
+#include <QMessageBox>
 #include "inst_data.h"
 
 namespace Ui {
@@ -16,9 +17,9 @@ public:
     explicit Control_Dialog(QWidget *parent = 0);
     ~Control_Dialog();
 
+    DataSet::Prop Return_Control_Dialog();
+
 private slots:
-//    void accept();
-//    void reject();
 
 private:
     Ui::Control_Dialog *ui;
@@ -30,6 +31,14 @@ private:
     void Set_comboBoxPulseRate();
     void Set_comboBoxWaveType();
     void Set_comboBoxUnits();
+
+    DataSet::AmpGain Ret_comboBoxAmpGain();
+    DataSet::Calc Ret_comboBoxCalc();
+    DataSet::Rate Ret_comboBoxCaptureRate();
+    DataSet::EMethod Ret_comboBoxEMethod();
+    DataSet::Pulse Ret_comboBoxPulseRate();
+    DataSet::Wave Ret_comboBoxWaveType();
+    DataSet::Units Ret_comboBoxUnits();
 };
 
 #endif // CONTROL_DIALOG_H

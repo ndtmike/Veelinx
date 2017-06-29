@@ -71,7 +71,7 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     return_prop.PropEMethod = QStringtoEMethod(sl.at(n));
 
     n=sl.indexOf(QRegExp(".*Rate:.*"));
-    return_prop.PropRate = QStringtoRate(sl.at(n));
+    return_prop.PropCaptureRate = QStringtoRate(sl.at(n));
 
     n=sl.indexOf(QRegExp(".*feet/second"));
     if(n != -1 ){
@@ -318,7 +318,7 @@ QPolygonF Parser::ToQPFADC(std::vector<DataSet::Test>::iterator itr_test)
     double time = 0.0;
     double interval = 0.1;
 
-    switch(Data->GetTest(itr_test).TestProp.PropRate){
+    switch(Data->GetTest(itr_test).TestProp.PropCaptureRate){
     case DataSet::RATE_250KHZ:
         interval = 1/250000.0;
         break;
@@ -351,7 +351,7 @@ QStringList Parser::ToQSLADC(std::vector<DataSet::Test>::iterator itr_test)
     double time = 0.0;
     double interval = 0.1;
 
-    switch(Data->GetTest(itr_test).TestProp.PropRate){
+    switch(Data->GetTest(itr_test).TestProp.PropCaptureRate){
     case DataSet::RATE_250KHZ:
         interval = 1/250000.0;
         break;
@@ -458,7 +458,7 @@ QString Parser::ToQStrRate(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
 
-    switch (Data->GetTest( itr_test ).TestProp.PropRate) {
+    switch (Data->GetTest( itr_test ).TestProp.PropCaptureRate) {
     case DataSet::RATE_250KHZ:
          return_string = tr(" 250 kHz ");
          break;
