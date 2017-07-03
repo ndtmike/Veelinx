@@ -475,12 +475,12 @@ bool MainWindow::saveFile(const QString &fileName)
 
 void MainWindow::showControl()
 {
-    QString AmpGainTest = "";
+    DataSet::Prop proptest;
     CD = new Control_Dialog(this);
     CD->setModal( true );
     if(CD->exec() == QDialog::Accepted){
-        QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);
-        CD->Return_Control_Dialog();
+        proptest = CD->Return_Control_Dialog();
+        QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);        
     }
 }
 

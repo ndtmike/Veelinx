@@ -93,6 +93,8 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     n=sl.indexOf(QRegExp(".*Density:.*"));
     return_prop.PropDensity = QStringtoDensity( sl.at(n) );
 
+    return_prop.PropPulseRate = DataSet::PulsePerSeq_3; //place holder as we do not upload this
+
     return(return_prop);
 }
 
