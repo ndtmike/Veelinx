@@ -21,7 +21,8 @@ SOURCES += \
     splash.cpp \
     dataplot.cpp \
     inst_data.cpp \
-    control_dialog.cpp
+    control_dialog.cpp \
+    remotecontrol.cpp
 
 
 HEADERS += \
@@ -31,7 +32,8 @@ HEADERS += \
     splash.h \
     dataplot.h \
     inst_data.h \
-    control_dialog.h
+    control_dialog.h \
+    remotecontrol.h
 
 
 FORMS += \
