@@ -31,23 +31,30 @@
 class DataSet
 {
 public:
-    enum AmpGain{ Gain_1, Gain_5, Gain_10, Gain_25, Gain_50, Gain_100, Gain_250, Gain_500 };
-    enum Wave{ PWave, SWave };
-    enum Rate{ RATE_250KHZ, RATE_500KHZ, RATE_1000KHZ, RATE_2000KHZ };
-    enum Units{ Imperial, Metric};
-    enum Pulse{ PulsePerSeq_1, PulsePerSeq_3, PulsePerSeq_10};
-    enum Calc{ Dist, Vel };
-    enum EMethod{ ArbMu, DerivedMu, SimpleE };
+    enum AmpGain{ Gain_1 = 0, Gain_5, Gain_10, Gain_25, Gain_50, Gain_100, Gain_250, Gain_500 };
+    enum Wave{ PWave = 0, SWave };
+    enum Rate{ RATE_250KHZ = 0, RATE_500KHZ, RATE_1000KHZ, RATE_2000KHZ };
+    enum Units{ Imperial = 0, Metric};
+    enum Pulse{ PulsePerSeq_1 = 1, PulsePerSeq_3 = 3, PulsePerSeq_10 = 10};
+    enum Calc{ Vel = 0, Dist };
+    enum EMethod{ ArbMu = 0, DerivedMu, SimpleE };
+    enum Voltage{ Hi = 0, Low };
 
     struct Prop{ //material property parameters for Windsor Probe
         AmpGain PropAmpGain;
-        unsigned PropDensity;
-        Wave PropWave;
-        Rate PropCaptureRate;
-        Units PropUnits;
-        Pulse PropPulseRate;
         Calc PropCalc;
+        Rate PropCaptureRate;
+        unsigned PropCycleTime;
+        bool PropDataSave;
+        unsigned PropDensity;
         EMethod PropEMethod;
+        unsigned PropMaterialTravelDistance;
+        unsigned PropMaterialTravelVelocity;
+        bool PropPicSave;
+        Pulse PropPulseRate;
+        Wave PropWave;
+        Units PropUnits;
+        Voltage PropVoltage;
     };
 
     struct Test{ //test for the Windsor Probe raw data

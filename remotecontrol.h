@@ -23,6 +23,9 @@
 #define REMOTECONTROL_H
 
 #include <QWidget>
+
+#include "inst_data.h"
+
 //******************************************************************************
 //  Definitions
 //******************************************************************************
@@ -76,7 +79,7 @@ class RemoteControl : public QWidget
     Q_OBJECT
 public:
     explicit RemoteControl(QWidget *parent = 0);
-    void                                  InitializeRemoteControlForm(void);
+    void  InitializeRemoteControlForm(void);
 
 signals:
 
@@ -84,14 +87,24 @@ public slots:
 
 
 private:
-    void                                  Com_CheckForDataSet(char firstChar, int timeout);
-     void                                  Com_CheckForRxData(char firstChar, int timeout);
-     bool                                  Com_CheckForRxTimeOut(void);
-     void                                  Com_CloseComPort(void);
-     void                                  Com_MarkStartTime(void);
-     void                                  Com_OpenComPort(void);
-     void                                  Com_SendMessage(char * txBuffer);
-     void                                  SaveDataFile(char * vMeterData, char * fileName);
+/*    void   Com_CheckForDataSet(char firstChar, int timeout);
+    void   Com_CheckForRxData(char firstChar, int timeout);
+    bool   Com_CheckForRxTimeOut(void);
+     void  Com_CloseComPort(void);
+     void  Com_MarkStartTime(void);
+     void  Com_OpenComPort(void);
+     void  Com_SendMessage(char * txBuffer);
+     void  SaveDataFile(char * vMeterData, char * fileName);
+*/
+    void GetData();
+    DataSet::AmpGain InitAmpGain( int data_in );
+    DataSet::Rate InitCaptureRate(int data_in);
+    unsigned InitMaterialTravelDistance( int data_in_hi, int data_in_lo);
+    unsigned InitMaterialTravelVelocity( int data_in_hi, int data_in_lo);
+    DataSet::EMethod InitPropCalc( int data_in );
+    unsigned InitPropDensity( int data_in_hi, int data_in_lo );
+    DataSet::Pulse InitPulse(int data_in);
+    unsigned InitPulseCycleTime( int data_in);
 };
 
 #endif // REMOTECONTROL_H
