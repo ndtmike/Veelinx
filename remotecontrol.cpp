@@ -394,4 +394,276 @@ unsigned RemoteControl::InitPulseCycleTime(int data_in)
     return( returntime );
 }
 
+/******************************************************************************
+
+  Function: unsigned ToIntAmpGain( int data_in )
+  Description:
+  ============
+  This routine initializes the amplifier gain
+
+  data_in coded as follows:
+    #define AMPLIFIER_GAIN_1_SETTING        0
+    #define AMPLIFIER_GAIN_5_SETTING
+    #define AMPLIFIER_GAIN_10_SETTING       2
+    #define AMPLIFIER_GAIN_25_SETTING       3
+    #define AMPLIFIER_GAIN_50_SETTING       4
+    #define AMPLIFIER_GAIN_100_SETTING      5
+    #define AMPLIFIER_GAIN_250_SETTING      6
+    #define AMPLIFIER_GAIN_500_SETTING      7
+******************************************************************************/
+int RemoteControl::ToIntAmpGain( DataSet::AmpGain data_in ){
+
+    int return_ampgain;
+
+    switch(data_in){
+
+    case DataSet::Gain_500:
+        return_ampgain = AMPLIFIER_GAIN_500_SETTING;
+        break;
+    case DataSet::Gain_250:
+        return_ampgain = AMPLIFIER_GAIN_250_SETTING;
+        break;
+    case DataSet::Gain_100:
+        return_ampgain = AMPLIFIER_GAIN_100_SETTING;
+        break;
+    case DataSet::Gain_50:
+        return_ampgain = AMPLIFIER_GAIN_50_SETTING;
+        break;
+    case DataSet::Gain_25:
+        return_ampgain = AMPLIFIER_GAIN_25_SETTING;
+        break;
+    case DataSet::Gain_10:
+        return_ampgain = AMPLIFIER_GAIN_10_SETTING;
+        break;
+    case DataSet::Gain_5:
+        return_ampgain = AMPLIFIER_GAIN_5_SETTING;
+        break;
+    case DataSet::Gain_1:
+        return_ampgain = AMPLIFIER_GAIN_1_SETTING;
+        break;
+
+    }
+    return(return_ampgain);
+}
+
+/******************************************************************************
+
+  Function: int ToIntCaptureRate( DataSet::Rate data_in )
+  Description:
+  ============
+  This routine initializes the capture rate
+
+  data_in coded as follows:
+#define PICTURE_RATE_250MHZ             0
+#define PICTURE_RATE_500MHZ             1
+#define PICTURE_RATE_1000MHZ            2
+#define PICTURE_RATE_2000MHZ            3
+******************************************************************************/
+int RemoteControl::ToIntCaptureRate( DataSet::Rate data_in ){
+
+    int return_rate;
+
+    switch( data_in ){
+
+    case DataSet::RATE_250KHZ:
+        return_rate = PICTURE_RATE_250MHZ;
+        break;
+    case DataSet::RATE_500KHZ:
+        return_rate = PICTURE_RATE_500MHZ;
+        break;
+    case DataSet::RATE_1000KHZ:
+        return_rate = PICTURE_RATE_1000MHZ;
+        break;
+    case DataSet::RATE_2000KHZ:
+        return_rate = PICTURE_RATE_2000MHZ;
+        break;
+    }
+
+    return( return_rate );
+}
+
+//******************************************************************************
+//
+//  Function: ToIntMaterialTravelDistance( unsigned data_in, int* out_ptr )
+//
+//  Description:
+//  ============
+//  This routine initializes the cycle time between pulse sequences
+//
+//  data_in coded as follows:
+//  #define MAT_TRAVEL_DIST_MAX             600
+//  #define MAT_TRAVEL_DIST_MIN             0.1
+//******************************************************************************
+void RemoteControl::ToIntMaterialTravelDistance( unsigned data_in, int* out_ptr )
+{
+    unsigned return_distance;
+
+    return_distance = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
+    if (return_distance < MAT_TRAVEL_DIST_MIN)
+    {
+        return_distance = MAT_TRAVEL_DIST_MIN;
+    }
+    else if (return_distance > MAT_TRAVEL_DIST_MAX)
+    {
+        return_distance = MAT_TRAVEL_DIST_MAX;
+    }
+
+    return(return_distance);
+}
+
+//******************************************************************************
+//
+//  Function: unsigned ToIntMaterialTravelVelocity( unsigned data_in_hi, int* out_ptr )
+//
+//  Description:
+//  ============
+//  This routine initializes the cycle time between pulse sequences
+//
+//  data_in coded as follows:
+//  #define MAT_TRAVEL_VEL_MAX              40000
+//  #define MAT_TRAVEL_VEL_MIN              1000
+//******************************************************************************
+void RemoteControl::ToIntMaterialTravelVelocity( unsigned data_in_hi, int* out_ptr )
+{
+    unsigned return_velocity;
+
+    return_velocity = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
+    if (return_velocity < MAT_TRAVEL_DIST_MIN)
+    {
+        return_velocity = MAT_TRAVEL_VEL_MIN;
+    }
+    else if (return_velocity > MAT_TRAVEL_VEL_MAX)
+    {
+        return_velocity = MAT_TRAVEL_VEL_MAX;
+    }
+
+    return(return_velocity);
+}
+
+/******************************************************************************
+
+  Function: int ToIntPropCalc( DataSet::EMethod data_in )
+
+  Description:
+  ============
+  This routine initializes the material density
+
+  data_in coded as follows:
+#define CALC_METHOD_ARB_MU              2
+#define CALC_METHOD_DERIVED_MU          1
+#define CALC_METHOD_SIMPLE_E            0
+******************************************************************************/
+int RemoteControl::ToIntPropCalc( DataSet::EMethod data_in ){
+
+    DataSet::EMethod return_e;
+
+    if (data_in == CALC_METHOD_ARB_MU)
+    {
+        return_e = DataSet::ArbMu;
+    }
+    else if (data_in == CALC_METHOD_DERIVED_MU)
+    {
+        return_e = DataSet::DerivedMu;
+    }
+    else
+    {
+        return_e = DataSet::SimpleE;
+    }
+
+    return(return_e);
+}
+
+/******************************************************************************
+
+  Function: void ToIntPropDensity(unsigned data_in, int* out_ptr)
+
+  Description:
+  ============
+  This routine initializes the material density
+
+  data_in coded as follows:
+    #define MAT_DENSITY_MAX                 500
+    #define MAT_DENSITY_MIN                 50
+******************************************************************************/
+void RemoteControl::ToIntPropDensity(unsigned data_in, int* out_ptr){
+
+    unsigned return_density;
+
+    // Initialize the material density
+    return_density = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
+    if (return_density < MAT_DENSITY_MIN)
+    {
+        return_density = MAT_DENSITY_MIN;
+    }
+    else if (return_density > MAT_DENSITY_MAX)
+    {
+        return_density = MAT_DENSITY_MAX;
+    }
+
+    return( return_density );
+}
+
+//******************************************************************************
+//
+//  Function: int ToIntPulse( DataSet::Pulse data_in )
+//
+//  Description:
+//  ============
+//  This routine initializes the pulse rate.  Mostly used to simplify the
+//  InitializeRemoteControlForm Function
+//
+//  data_in coded as follows:
+//  #define PULSES_PER_SEQ_1                1
+//  #define PULSES_PER_SEQ_3                3
+//  #define PULSES_PER_SEQ_10               10
+//******************************************************************************
+int RemoteControl::ToIntPulse( DataSet::Pulse data_in )
+{
+    DataSet::Pulse return_pulse;
+
+    // Initialize the pulses per sequence
+    if (data_in == PULSES_PER_SEQ_3)
+    {
+      return_pulse = DataSet::PulsePerSeq_3;
+    }
+    else if (data_in == PULSES_PER_SEQ_10)
+    {
+      return_pulse = DataSet::PulsePerSeq_10;
+    }
+    else
+    {
+      return_pulse = DataSet::PulsePerSeq_1;
+    }
+
+    return(return_pulse);
+}
+
+//******************************************************************************
+//
+//  Function: int ToIntPulseCycleTime( unsigned data_in )
+//
+//  Description:
+//  ============
+//  This routine initializes the cycle time between pulse sequences
+//
+//  data_in coded as follows:
+//  #define CYCLE_TIME_MAX                  10
+//  #define CYCLE_TIME_MIN                  0
+//******************************************************************************
+ int RemoteControl::ToIntPulseCycleTime( unsigned data_in )
+{
+    int returntime;
+
+    if ((data_in > CYCLE_TIME_MIN) && (data_in < CYCLE_TIME_MAX))
+    {
+      returntime = data_in;
+    }
+    else
+    {
+      returntime = CYCLE_TIME_MIN;
+    }
+
+    return( returntime );
+}
+
 

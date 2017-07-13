@@ -1,23 +1,22 @@
-//******************************************************************************
-//
-//  Filename: RemoteControl.h
-//
-//  Copyright 2010-2017, NDT James Instruments Inc.  All rights reserved.
-//
-//  Description:
-//  ============
-//  This file contains all the #defines associated with the operation of the
-//   Velocilinx's remote control panel.
-//
-//  Revision History:
-//  =================
-//  Date        Author         Description
-//  ----------  -------------  -------------------------------------------------
-//  12/22/2010  Charlie Green  Initial version
-//  09/08/2011  Charlie Green  Changed name from V-Meter to Velocilinx
-//  07/07/2017  Michael Hoag   Adapted fro QT and Changed Name to Veelinx
-//
-//******************************************************************************
+/******************************************************************************
+    Filename: RemoteControl.h
+
+    Copyright 2010-2017, NDT James Instruments Inc.  All rights reserved.
+
+    Description:
+    ============
+    This file contains all the #defines associated with the operation of the
+    Velocilinx's remote control panel.
+
+    Revision History:
+    =================
+    Date        Author         Description
+    ----------  -------------  -------------------------------------------------
+    12/22/2010  Charlie Green  Initial version
+    09/08/2011  Charlie Green  Changed name from V-Meter to Velocilinx
+    07/07/2017  Michael Hoag   Adapted for QT and Changed Name to Veelinx
+
+********************************************************************************/
 
 #ifndef REMOTECONTROL_H
 #define REMOTECONTROL_H
@@ -85,18 +84,9 @@ signals:
 
 public slots:
 
-
 private:
-/*    void   Com_CheckForDataSet(char firstChar, int timeout);
-    void   Com_CheckForRxData(char firstChar, int timeout);
-    bool   Com_CheckForRxTimeOut(void);
-     void  Com_CloseComPort(void);
-     void  Com_MarkStartTime(void);
-     void  Com_OpenComPort(void);
-     void  Com_SendMessage(char * txBuffer);
-     void  SaveDataFile(char * vMeterData, char * fileName);
-*/
     void GetData();
+
     DataSet::AmpGain InitAmpGain( int data_in );
     DataSet::Rate InitCaptureRate(int data_in);
     unsigned InitMaterialTravelDistance( int data_in_hi, int data_in_lo);
@@ -105,6 +95,15 @@ private:
     unsigned InitPropDensity( int data_in_hi, int data_in_lo );
     DataSet::Pulse InitPulse(int data_in);
     unsigned InitPulseCycleTime( int data_in);
+
+    int ToIntAmpGain( DataSet::AmpGain data_in);
+    int ToIntCaptureRate( DataSet::Rate data_in);
+    void ToIntMaterialTravelDistance( unsigned data_in, int* out_ptr);
+    void ToIntMaterialTravelVelocity( unsigned data_in, int* out_ptr);
+    int ToIntPropCalc( DataSet::EMethod data_in);
+    void ToIntPropDensity( unsigned data_in, int* out_ptr);
+    int ToIntPulse( DataSet::Pulse data_in );
+    int ToIntPulseCycleTime( unsigned data_in );
 };
 
 #endif // REMOTECONTROL_H
