@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>382</width>
-    <height>304</height>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,7 +33,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>150</y>
+     <y>130</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -81,7 +81,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>230</y>
+     <y>190</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -134,7 +134,7 @@
      <height>54</height>
     </rect>
    </property>
-   <layout class="QFormLayout" name="formLayoutCaptureRate_2">
+   <layout class="QFormLayout" name="formLayoutUnits">
     <property name="labelAlignment">
      <set>Qt::AlignCenter</set>
     </property>
@@ -177,7 +177,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>150</y>
+     <y>130</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -225,7 +225,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>230</y>
+     <y>190</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -273,7 +273,7 @@
    <property name="geometry">
     <rect>
      <x>260</x>
-     <y>230</y>
+     <y>190</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -335,7 +335,7 @@
     <string>V-Meter Control Parameters</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -383,17 +383,329 @@
     </item>
    </layout>
   </widget>
+  <widget class="QWidget" name="layoutWidget_7">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>250</y>
+     <width>111</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formVoltage">
+    <property name="labelAlignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="formAlignment">
+     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+    </property>
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
+    <item row="1" column="0" colspan="2">
+     <widget class="QComboBox" name="comboBoxVoltage"/>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="lblVoltage">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Voltage</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_8">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>250</y>
+     <width>111</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayoutDataSave">
+    <property name="labelAlignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="formAlignment">
+     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+    </property>
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
+    <item row="1" column="0" colspan="2">
+     <widget class="QComboBox" name="comboBoxDataSave"/>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="lblDataSave">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>DataSave</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_9">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>250</y>
+     <width>111</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayoutPicSave">
+    <property name="labelAlignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="formAlignment">
+     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+    </property>
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
+    <item row="1" column="0" colspan="2">
+     <widget class="QComboBox" name="comboBoxPicSave"/>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="lblPicSave">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>PicSave</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_10">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>340</y>
+     <width>351</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="forLayoutDensity">
+    <property name="spacing">
+     <number>21</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="lblDensity">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Density    </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEditCycleTime_2"/>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSliderDensity">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_11">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>370</y>
+     <width>351</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="forLayoutDistance">
+    <property name="spacing">
+     <number>21</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="lblDistance">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Distance  </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEditCycleTime_3"/>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSliderDistance">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_12">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>400</y>
+     <width>351</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="forLayoutVelocity">
+    <property name="spacing">
+     <number>21</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="lblVelocity">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Velocity   </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEditVelocity"/>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSliderVelocity">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>310</y>
+     <width>351</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="forLayoutCycleTime">
+    <property name="spacing">
+     <number>20</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="lblCycleTime">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>CycleTime</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEditCycleTime"/>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSliderCycleTime">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <zorder>layoutWidget</zorder>
   <zorder>buttonBox</zorder>
-  <zorder>comboBoxAmpGain</zorder>
-  <zorder>lblAmpGain</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>layoutWidget_2</zorder>
   <zorder>layoutWidget_3</zorder>
   <zorder>layoutWidget_4</zorder>
   <zorder>layoutWidget_5</zorder>
   <zorder>layoutWidget_6</zorder>
-  <zorder>lblWaveType</zorder>
   <zorder>cdTitle</zorder>
+  <zorder>layoutWidget_7</zorder>
+  <zorder>layoutWidget_8</zorder>
+  <zorder>layoutWidget_9</zorder>
+  <zorder>lblCycleTime</zorder>
+  <zorder>lineEditCycleTime</zorder>
+  <zorder>horizontalSliderCycleTime</zorder>
+  <zorder>layoutWidget_10</zorder>
+  <zorder>layoutWidget_11</zorder>
+  <zorder>layoutWidget_12</zorder>
+  <zorder>lblDistance</zorder>
  </widget>
  <resources/>
  <connections>
