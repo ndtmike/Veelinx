@@ -124,7 +124,7 @@ void Control_Dialog::Set_comboBoxWaveType()
 void Control_Dialog::Set_Voltage()
 {
     ui->comboBoxVoltage->addItem("Hi");
-    ui->comboBoxVoltage->addItem("Lo");
+    ui->comboBoxVoltage->addItem("Low");
 }
 
 void Control_Dialog::Set_comboBoxUnits()

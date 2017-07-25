@@ -102,6 +102,16 @@ MainWindow::~MainWindow()
     delete serial;
 }
 
+
+/******************************************************************************
+
+  Function: about()
+
+  Description:
+  ============
+  'About' software window
+
+******************************************************************************/
 void MainWindow::about()
 {
     QString s;
@@ -119,9 +129,15 @@ void MainWindow::about()
     QMessageBox::information(this, tr("About Windsorlinx"), s);
 }
 
-/*
- * changes text of Menu System
-*/
+/******************************************************************************
+
+  Function: changeEvent(QEvent *e)
+
+  Description:
+  ============
+  Changes text of menu system when a new language is selected
+
+******************************************************************************/
 
 void MainWindow::changeEvent(QEvent *e)
 {
@@ -132,12 +148,29 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
+/******************************************************************************
+
+  Function: closeEvent(QCloseEvent*)
+
+  Description:
+  ============
+  Actions that should occur when the window closes
+
+******************************************************************************/
 void MainWindow::closeEvent (QCloseEvent* /*event*/)
 {
     GraphData->close();
 }
 
+/******************************************************************************
 
+  Function: checkSerialPort()
+
+  Description:
+  ============
+  Checks that an instrument is connected to the PC
+
+******************************************************************************/
 bool MainWindow::checkSerialPort()
 {
     QString description;
@@ -182,7 +215,15 @@ bool MainWindow::checkSerialPort()
     return(r);
 }
 
+/******************************************************************************
 
+  Function: cleanData()
+
+  Description:
+  ============
+  cleans recieved data parses it and prints it to the screen
+
+******************************************************************************/
 
 void MainWindow::cleanData()//main function that takes raw data and transforms to usable
 {
@@ -221,12 +262,29 @@ void MainWindow::cleanData()//main function that takes raw data and transforms t
     DataUpload = true;
 }
 
+/******************************************************************************
+
+  Function: copy()
+
+  Description:
+  ============
+  Copies data in ASCII form to the clipboard
+******************************************************************************/
+
 void MainWindow::copy()
 {
     console->selectAll();
     console->copy();
 }
 
+/******************************************************************************
+
+  Function: closeSerialPort()
+
+  Description:
+  ============
+  Closes serial port
+******************************************************************************/
 void MainWindow::closeSerialPort()
 {
     if (serial->isOpen())
@@ -234,7 +292,16 @@ void MainWindow::closeSerialPort()
     console->setEnabled(false);
     ui->statusBar->showMessage(tr("Disconnected"));
 }
+/******************************************************************************
 
+  Function: endUpload
+
+  Description:
+  ============
+  function called when all data has been uploaded to the PC.  I.E. When the
+    upload timer times out
+
+******************************************************************************/
 void MainWindow::endUpload()
 {
     serialTimeOut->stop();
@@ -257,6 +324,15 @@ void MainWindow::endUpload()
     ui->actionPlot->setEnabled(true);
 }
 
+/******************************************************************************
+
+  Function: handleError(QSerialPort::SerialPortError error)
+
+  Description:
+  ============
+  Handles unexpect serial port errors
+
+******************************************************************************/
 void MainWindow::handleError(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
@@ -265,12 +341,33 @@ void MainWindow::handleError(QSerialPort::SerialPortError error)
     }
 }
 
+/******************************************************************************
+
+  Function: help()
+
+  Description:
+  ============
+  Launches appropriate help file
+
+******************************************************************************/
 void MainWindow::help()
 {
     QProcess* help = new QProcess(this);
     help->start("hh.exe Veelinx.chm");
 }
 
+
+/******************************************************************************
+
+  Function: initActionsConnections()
+
+  Description:
+  ============
+  This routine initializes the cycle time between pulse sequences
+
+ Init all the connection for the main window page
+
+******************************************************************************/
 void MainWindow::initActionsConnections()
 {
     ui->actionQuit->setEnabled(true);
@@ -285,42 +382,70 @@ void MainWindow::initActionsConnections()
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(help()));
     connect(ui->action_Open, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(cleanData()));
+
     connect(ui->actionDeutche, SIGNAL(triggered()), this, SLOT(lngDeutche()));
     connect(ui->actionEnglish, SIGNAL(triggered()), this, SLOT(lngEnglish()));
     connect(ui->actionEspanol, SIGNAL(triggered()), this, SLOT(lngEspanol()));
     connect(ui->actionControl, SIGNAL(triggered()), this, SLOT(showControl()));
 }
 
-/*
- * sets translator object to German
- */
+/******************************************************************************
+
+  Function: lngDeutche()
+
+  Description:
+  ============
+  Sets Translator object to German
+
+******************************************************************************/
 void MainWindow::lngDeutche()
 {
     CurrentLocale = QLocale(QLocale::German);
     QLocale::setDefault(CurrentLocale);
     LNGLoadTranslator();
 }
-/*
- * sets translator object to English
- */
+
+/******************************************************************************
+
+  Function: lngEnglish()
+
+  Description:
+  ============
+  Sets Translator object to English
+
+******************************************************************************/
 void MainWindow::lngEnglish()
 {
     CurrentLocale = QLocale(QLocale::English);
     QLocale::setDefault(CurrentLocale);
     LNGLoadTranslator();
 }
-/*
- * sets translator object to Spanish
- */
+
+/******************************************************************************
+
+  Function: lngSpanish()
+
+  Description:
+  ============
+  Sets Translator object to Spanish
+
+******************************************************************************/
 void MainWindow::lngEspanol()
 {
     CurrentLocale = QLocale(QLocale::Spanish);
     QLocale::setDefault(CurrentLocale);
     LNGLoadTranslator();
 }
-/*
- *loads translator  object
-*/
+
+/******************************************************************************
+
+  Function: LNGLoadTranslator()
+
+  Description:
+  ============
+  Load Translator Object
+
+******************************************************************************/
 void MainWindow::LNGLoadTranslator()
 {
     if(Translator->isEmpty()){
@@ -332,6 +457,16 @@ void MainWindow::LNGLoadTranslator()
         qApp->installTranslator(Translator);
     }
 }
+
+/******************************************************************************
+
+  Function: loadExampleFile()
+
+  Description:
+  ============
+  For testing purposes loads an example file.
+
+******************************************************************************/
 void MainWindow::loadExampleFile()
 {
     saveFileName = "C:/Users/Mike/Documents/Projects/Veelinx/ExampleFile/ReviewDataSet-2013_04_02 15_43_03.txt";
@@ -351,6 +486,15 @@ void MainWindow::loadExampleFile()
 #endif
 }
 
+/******************************************************************************
+
+  Function: openFile()
+
+  Description:
+  ============
+  Opens a file fo ASCII Data
+
+******************************************************************************/
 void MainWindow::openFile()
 {
     QString fileName = "";
@@ -376,6 +520,15 @@ void MainWindow::openFile()
     }
 }
 
+/******************************************************************************
+
+  Function: openSerialPort()
+
+  Description:
+  ============
+  Opens Serial Port for Communication
+
+******************************************************************************/
 void MainWindow::openSerialPort()
 {
     serial->setBaudRate(9600);
@@ -395,15 +548,32 @@ void MainWindow::openSerialPort()
     }
 }
 
+/******************************************************************************
+
+  Function: processSerialPort()
+
+  Description:
+  ============
+  Opens Serial Port for Communication and starts upload timer
+
+******************************************************************************/
 void MainWindow::processSerialPort()
 {
-
     foundSerialPort = checkSerialPort();
     if(foundSerialPort){
         openSerialPort();
         connectTimer->start(500);
     }
 }
+
+/******************************************************************************
+
+  Function: readData()
+
+  Description:
+  ============
+  Takes data from serial port and adds to console buffer
+******************************************************************************/
 
 void MainWindow::readData()
 {
@@ -413,6 +583,15 @@ void MainWindow::readData()
     console->putData(serial->readAll());
 }
 
+/*
+/******************************************************************************
+//
+//  Function: readData()
+//
+//  Description:
+//  ============
+//  Takes data from serial port and adds to console buffer
+//******************************************************************************
 QString MainWindow::resultsFormat( Parser &r, std::vector<DataSet::Test>::iterator itr ){
     QString buffer;
     QTextStream display( &buffer );
@@ -424,7 +603,7 @@ QString MainWindow::resultsFormat( Parser &r, std::vector<DataSet::Test>::iterat
     }
     return (buffer);
 }
-
+*/
 /*void MainWindow::save()
 {
     if(saveFileName != ""){
@@ -437,6 +616,15 @@ QString MainWindow::resultsFormat( Parser &r, std::vector<DataSet::Test>::iterat
     }
 }
 */
+
+/******************************************************************************
+
+  Function: saveAs()
+
+  Description:
+  ============
+  Save data to a file, get file name with dialog
+******************************************************************************/
 bool MainWindow::saveAs()
 {
     QFileDialog dialog(this);
@@ -451,6 +639,15 @@ bool MainWindow::saveAs()
     saveFileName = files.at(0);
     return saveFile(files.at(0));
 }
+
+/******************************************************************************
+
+  Function: saveFile()
+
+  Description:
+  ============
+  Save as given filename
+******************************************************************************/
 
 bool MainWindow::saveFile(const QString &fileName)
 {
@@ -473,6 +670,15 @@ bool MainWindow::saveFile(const QString &fileName)
     return true;
 }
 
+/******************************************************************************
+
+  Function: showControl()
+
+  Description:
+  ============
+  Show V-Meter control dialog
+
+******************************************************************************/
 void MainWindow::showControl()
 {
     DataSet::Prop proptest;
@@ -484,6 +690,15 @@ void MainWindow::showControl()
     }
 }
 
+/******************************************************************************
+
+  Function: showSplash
+
+  Description:
+  ============
+  Show splash screen
+
+******************************************************************************/
 void MainWindow::showSplash()
 {
     const int five_sec = 5000;
