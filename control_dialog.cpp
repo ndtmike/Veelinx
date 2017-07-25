@@ -10,10 +10,17 @@ Control_Dialog::Control_Dialog(QWidget *parent) :
     Set_comboBoxAmpGain();
     Set_comboBoxCalc();
     Set_comboBoxCaptureRate();
+    Set_CycleTime();
+    Set_DataSave();
+    Set_Density();
     Set_comboBoxEMethod();
+    Set_MaterialTravelDistance();
+    Set_MaterialTravelVelocity();
+    Set_PicSave();
     Set_comboBoxPulseRate();
     Set_comboBoxWaveType();
     Set_comboBoxUnits();
+    Set_Voltage();
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -50,11 +57,55 @@ void Control_Dialog::Set_comboBoxCaptureRate()
     ui->comboBoxCaptureRate->addItem("2.0 MHz");
 }
 
+void Control_Dialog::Set_CycleTime()
+{
+    connect(ui->CycleTimeSpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderCycleTime,SLOT(setValue(int)));
+    connect(ui->horizontalSliderCycleTime, SIGNAL(valueChanged(int)),
+            ui->CycleTimeSpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_DataSave()
+{
+    ui->comboBoxDataSave->addItem("Yes");
+    ui->comboBoxDataSave->addItem("No");
+}
+
+void Control_Dialog::Set_Density()
+{
+    connect(ui->DensitySpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderDensity,SLOT(setValue(int)));
+    connect(ui->horizontalSliderDensity, SIGNAL(valueChanged(int)),
+            ui->DensitySpinBox, SLOT(setValue(int)));
+}
+
 void Control_Dialog::Set_comboBoxEMethod()
 {
     ui->comboBoxEMethod->addItem("Arb. Mu");
     ui->comboBoxEMethod->addItem("Derived Mu");
     ui->comboBoxEMethod->addItem("Simple E");
+}
+
+void Control_Dialog::Set_MaterialTravelDistance()
+{
+    connect(ui->DistanceSpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderDistance,SLOT(setValue(int)));
+    connect(ui->horizontalSliderDistance, SIGNAL(valueChanged(int)),
+            ui->DistanceSpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_MaterialTravelVelocity()
+{
+    connect(ui->VelocitySpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderVelocity,SLOT(setValue(int)));
+    connect(ui->horizontalSliderVelocity, SIGNAL(valueChanged(int)),
+            ui->VelocitySpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_PicSave()
+{
+    ui->comboBoxPicSave->addItem("Yes");
+    ui->comboBoxPicSave->addItem("No");
 }
 
 void Control_Dialog::Set_comboBoxPulseRate()
@@ -68,6 +119,12 @@ void Control_Dialog::Set_comboBoxWaveType()
 {
     ui->comboBoxWaveType->addItem("P Wave");
     ui->comboBoxWaveType->addItem("S Wave");
+}
+
+void Control_Dialog::Set_Voltage()
+{
+    ui->comboBoxVoltage->addItem("Hi");
+    ui->comboBoxVoltage->addItem("Lo");
 }
 
 void Control_Dialog::Set_comboBoxUnits()
@@ -158,6 +215,26 @@ DataSet::Rate Control_Dialog::Ret_comboBoxCaptureRate()
     return(retrate);
 }
 
+unsigned Control_Dialog::Ret_CycleTime()
+{
+    unsigned returnui = ui->CycleTimeSpinBox->value();
+    return(returnui);
+}
+
+bool Control_Dialog::Ret_DataSave()
+{
+    bool returnbool;
+    int intvar = ui->comboBoxDataSave->currentIndex();
+    returnbool = intvar == 0 ? true : false;
+    return(returnbool);
+}
+
+unsigned Control_Dialog::Ret_Density()
+{
+    unsigned returnui = ui->DensitySpinBox->value();
+    return(returnui);
+}
+
 DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
 {
     int intvar;
@@ -178,6 +255,26 @@ DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
         break;
     }
     return(retemethod);
+}
+
+unsigned Control_Dialog::Ret_MaterialTravelDistance()
+{
+    unsigned returnui = ui->DistanceSpinBox->value();
+    return(returnui);
+}
+
+unsigned Control_Dialog::Ret_MaterialTravelVelocity()
+{
+    unsigned returnui = ui->VelocitySpinBox->value();
+    return(returnui);
+}
+
+bool Control_Dialog::Ret_PicSave()
+{
+    bool returnbool;
+    int intvar = ui->comboBoxPicSave->currentIndex();
+    returnbool = intvar == 0 ? true : false;
+    return(returnbool);
 }
 
 DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
@@ -240,6 +337,25 @@ DataSet::Units Control_Dialog::Ret_comboBoxUnits()
     return(retunits);
 }
 
+DataSet::Voltage Control_Dialog::Ret_Voltage()
+{
+    int intvar;
+    DataSet::Voltage retvolt;
+    intvar = ui->comboBoxUnits->currentIndex();
+    switch (intvar) {
+    case 0:
+        retvolt = DataSet::Hi;
+        break;
+    case 1:
+        retvolt = DataSet::Low;
+        break;
+    default:
+        QMessageBox::information(this, "Control_Dialog" ,QString("Units %1").arg(intvar));
+        break;
+    }
+    return(retvolt);
+}
+
 DataSet::Prop Control_Dialog::Return_Control_Dialog()
 {
     DataSet::Prop returnprop;
@@ -247,11 +363,17 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
     returnprop.PropAmpGain = Ret_comboBoxAmpGain();
     returnprop.PropCalc = Ret_comboBoxCalc();
     returnprop.PropCaptureRate = Ret_comboBoxCaptureRate();
+    returnprop.PropCycleTime = Ret_CycleTime();
+    returnprop.PropDataSave = Ret_DataSave();
+    returnprop.PropDensity = Ret_Density();
     returnprop.PropEMethod = Ret_comboBoxEMethod();
+    returnprop.PropMaterialTravelDistance = Ret_MaterialTravelDistance();
+    returnprop.PropMaterialTravelVelocity = Ret_MaterialTravelVelocity();
+    returnprop.PropPicSave = Ret_PicSave();
     returnprop.PropPulseRate = Ret_comboBoxPulseRate();
     returnprop.PropWave = Ret_comboBoxWaveType();
     returnprop.PropUnits = Ret_comboBoxUnits();
-    returnprop.PropDensity = 100; //arbitrary to fill struct
+    returnprop.PropVoltage = Ret_Voltage();
 
    return(returnprop);
 }

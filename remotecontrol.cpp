@@ -15,7 +15,7 @@ RemoteControl::RemoteControl(QWidget *parent) : QWidget(parent)
 //
 //******************************************************************************
 void RemoteControl::GetData(void){
-     char    buffer[6] = {0x5A, 0x40, 0xFF, 0XFF, 0xA3};
+     unsigned char    buffer[6] = {0x5A, 0x40, 0xFF, 0xFF, 0xA3};
      // Send initial settings message and retrieve received message
    /*  initTime = TRUE;
      comBufferPtr = 0;
@@ -496,7 +496,7 @@ int RemoteControl::ToIntCaptureRate( DataSet::Rate data_in ){
 //******************************************************************************
 void RemoteControl::ToIntMaterialTravelDistance( unsigned data_in, int* out_ptr )
 {
-    unsigned return_distance;
+/*    unsigned return_distance;
 
     return_distance = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
     if (return_distance < MAT_TRAVEL_DIST_MIN)
@@ -508,7 +508,7 @@ void RemoteControl::ToIntMaterialTravelDistance( unsigned data_in, int* out_ptr 
         return_distance = MAT_TRAVEL_DIST_MAX;
     }
 
-    return(return_distance);
+    return(return_distance);*/
 }
 
 //******************************************************************************
@@ -525,7 +525,7 @@ void RemoteControl::ToIntMaterialTravelDistance( unsigned data_in, int* out_ptr 
 //******************************************************************************
 void RemoteControl::ToIntMaterialTravelVelocity( unsigned data_in_hi, int* out_ptr )
 {
-    unsigned return_velocity;
+/*    unsigned return_velocity;
 
     return_velocity = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
     if (return_velocity < MAT_TRAVEL_DIST_MIN)
@@ -537,7 +537,7 @@ void RemoteControl::ToIntMaterialTravelVelocity( unsigned data_in_hi, int* out_p
         return_velocity = MAT_TRAVEL_VEL_MAX;
     }
 
-    return(return_velocity);
+    return(return_velocity);*/
 }
 
 /******************************************************************************
@@ -586,7 +586,7 @@ int RemoteControl::ToIntPropCalc( DataSet::EMethod data_in ){
     #define MAT_DENSITY_MIN                 50
 ******************************************************************************/
 void RemoteControl::ToIntPropDensity(unsigned data_in, int* out_ptr){
-
+/*
     unsigned return_density;
 
     // Initialize the material density
@@ -600,7 +600,7 @@ void RemoteControl::ToIntPropDensity(unsigned data_in, int* out_ptr){
         return_density = MAT_DENSITY_MAX;
     }
 
-    return( return_density );
+    return( return_density );*/
 }
 
 //******************************************************************************

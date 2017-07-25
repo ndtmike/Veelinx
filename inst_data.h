@@ -32,13 +32,13 @@ class DataSet
 {
 public:
     enum AmpGain{ Gain_1 = 0, Gain_5, Gain_10, Gain_25, Gain_50, Gain_100, Gain_250, Gain_500 };
-    enum Wave{ PWave = 0, SWave };
-    enum Rate{ RATE_250KHZ = 0, RATE_500KHZ, RATE_1000KHZ, RATE_2000KHZ };
-    enum Units{ Imperial = 0, Metric};
-    enum Pulse{ PulsePerSeq_1 = 1, PulsePerSeq_3 = 3, PulsePerSeq_10 = 10};
     enum Calc{ Vel = 0, Dist };
     enum EMethod{ ArbMu = 0, DerivedMu, SimpleE };
+    enum Pulse{ PulsePerSeq_1 = 1, PulsePerSeq_3 = 3, PulsePerSeq_10 = 10};
+    enum Rate{ RATE_250KHZ = 0, RATE_500KHZ, RATE_1000KHZ, RATE_2000KHZ };
+    enum Units{ Imperial = 0, Metric};
     enum Voltage{ Hi = 0, Low };
+    enum Wave{ PWave = 0, SWave };
 
     struct Prop{ //material property parameters for Windsor Probe
         AmpGain PropAmpGain;
