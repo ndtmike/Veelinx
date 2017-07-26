@@ -69,6 +69,7 @@
 #include "inst_data.h"
 #include "parser.h"
 #include "splash.h"
+#include "remotecontrol.h"
 
 //test Regular Operation
 //#define TEST_REG
@@ -142,6 +143,7 @@ private:
     Ui::MainWindow *ui;
 
     bool checkSerialPort();
+    QByteArray GetCurrentSettings();
     void initActionsConnections();
     QString resultsFormat( Parser &r, std::vector<DataSet::Test>::iterator itr);
     bool saveFile(const QString &fileName);

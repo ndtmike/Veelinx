@@ -126,7 +126,7 @@ void RemoteControl::InitializeRemoteControlForm(void)
 
   data_in coded as follows:
     #define AMPLIFIER_GAIN_1_SETTING        0
-    #define AMPLIFIER_GAIN_5_SETTING
+    #define AMPLIFIER_GAIN_5_SETTING        1
     #define AMPLIFIER_GAIN_10_SETTING       2
     #define AMPLIFIER_GAIN_25_SETTING       3
     #define AMPLIFIER_GAIN_50_SETTING       4

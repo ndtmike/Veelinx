@@ -270,7 +270,6 @@ void MainWindow::cleanData()//main function that takes raw data and transforms t
   ============
   Copies data in ASCII form to the clipboard
 ******************************************************************************/
-
 void MainWindow::copy()
 {
     console->selectAll();
@@ -292,6 +291,7 @@ void MainWindow::closeSerialPort()
     console->setEnabled(false);
     ui->statusBar->showMessage(tr("Disconnected"));
 }
+
 /******************************************************************************
 
   Function: endUpload
@@ -324,6 +324,43 @@ void MainWindow::endUpload()
     ui->actionPlot->setEnabled(true);
 }
 
+/******************************************************************************
+
+  Function: GetCurrentSettings()
+
+  Description:
+  ============
+  Return QByteArray of CurrentSettings from V-Meter Serial Port
+******************************************************************************/
+QByteArray MainWindow::GetCurrentSettings()
+{
+    QByteArray returnarray;
+
+    returnarray.resize(20);
+    returnarray[0] = 0x02;  //pulse per seq
+    returnarray[1] = 0x02;  //cycletime
+    returnarray[2] = 0x00;  //save data
+    returnarray[3] = 0x00;  //picture display
+    returnarray[4] = 0x01;  //measurement mode
+    returnarray[5] = 0x02;  //distance
+    returnarray[6] = 0x02;  //distance
+    returnarray[7] = 0x02;  //velocity
+    returnarray[8] = 0x02;  //velocity
+    returnarray[9] = 0x02;  //unused?
+    returnarray[10] = 0x02; //gain
+    returnarray[11] = 0x02; //picture rate
+    returnarray[12] = 0x00; //pulser voltage
+    returnarray[13] = 0x02; //wave type
+    returnarray[14] = 0x02; //Density
+    returnarray[15] = 0x02; //Density
+    returnarray[16] = 0x00; //mu calc method
+    returnarray[17] = 0x02; //test number
+    returnarray[18] = 0x02; //test number
+    returnarray[19] = 0x00; //metric/imp
+    returnarray[20] = 0x02;
+
+    return(returnarray);
+}
 /******************************************************************************
 
   Function: handleError(QSerialPort::SerialPortError error)
@@ -583,15 +620,15 @@ void MainWindow::readData()
     console->putData(serial->readAll());
 }
 
-/*
+
 /******************************************************************************
-//
-//  Function: readData()
-//
-//  Description:
-//  ============
-//  Takes data from serial port and adds to console buffer
-//******************************************************************************
+
+  Function: readData()
+
+  Description:
+  ============
+  Takes data from serial port and adds to console buffer
+******************************************************************************
 QString MainWindow::resultsFormat( Parser &r, std::vector<DataSet::Test>::iterator itr ){
     QString buffer;
     QTextStream display( &buffer );
@@ -681,6 +718,7 @@ bool MainWindow::saveFile(const QString &fileName)
 ******************************************************************************/
 void MainWindow::showControl()
 {
+
     DataSet::Prop proptest;
     CD = new Control_Dialog(this);
     CD->setModal( true );
@@ -688,6 +726,8 @@ void MainWindow::showControl()
         proptest = CD->Return_Control_Dialog();
         QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);        
     }
+
+    delete CD;
 }
 
 /******************************************************************************

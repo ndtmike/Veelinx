@@ -24,20 +24,20 @@ private slots:
 private:
     Ui::Control_Dialog *ui;
 
-    void Set_comboBoxAmpGain();
-    void Set_comboBoxCalc();
-    void Set_comboBoxCaptureRate();
-    void Set_CycleTime();
-    void Set_DataSave();
-    void Set_Density();
-    void Set_comboBoxEMethod();
-    void Set_MaterialTravelDistance();
-    void Set_MaterialTravelVelocity();
-    void Set_PicSave();
-    void Set_comboBoxPulseRate();
-    void Set_comboBoxWaveType();
-    void Set_comboBoxUnits();
-    void Set_Voltage();
+    DataSet::AmpGain CharToAmpGain( char data_in );
+    DataSet::Calc CharToCalc( char data_in );
+    DataSet::Rate CharToCaptureRate( char data_in );
+    unsigned CharToCycleTime( char data_in_hi, char data_in_lo );
+    bool CharToDataSave( char data_in );
+    unsigned CharToDensity( char data_in_hi, char data_in_lo );
+    DataSet::EMethod CharToEMethod( char data_in );
+    unsigned CharToMaterialTravelDistance( char data_in_hi, char data_in_lo);
+    unsigned CharToMaterialTravelVelocity( char data_in_hi, char data_in_lo);
+    bool CharToPicSave( char data_in );
+    DataSet::Pulse CharToPulse(char data_in);
+    DataSet::Wave CharToWaveType( char data_in );
+    DataSet::Units CharToUnits( char data_in );
+    DataSet::Voltage CharToVoltage( char data_in );
 
     DataSet::AmpGain Ret_comboBoxAmpGain();
     DataSet::Calc Ret_comboBoxCalc();
@@ -53,6 +53,22 @@ private:
     DataSet::Wave Ret_comboBoxWaveType();
     DataSet::Units Ret_comboBoxUnits();
     DataSet::Voltage Ret_Voltage();
+
+    void Set_comboBoxAmpGain();
+    void Set_comboBoxCalc();
+    void Set_comboBoxCaptureRate();
+    void Set_CycleTime();
+    void Set_DataSave();
+    void Set_Density();
+    void Set_comboBoxEMethod();
+    void Set_MaterialTravelDistance();
+    void Set_MaterialTravelVelocity();
+    void Set_PicSave();
+    void Set_comboBoxPulseRate();
+    void Set_comboBoxWaveType();
+    void Set_comboBoxUnits();
+    void Set_Voltage();
+
 };
 
 #endif // CONTROL_DIALOG_H
