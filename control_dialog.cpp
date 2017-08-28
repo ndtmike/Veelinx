@@ -30,6 +30,7 @@ Control_Dialog::~Control_Dialog()
 {
     delete ui;
 }
+
 /******************************************************************************
 
   Function: DataSet::AmpGain CharToAmpGain( char data_in )
@@ -47,7 +48,7 @@ Control_Dialog::~Control_Dialog()
     #define AMPLIFIER_GAIN_250_SETTING      6
     #define AMPLIFIER_GAIN_500_SETTING      7
 ******************************************************************************/
-DataSet::AmpGain Control_Dialog::InitAmpGain( char data_in ){
+DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in ){
 
     DataSet::AmpGain return_amp_gain;
 
@@ -145,21 +146,15 @@ DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in ){
   Function: DataSet::Rate CharToCycleTime( char data_in_hi, char data_in_lo )
   Description:
   ============
-  This routine initializes the capture rate
 
-  data_in coded as follows:
- #define PICTURE_RATE_250MHZ             0
- #define PICTURE_RATE_500MHZ             1
- #define PICTURE_RATE_1000MHZ            2
- #define PICTURE_RATE_2000MHZ            3
 ******************************************************************************/
 unsigned Control_Dialog::CharToCycleTime( char data_in_hi, char data_in_lo )
 {
     unsigned returntime;
 
-    if ((data_in > CYCLE_TIME_MIN) && (data_in < CYCLE_TIME_MAX))
+    if ((data_in_hi > CYCLE_TIME_MIN) && (data_in_hi < CYCLE_TIME_MAX))
     {
-      returntime = data_in;
+      returntime = data_in_hi;
     }
     else
     {
@@ -169,20 +164,6 @@ unsigned Control_Dialog::CharToCycleTime( char data_in_hi, char data_in_lo )
     return( returntime );
 }
 
-/******************************************************************************
-
-  Function: DataSet::Rate CharToDataSave( char data_in )
-  Description:
-  ============
-  This routine initializes the capture rate
-
-  data_in coded as follows:
-
-******************************************************************************/
-unsigned Control_Dialog::CharToCycleTime( char data_in_hi, char data_in_lo )
-{
-
-}
 
 /******************************************************************************
 
@@ -227,7 +208,7 @@ unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo ){
 #define CALC_METHOD_DERIVED_MU          1
 #define CALC_METHOD_SIMPLE_E            0
 ******************************************************************************/
-DataSet::EMethod Control_Dialog::CharToEMethod(int data_in){
+DataSet::EMethod Control_Dialog::CharToEMethod(char data_in){
 
     DataSet::EMethod return_e;
 
@@ -258,7 +239,7 @@ DataSet::EMethod Control_Dialog::CharToEMethod(int data_in){
 //  #define MAT_TRAVEL_DIST_MAX             600
 //  #define MAT_TRAVEL_DIST_MIN             0.1
 //******************************************************************************
-unsigned RemoteControl::CharToMaterialTravelDistance( int data_in_hi, int data_in_lo)
+unsigned Control_Dialog::CharToMaterialTravelDistance( char data_in_hi, char data_in_lo)
 {
     unsigned return_distance;
 
@@ -314,7 +295,7 @@ unsigned RemoteControl::InitMaterialTravelVelocity( int data_in_hi, int data_in_
   data_in coded as follows:
 
 ******************************************************************************/
-unsigned Control_Dialog::CharToPicSave( char data_in_hi )
+bool Control_Dialog::CharToPicSave( char data_in )
 {
 
 }
@@ -331,7 +312,7 @@ unsigned Control_Dialog::CharToPicSave( char data_in_hi )
     #define PULSES_PER_SEQ_3                3
    #define PULSES_PER_SEQ_10               10
 ******************************************************************************/
-DataSet::Pulse RemoteControl::CharToPulse(int data_in)
+DataSet::Pulse Control_Dialog::CharToPulse(char data_in)
 {
     DataSet::Pulse return_pulse;
 

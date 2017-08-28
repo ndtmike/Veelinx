@@ -1,10 +1,30 @@
- #ifndef CONTROL_DIALOG_H
+#ifndef CONTROL_DIALOG_H
 #define CONTROL_DIALOG_H
 
 #include <QDialog>
 #include <QMessageBox>
 #include "inst_data.h"
+#include "remotecontrol.h"
+/*
+#define AMPLIFIER_GAIN_1_SETTING        0
+#define AMPLIFIER_GAIN_5_SETTING        1
+#define AMPLIFIER_GAIN_10_SETTING       2
+#define AMPLIFIER_GAIN_25_SETTING       3
+#define AMPLIFIER_GAIN_50_SETTING       4
+#define AMPLIFIER_GAIN_100_SETTING      5
+#define AMPLIFIER_GAIN_250_SETTING      6
+#define AMPLIFIER_GAIN_500_SETTING      7
 
+#define PICTURE_RATE_250MHZ             0
+#define PICTURE_RATE_500MHZ             1
+#define PICTURE_RATE_1000MHZ            2
+#define PICTURE_RATE_2000MHZ            3
+
+#define CYCLE_TIME_MIN 0  // needs to be checked
+#define CYCLE_TIME_MAX 10  //needs to be checked
+#define MAT_DENSITY_MIN 100 //needs to be checked
+#define MAT_DENSITY_MAX 4000 //needs to be checked
+*/
 namespace Ui {
 class Control_Dialog;
 }

@@ -251,6 +251,7 @@ unsigned RemoteControl::InitMaterialTravelDistance( int data_in_hi, int data_in_
 //  #define MAT_TRAVEL_VEL_MAX              40000
 //  #define MAT_TRAVEL_VEL_MIN              1000
 //******************************************************************************
+/*
 unsigned RemoteControl::InitMaterialTravelVelocity( int data_in_hi, int data_in_lo)
 {
     unsigned return_velocity;
@@ -267,7 +268,7 @@ unsigned RemoteControl::InitMaterialTravelVelocity( int data_in_hi, int data_in_
 
     return(return_velocity);
 }
-
+*/
 /******************************************************************************
 
   Function: unsigned InitPropCalc( int data_in )
