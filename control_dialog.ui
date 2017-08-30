@@ -527,46 +527,113 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget_10">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>340</y>
+     <x>21</x>
+     <y>311</y>
      <width>351</width>
      <height>24</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="formLayoutDensity">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
     <property name="spacing">
-     <number>30</number>
+     <number>36</number>
     </property>
     <item>
-     <widget class="QLabel" name="lblDensity">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>13</number>
       </property>
-      <property name="text">
-       <string>Density    </string>
+      <item>
+       <widget class="QLabel" name="lblCycleTime">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>CycleTime</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="CycleTimeSpinBox">
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="maximum">
+         <number>600</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSliderCycleTime">
+      <property name="maximum">
+       <number>600</number>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>21</x>
+     <y>341</y>
+     <width>351</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <property name="spacing">
+     <number>36</number>
+    </property>
     <item>
-     <widget class="QSpinBox" name="DensitySpinBox">
-      <property name="minimum">
-       <number>50</number>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>14</number>
       </property>
-      <property name="maximum">
-       <number>500</number>
-      </property>
-      <property name="singleStep">
-       <number>1</number>
-      </property>
-     </widget>
+      <item>
+       <widget class="QLabel" name="lblDensity">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Density    </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="DensitySpinBox">
+        <property name="minimum">
+         <number>50</number>
+        </property>
+        <property name="maximum">
+         <number>500</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QSlider" name="horizontalSliderDensity">
@@ -583,43 +650,56 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget_11">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>370</y>
+     <x>21</x>
+     <y>371</y>
      <width>351</width>
      <height>24</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="formLayoutDistance">
+   <layout class="QHBoxLayout" name="horizontalLayout_6">
     <property name="spacing">
-     <number>21</number>
+     <number>36</number>
     </property>
     <item>
-     <widget class="QLabel" name="lblDistance">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <property name="spacing">
+       <number>11</number>
       </property>
-      <property name="text">
-       <string>Distance       </string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="DistanceSpinBox">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>600</number>
-      </property>
-     </widget>
+      <item>
+       <widget class="QLabel" name="lblDistance">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Distance   </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="DistanceSpinBox">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>600</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QSlider" name="horizontalSliderDistance">
@@ -636,43 +716,50 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget_12">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>400</y>
+     <x>22</x>
+     <y>402</y>
      <width>351</width>
      <height>24</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="formLayoutVelocity">
+   <layout class="QHBoxLayout" name="horizontalLayout_8">
     <property name="spacing">
-     <number>21</number>
+     <number>36</number>
     </property>
     <item>
-     <widget class="QLabel" name="lblVelocity">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <property name="spacing">
+       <number>15</number>
       </property>
-      <property name="text">
-       <string>Velocity     </string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="VelocitySpinBox">
-      <property name="minimum">
-       <number>1000</number>
-      </property>
-      <property name="maximum">
-       <number>40000</number>
-      </property>
-     </widget>
+      <item>
+       <widget class="QLabel" name="lblVelocity">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Velocity</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="VelocitySpinBox">
+        <property name="minimum">
+         <number>1000</number>
+        </property>
+        <property name="maximum">
+         <number>40000</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QSlider" name="horizontalSliderVelocity">
@@ -681,59 +768,6 @@
       </property>
       <property name="maximum">
        <number>40000</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>310</y>
-     <width>351</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="formLayoutCycleTime">
-    <property name="spacing">
-     <number>30</number>
-    </property>
-    <item>
-     <widget class="QLabel" name="lblCycleTime">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>CycleTime</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="CycleTimeSpinBox">
-      <property name="frame">
-       <bool>true</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <property name="maximum">
-       <number>600</number>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSlider" name="horizontalSliderCycleTime">
-      <property name="maximum">
-       <number>600</number>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>

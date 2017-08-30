@@ -61,6 +61,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     GraphData = new DataPlot(this);
 
+    Splash = new SplashDialog();
+
     CurrentLocale = QLocale::system(); //standardized number strings
     QString systemlocale = CurrentLocale.name();
     CurrentLocale = QLocale(systemlocale);
@@ -79,24 +81,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #ifndef QT_DEBUG
     QTimer* init_timer = new QTimer(this);
-    init_timer->singleShot(100, this, SLOT(showSplash()));
+    init_timer->singleShot(1, this, SLOT(showSplash())); //delay before splash screen
 #else
 #ifdef TEST_REG
     QTimer* init_timer = new QTimer(this);
-    init_timer->singleShot(100, this, SLOT(showSplash()));
+    init_timer->singleShot(1, this, SLOT(showSplash()));  //delay before splash screen
 #else
     QTimer* init_timer = new QTimer(this);
-    init_timer->singleShot(20, this, SLOT(loadExampleFile()));
+    init_timer->singleShot(1, this, SLOT(loadExampleFile()));
 #endif
 #endif
-    connectTimer = new QTimer(this);
+//    connectTimer = new QTimer(this);
 }
 
 MainWindow::~MainWindow()
 {
     delete GraphData;
     closeSerialPort();
-    delete connectTimer;
+//    delete connectTimer;
     delete ui;
     delete console;
     delete serial;
@@ -335,6 +337,36 @@ void MainWindow::endUpload()
 QByteArray MainWindow::GetCurrentSettings()
 {
     QByteArray returnarray;
+    QByteArray initmsg;
+    initmsg.resize( REMOTE_CTRL_MSG_SIZE );
+    initmsg[0] = REMOTE_CTRL_HEADER;
+    initmsg[1] = MSG_CODE_INITIAL_SETTINGS;
+    initmsg[2] = MSG_CODE_FILL;
+    initmsg[3] = MSG_CODE_FILL;
+    initmsg[4] = REMOTE_CTRL_FOOTER;
+
+    qint64 bytesWritten = serial->write(initmsg);
+
+    if (bytesWritten == -1) {
+        QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write the data to port %1, error: %2")
+                             .arg(serial->portName(), serial->errorString()));
+//            standardOutput << QObject::tr("Failed to write the data to port %1, error: %2").arg(serialPortName).arg(serialPort.errorString()) << endl;
+            return( returnarray.append(SERIAL_PORT_ERROR));
+    } else if (bytesWritten != initmsg.size()) {
+        QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write all the data to port %1, error: %2")
+                             .arg(serial->portName(), serial->errorString()));
+//            standardOutput << QObject::tr("Failed to write all the data to port %1, error: %2").arg(serialPortName).arg(serialPort.errorString()) << endl;
+            return( returnarray.append(SERIAL_PORT_ERROR));
+    } else if (!serial->waitForBytesWritten(5000)) {
+        QMessageBox::information(this,"GetCurrentSettings", tr("Operation timed out or an error occurred for port %1, error: %2")
+                             .arg(serial->portName(), serial->errorString()));
+//            standardOutput << QObject::tr("Operation timed out or an error occurred for port %1, error: %2").arg(serialPortName).arg(serialPort.errorString()) << endl;
+            return( returnarray.append(SERIAL_PORT_ERROR));
+    }
+
+    QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+ //       standardOutput << QObject::tr("Data successfully sent to port %1").arg(serialPortName) << endl;
+
 
     returnarray.resize(20);
     returnarray[0] = 0x02;  //pulse per seq
@@ -599,7 +631,7 @@ void MainWindow::processSerialPort()
     foundSerialPort = checkSerialPort();
     if(foundSerialPort){
         openSerialPort();
-        connectTimer->start(500);
+        GetCurrentSettings();
     }
 }
 
@@ -614,45 +646,11 @@ void MainWindow::processSerialPort()
 
 void MainWindow::readData()
 {
-    connectTimer->stop();
+//    connectTimer->stop();
     serialTimeOut->start(500);
     Data += serial->readAll();
     console->putData(serial->readAll());
 }
-
-
-/******************************************************************************
-
-  Function: readData()
-
-  Description:
-  ============
-  Takes data from serial port and adds to console buffer
-******************************************************************************
-QString MainWindow::resultsFormat( Parser &r, std::vector<DataSet::Test>::iterator itr ){
-    QString buffer;
-    QTextStream display( &buffer );
-
-    if(itr->TestProp.PropUnits == DataSet::Metric){
-
-    }else{
-
-    }
-    return (buffer);
-}
-*/
-/*void MainWindow::save()
-{
-    if(saveFileName != ""){
-        saveFile(saveFileName);
-        QMessageBox::information(this,"Windsorlinx",tr("File: ")+
-                                 '\n' + saveFileName +
-                                 '\n' + tr("Saved Successfully"));
-    }else{
-        saveAs();
-    }
-}
-*/
 
 /******************************************************************************
 
@@ -741,12 +739,16 @@ void MainWindow::showControl()
 ******************************************************************************/
 void MainWindow::showSplash()
 {
-    const int five_sec = 5000;
+    const int five_sec = 5000;//need to change dialog here and in splash
 
-    SplashDialog* splash = new SplashDialog();
-    splash->setModal( true );
-    splash->show();
-
-    QTimer* splash_timer = new QTimer(this);
-    splash_timer->singleShot(five_sec, this, SLOT(processSerialPort()));
+//    SplashDialog* splash = new SplashDialog();
+    Splash->setModal( true );
+    Splash->show();
+#ifdef QT_DEBUG
+    QTimer* init_timer = new QTimer(this);
+    init_timer->singleShot(10, this, SLOT(processSerialPort()));
+#else
+    QTimer* init_timer = new QTimer(this);
+    init_timer->singleShot(five_sec, this, SLOT(processSerialPort()));
+#endif
 }

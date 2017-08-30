@@ -18,6 +18,7 @@
 #include <QDialog>
 #include <QTimer>
 
+
 namespace Ui {
 class SplashDialog;
 }

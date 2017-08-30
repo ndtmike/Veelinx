@@ -72,15 +72,45 @@
 #include "remotecontrol.h"
 
 //test Regular Operation
-//#define TEST_REG
+#define TEST_REG
 
 //test Graph
 //#define TEST_GRAPH
 
 //test Control Dialog one Dialog at a time
 #ifndef TEST_GRAPH
-#define TEST_CD
+//#define TEST_CD
 #endif
+
+//message codes from uC five bytes
+//header msg data1 data2 footer
+
+// Remote control protocol msg. codes
+#define MSG_CODE_PULSE_FREQ             0x00
+#define MSG_CODE_PULSE_CYCLE_TIME       0x01
+#define MSG_CODE_SAVE_TEST              0x02
+#define MSG_CODE_DISPLAY_SIG            0x03
+#define MSG_CODE_MSMT_MODE              0x04
+#define MSG_CODE_DISTANCE               0x05
+#define MSG_CODE_VELOCITY               0x06
+#define MSG_CODE_RUN_A_TEST             0x07
+#define MSG_CODE_AMP_GAIN               0x10
+#define MSG_CODE_PICTURE_RATE           0x11
+#define MSG_CODE_PULSER_VOLTAGE         0x12
+#define MSG_CODE_WAVE_TYPE              0x20
+#define MSG_CODE_DENSITY                0x21
+#define MSG_CODE_E_MU_CALC_METHOD       0x22
+#define MSG_CODE_REVIEW_TEST_NUM        0x30
+#define MSG_CODE_INITIAL_SETTINGS       0x40
+#define MSG_CODE_WATCHDOG_RESET         0x50
+#define MSG_CODE_FILL                   0xFF
+
+// Remote control protocol miscellaneous definitions
+#define REMOTE_CTRL_HEADER              0x5A
+#define REMOTE_CTRL_FOOTER              0xA3
+#define REMOTE_CTRL_MSG_SETS            2
+#define REMOTE_CTRL_MSG_SIZE            5
+#define SERIAL_PORT_ERROR               0xAA
 
 QT_BEGIN_NAMESPACE
 
@@ -138,6 +168,7 @@ private:
     bool foundSerialPort;
     DataPlot *GraphData;
     QSerialPort *serial;
+    SplashDialog* Splash;
     QTimer *serialTimeOut;
     QTranslator* Translator;
     Ui::MainWindow *ui;

@@ -19,7 +19,12 @@ SplashDialog::SplashDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SplashDialog)
 {
-    const int five_sec = 5000;
+#ifdef QT_DEBUG
+    const int five_sec = 10;
+#else
+    const int five_sec = 5000;  //need to change both 5 sec here and in "mainwindow"
+#endif
+
     ui->setupUi(this);
     QTimer* init_timer = new QTimer(this);
     connect(init_timer, SIGNAL(timeout()), this, SLOT(update()));
