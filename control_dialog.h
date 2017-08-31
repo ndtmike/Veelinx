@@ -38,6 +38,7 @@ public:
     ~Control_Dialog();
 
     DataSet::Prop Return_Control_Dialog();
+    bool Set_Control_Dialog( const QByteArray );
 
 private slots:
 

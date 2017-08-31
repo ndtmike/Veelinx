@@ -139,7 +139,7 @@ protected:
 private slots:
     void about();
     void changeEvent(QEvent *e);
-    void cleanData();
+    void displayData();
     void closeSerialPort();
     void copy();
     void endUpload();

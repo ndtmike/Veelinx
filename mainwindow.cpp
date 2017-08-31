@@ -227,7 +227,7 @@ bool MainWindow::checkSerialPort()
 
 ******************************************************************************/
 
-void MainWindow::cleanData()//main function that takes raw data and transforms to usable
+void MainWindow::displayData()//main function that takes raw data and transforms to usable
 {
     QString buffer = "";
     QTextStream display( &buffer );
@@ -306,6 +306,14 @@ void MainWindow::closeSerialPort()
 ******************************************************************************/
 void MainWindow::endUpload()
 {
+    QByteArray header;
+    QByteArray init;
+
+    init.append('Z');
+    init.append('@');
+
+    header = Data.left(2);
+
     serialTimeOut->stop();
 
     if(DataUpload == false){
@@ -313,12 +321,25 @@ void MainWindow::endUpload()
 #ifndef QT_NO_CURSOR
         QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
-        cleanData();
+        if( header == init ){
+            if(!CD->Set_Control_Dialog(Data)){
+                QMessageBox::warning(this, "endUpload", tr("Restart Program Before Uploading More Data"));
+                close();
+            }
+            Data = ""; //empty array
+            DataUpload = false;
+        }else{//uploading data
+            displayData();
+            ui->actionSaveAs->setEnabled(true);
+            ui->action_Open->setEnabled(false);
+            ui->actionPlot->setEnabled(true);
+        }
 #ifndef QT_NO_CURSOR
         QApplication::restoreOverrideCursor();
 #endif
     }else{
         QMessageBox::information(this, "endUpload", tr("Restart Program Before Uploading More Data"));
+        close();
     }
 
     ui->actionSaveAs->setEnabled(true);
@@ -450,7 +471,7 @@ void MainWindow::initActionsConnections()
     connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(help()));
     connect(ui->action_Open, SIGNAL(triggered()), this, SLOT(openFile()));
-    connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(cleanData()));
+    connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(displayData()));
 
     connect(ui->actionDeutche, SIGNAL(triggered()), this, SLOT(lngDeutche()));
     connect(ui->actionEnglish, SIGNAL(triggered()), this, SLOT(lngEnglish()));
@@ -544,7 +565,7 @@ void MainWindow::loadExampleFile()
     QTextStream load(&file);
     QString buffer = load.readAll();
     Data.append( buffer );
-    cleanData(); // loads data
+    displayData(); // loads data
     file.close();
 
 #ifdef TEST_GRAPH
@@ -649,7 +670,7 @@ void MainWindow::readData()
 //    connectTimer->stop();
     serialTimeOut->start(500);
     Data += serial->readAll();
-    console->putData(serial->readAll());
+//    console->putData(serial->readAll());
 }
 
 /******************************************************************************

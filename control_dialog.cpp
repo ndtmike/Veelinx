@@ -31,6 +31,52 @@ Control_Dialog::~Control_Dialog()
     delete ui;
 }
 
+
+DataSet::Prop Control_Dialog::Return_Control_Dialog()
+{
+    DataSet::Prop returnprop;
+
+    returnprop.PropAmpGain = Ret_comboBoxAmpGain();
+    returnprop.PropCalc = Ret_comboBoxCalc();
+    returnprop.PropCaptureRate = Ret_comboBoxCaptureRate();
+    returnprop.PropCycleTime = Ret_CycleTime();
+    returnprop.PropDataSave = Ret_DataSave();
+    returnprop.PropDensity = Ret_Density();
+    returnprop.PropEMethod = Ret_comboBoxEMethod();
+    returnprop.PropMaterialTravelDistance = Ret_MaterialTravelDistance();
+    returnprop.PropMaterialTravelVelocity = Ret_MaterialTravelVelocity();
+    returnprop.PropPicSave = Ret_PicSave();
+    returnprop.PropPulseRate = Ret_comboBoxPulseRate();
+    returnprop.PropWave = Ret_comboBoxWaveType();
+    returnprop.PropUnits = Ret_comboBoxUnits();
+    returnprop.PropVoltage = Ret_Voltage();
+
+    return(returnprop);
+}
+
+/******************************************************************************
+
+  Function: bool Set_Control_Dialog(const QByteArray)
+  Description:
+  ============
+  Sets the parameter of the control dialog box from the incoming string
+
+  data_in coded as follows:
+  "Z@number_of_pulses ÿ repeat_time ÿ test_is_saved ÿ show_the_picture ÿ measurement_modeÿ
+    p_distance_high ÿ p_distance_low ÿ s_distance_high ÿ s_distance_low ÿ
+    p_velocity_high ÿ p_velocity_low ÿ s_velocity_high ÿ s_velocity_low ÿ
+    run_enable ÿ amp_gain_index ÿ picture_rate_index ÿ pulser_voltage ÿ wave_type ÿ density_hi ÿ density_lo
+    e_type ÿ review_number_hi ÿ review_number_lo ÿ display_units"
+
+  Sample string
+  Z@10ÿ2ÿ0ÿ1ÿ0ÿ0ÿ0ÿ0ÿ45ÿ0ÿ7ÿ2ÿ128ÿ0ÿ0ÿ50ÿ0ÿ0ÿ1ÿ0ÿ£
+
+******************************************************************************/
+bool Control_Dialog::Set_Control_Dialog(const QByteArray)
+{
+
+}
+
 /******************************************************************************
 
   Function: DataSet::AmpGain CharToAmpGain( char data_in )
@@ -712,24 +758,3 @@ DataSet::Voltage Control_Dialog::Ret_Voltage()
     return(retvolt);
 }
 
-DataSet::Prop Control_Dialog::Return_Control_Dialog()
-{
-    DataSet::Prop returnprop;
-
-    returnprop.PropAmpGain = Ret_comboBoxAmpGain();
-    returnprop.PropCalc = Ret_comboBoxCalc();
-    returnprop.PropCaptureRate = Ret_comboBoxCaptureRate();
-    returnprop.PropCycleTime = Ret_CycleTime();
-    returnprop.PropDataSave = Ret_DataSave();
-    returnprop.PropDensity = Ret_Density();
-    returnprop.PropEMethod = Ret_comboBoxEMethod();
-    returnprop.PropMaterialTravelDistance = Ret_MaterialTravelDistance();
-    returnprop.PropMaterialTravelVelocity = Ret_MaterialTravelVelocity();
-    returnprop.PropPicSave = Ret_PicSave();
-    returnprop.PropPulseRate = Ret_comboBoxPulseRate();
-    returnprop.PropWave = Ret_comboBoxWaveType();
-    returnprop.PropUnits = Ret_comboBoxUnits();
-    returnprop.PropVoltage = Ret_Voltage();
-
-   return(returnprop);
-}
