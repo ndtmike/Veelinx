@@ -260,6 +260,7 @@ void MainWindow::displayData()//main function that takes raw data and transforms
 
         GraphData->SetData(p.ToQPFADC(itr));
     }
+
     console->setPlainText( buffer );
     DataUpload = true;
 }
@@ -309,7 +310,7 @@ void MainWindow::endUpload()
     QByteArray header;
     QByteArray init;
 
-    init.append('Z');
+    init.append('Z'); //set to check init bytes
     init.append('@');
 
     header = Data.left(2);

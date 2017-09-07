@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>382</width>
-    <height>430</height>
+    <height>563</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,8 +32,8 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>130</y>
+     <x>10</x>
+     <y>170</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -80,8 +80,8 @@
   <widget class="QWidget" name="layoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>190</y>
+     <x>10</x>
+     <y>230</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -128,8 +128,8 @@
   <widget class="QWidget" name="layoutWidget_3">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>70</y>
+     <x>130</x>
+     <y>110</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -176,8 +176,8 @@
   <widget class="QWidget" name="layoutWidget_4">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>130</y>
+     <x>130</x>
+     <y>170</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -224,8 +224,8 @@
   <widget class="QWidget" name="layoutWidget_5">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>190</y>
+     <x>130</x>
+     <y>230</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -272,8 +272,8 @@
   <widget class="QWidget" name="layoutWidget_6">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>190</y>
+     <x>250</x>
+     <y>230</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -338,8 +338,8 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>70</y>
+     <x>10</x>
+     <y>110</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -386,8 +386,8 @@
   <widget class="QWidget" name="layoutWidget_7">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>250</y>
+     <x>10</x>
+     <y>290</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -434,8 +434,8 @@
   <widget class="QWidget" name="layoutWidget_8">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>250</y>
+     <x>130</x>
+     <y>290</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -482,8 +482,8 @@
   <widget class="QWidget" name="layoutWidget_9">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>250</y>
+     <x>250</x>
+     <y>290</y>
      <width>111</width>
      <height>54</height>
     </rect>
@@ -527,11 +527,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>21</x>
-     <y>311</y>
+     <x>11</x>
+     <y>381</y>
      <width>351</width>
      <height>24</height>
     </rect>
@@ -553,7 +553,7 @@
          </font>
         </property>
         <property name="text">
-         <string>CycleTime</string>
+         <string> Cycle Time </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -587,11 +587,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>21</x>
-     <y>341</y>
+     <x>11</x>
+     <y>411</y>
      <width>351</width>
      <height>24</height>
     </rect>
@@ -613,7 +613,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Density    </string>
+         <string>Density       </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -650,11 +650,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>21</x>
-     <y>371</y>
+     <x>11</x>
+     <y>441</y>
      <width>351</width>
      <height>24</height>
     </rect>
@@ -669,14 +669,14 @@
        <number>11</number>
       </property>
       <item>
-       <widget class="QLabel" name="lblDistance">
+       <widget class="QLabel" name="lblPDistance">
         <property name="font">
          <font>
           <pointsize>10</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Distance   </string>
+         <string>P Distance   </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -684,7 +684,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="DistanceSpinBox">
+       <widget class="QSpinBox" name="PDistanceSpinBox">
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
         </property>
@@ -702,7 +702,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QSlider" name="horizontalSliderDistance">
+     <widget class="QSlider" name="horizontalSliderPDistance">
       <property name="minimum">
        <number>1</number>
       </property>
@@ -716,11 +716,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>22</x>
-     <y>402</y>
+     <x>10</x>
+     <y>470</y>
      <width>351</width>
      <height>24</height>
     </rect>
@@ -735,14 +735,14 @@
        <number>15</number>
       </property>
       <item>
-       <widget class="QLabel" name="lblVelocity">
+       <widget class="QLabel" name="lblPVelocity">
         <property name="font">
          <font>
           <pointsize>10</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Velocity</string>
+         <string>P Velocity</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -750,7 +750,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="VelocitySpinBox">
+       <widget class="QSpinBox" name="PVelocitySpinBox">
         <property name="minimum">
          <number>1000</number>
         </property>
@@ -762,7 +762,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QSlider" name="horizontalSliderVelocity">
+     <widget class="QSlider" name="horizontalSliderPVelocity">
       <property name="minimum">
        <number>1000</number>
       </property>
@@ -776,6 +776,231 @@
     </item>
    </layout>
   </widget>
+  <widget class="QWidget" name="layoutWidget_10">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>170</y>
+     <width>111</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayoutMeasMode">
+    <property name="labelAlignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="formAlignment">
+     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+    </property>
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
+    <item row="1" column="0" colspan="2">
+     <widget class="QComboBox" name="comboBoxMeasMode"/>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="lblMeasMode">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Meas Mode</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_11">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>500</y>
+     <width>351</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <property name="spacing">
+     <number>36</number>
+    </property>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_10">
+      <property name="spacing">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblSDistance">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>S Distance   </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="SDistanceSpinBox">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>600</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSliderSDistance">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>600</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_12">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>530</y>
+     <width>351</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_11">
+    <property name="spacing">
+     <number>36</number>
+    </property>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_12">
+      <property name="spacing">
+       <number>15</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblSVelocity">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>S Velocity</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="SVelocitySpinBox">
+        <property name="minimum">
+         <number>1000</number>
+        </property>
+        <property name="maximum">
+         <number>40000</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QSlider" name="horizontalSliderSVelocity">
+      <property name="minimum">
+       <number>1000</number>
+      </property>
+      <property name="maximum">
+       <number>40000</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_13">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>110</y>
+     <width>111</width>
+     <height>54</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayoutRun">
+    <property name="labelAlignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="formAlignment">
+     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+    </property>
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
+    <item row="1" column="0" colspan="2">
+     <widget class="QComboBox" name="comboBoxRun"/>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="lblRun">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Run</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <zorder>layoutWidget</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>layoutWidget</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>buttonBox</zorder>
@@ -792,6 +1017,7 @@
   <zorder>layoutWidget_10</zorder>
   <zorder>layoutWidget_11</zorder>
   <zorder>layoutWidget_12</zorder>
+  <zorder>layoutWidget_13</zorder>
  </widget>
  <resources/>
  <connections>

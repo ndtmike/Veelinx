@@ -14,10 +14,14 @@ Control_Dialog::Control_Dialog(QWidget *parent) :
     Set_DataSave();
     Set_Density();
     Set_comboBoxEMethod();
-    Set_MaterialTravelDistance();
-    Set_MaterialTravelVelocity();
+    Set_comboBoxMeasMode();
+    Set_PTravelDistance();
+    Set_PTravelVelocity();
     Set_PicSave();
     Set_comboBoxPulseRate();
+    Set_comboBoxRun();
+    Set_STravelDistance();
+    Set_STravelVelocity();
     Set_comboBoxWaveType();
     Set_comboBoxUnits();
     Set_Voltage();
@@ -43,10 +47,12 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
     returnprop.PropDataSave = Ret_DataSave();
     returnprop.PropDensity = Ret_Density();
     returnprop.PropEMethod = Ret_comboBoxEMethod();
-    returnprop.PropMaterialTravelDistance = Ret_MaterialTravelDistance();
-    returnprop.PropMaterialTravelVelocity = Ret_MaterialTravelVelocity();
+    returnprop.PropPTravelDistance = Ret_PTravelDistance();
+    returnprop.PropPTravelVelocity = Ret_PTravelVelocity();
     returnprop.PropPicSave = Ret_PicSave();
     returnprop.PropPulseRate = Ret_comboBoxPulseRate();
+    returnprop.PropSTravelDistance = Ret_STravelDistance();
+    returnprop.PropSTravelVelocity = Ret_STravelVelocity();
     returnprop.PropWave = Ret_comboBoxWaveType();
     returnprop.PropUnits = Ret_comboBoxUnits();
     returnprop.PropVoltage = Ret_Voltage();
@@ -62,7 +68,7 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
   Sets the parameter of the control dialog box from the incoming string
 
   data_in coded as follows:
-  "Z@number_of_pulses ÿ repeat_time ÿ test_is_saved ÿ show_the_picture ÿ measurement_modeÿ
+  "Z@number_of_pulses ÿ repeat_time ÿ test_is_saved ÿ show_the_picture ÿ measurement_mode ÿ
     p_distance_high ÿ p_distance_low ÿ s_distance_high ÿ s_distance_low ÿ
     p_velocity_high ÿ p_velocity_low ÿ s_velocity_high ÿ s_velocity_low ÿ
     run_enable ÿ amp_gain_index ÿ picture_rate_index ÿ pulser_voltage ÿ wave_type ÿ density_hi ÿ density_lo
@@ -72,9 +78,35 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
   Z@10ÿ2ÿ0ÿ1ÿ0ÿ0ÿ0ÿ0ÿ45ÿ0ÿ7ÿ2ÿ128ÿ0ÿ0ÿ50ÿ0ÿ0ÿ1ÿ0ÿ£
 
 ******************************************************************************/
-bool Control_Dialog::Set_Control_Dialog(const QByteArray)
+bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
 {
+    bool ok = false;
 
+    Current_Prop.PropPulseRate = CharToPulse( header.at(Pulse_Pos()), &ok );
+    Current_Prop.PropCycleTime = CharToCycleTime(header.at(CycleTime_Pos()), &ok );
+    Current_Prop.PropDataSave = CharToDataSave( DataSave_Pos(), &ok  );
+    Current_Prop.PropPicSave = CharToPicSave( header.at(PicSave_Pos()), &ok );
+    Current_Prop.PropMeaseMode = CharToMeasMode(header.at( MeasMode_Pos()), &ok );
+    Current_Prop.PropPTravelDistance =
+            CharToPTravelDistance( header.at( P_Dist_Pos()), header.at(P_Dist_Pos() + 2), &ok  );
+    Current_Prop.PropSTravelDistance =
+            CharToSTravelDistance( header.at( S_Dist_Pos()), header.at(S_Dist_Pos() + 2), &ok  );
+    Current_Prop.PropPTravelVelocity =
+            CharToPTravelVelocity( header.at( P_Vel_Pos()), header.at(P_Vel_Pos() + 2), &ok  );
+    Current_Prop.PropSTravelVelocity =
+            CharToSTravelVelocity( header.at( S_Vel_Pos()), header.at( S_Vel_Pos() + 2), &ok  );
+    Current_Prop.PropRun = (bool)header.at( RE_Pos(), &ok );
+    Current_Prop.PropAmpGain =
+            CharToAmpGain( header.at( AmpGain_Pos()), &ok );
+    Current_Prop.PropCaptureRate =
+            CharToCaptureRate( header.at( PicRate_Pos() ), &ok );
+    Current_Prop.PropVoltage = CharToVoltage( header.at( Voltage_Pos() ), &ok );
+    Current_Prop.PropWave = CharToWaveType( header.at( Wave_Pos() ), &ok );
+    Current_Prop.PropDensity =
+            CharToDensity( header.at( Density_Pos()), header.at( Density_Pos() + 2 ), &ok );
+    Current_Prop.PropUnits = CharToUnits( header.at( Units_Pos() ), &ok );
+
+    return( true );
 }
 
 /******************************************************************************
@@ -94,7 +126,7 @@ bool Control_Dialog::Set_Control_Dialog(const QByteArray)
     #define AMPLIFIER_GAIN_250_SETTING      6
     #define AMPLIFIER_GAIN_500_SETTING      7
 ******************************************************************************/
-DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in ){
+DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in, bool* ok ){
 
     DataSet::AmpGain return_amp_gain;
 
@@ -145,7 +177,7 @@ DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in ){
 #define PULSE_CALC_DISTANCE             0
 #define PULSE_CALC_VELOCITY             1
 ******************************************************************************/
-DataSet::Calc Control_Dialog::CharToCalc( char data_in )
+DataSet::Calc Control_Dialog::CharToCalc( char data_in, bool* ok )
 {
 
 }
@@ -163,7 +195,7 @@ DataSet::Calc Control_Dialog::CharToCalc( char data_in )
 #define PICTURE_RATE_1000MHZ            2
 #define PICTURE_RATE_2000MHZ            3
 ******************************************************************************/
-DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in ){
+DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in, bool* ok ){
 
     DataSet::Rate return_rate;
 
@@ -189,27 +221,43 @@ DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in ){
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToCycleTime( char data_in_hi, char data_in_lo )
+  Function: DataSet::Rate CharToCycleTime( char data_in_hi, char data_in_lo, bool* ok )
   Description:
   ============
 
 ******************************************************************************/
-unsigned Control_Dialog::CharToCycleTime( char data_in_hi, char data_in_lo )
+unsigned Control_Dialog::CharToCycleTime( char data_in, bool* ok )
 {
     unsigned returntime;
-
-    if ((data_in_hi > CYCLE_TIME_MIN) && (data_in_hi < CYCLE_TIME_MAX))
-    {
-      returntime = data_in_hi;
+    int cindex = (int) data_in;
+    ok = false;
+    if( cindex >= CYCLE_TIME_MIN && cindex <= CYCLE_TIME_MAX ){
+        ok = true;
+        ui->CycleTimeSpinBox->setValue( cindex );
+        if ((data_in > CYCLE_TIME_MIN) && (data_in < CYCLE_TIME_MAX)){
+            returntime = ( unsigned ) data_in;
+        }else{
+            returntime = CYCLE_TIME_MIN;
+        }
     }
-    else
-    {
-      returntime = CYCLE_TIME_MIN;
-    }
-
     return( returntime );
 }
 
+
+/******************************************************************************
+
+  Function: DataSet::Calc CharToDataSave( char data_in )
+  Description:
+  ============
+  This routine converts the DataSave Parameter
+
+          1
+******************************************************************************/
+bool Control_Dialog::CharToDataSave( char data_in, bool* ok )
+{
+
+
+}
 
 /******************************************************************************
 
@@ -223,7 +271,7 @@ unsigned Control_Dialog::CharToCycleTime( char data_in_hi, char data_in_lo )
     #define MAT_DENSITY_MAX                 500
     #define MAT_DENSITY_MIN                 50
 ******************************************************************************/
-unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo ){
+unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo, bool* ok ){
 
     unsigned return_density;
 
@@ -254,7 +302,7 @@ unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo ){
 #define CALC_METHOD_DERIVED_MU          1
 #define CALC_METHOD_SIMPLE_E            0
 ******************************************************************************/
-DataSet::EMethod Control_Dialog::CharToEMethod(char data_in){
+DataSet::EMethod Control_Dialog::CharToEMethod( char data_in , bool* ok ){
 
     DataSet::EMethod return_e;
 
@@ -273,6 +321,27 @@ DataSet::EMethod Control_Dialog::CharToEMethod(char data_in){
 
     return(return_e);
 }
+
+/******************************************************************************
+
+  Function: DataSet::EMethod CharToMeasMode( int data_in )
+
+  Description:
+  ============
+  This routine initializes the material density
+
+  data_in coded as follows:
+
+******************************************************************************/
+DataSet::MeasMode Control_Dialog::CharToMeasMode( char data_in, bool* ok ){
+
+    DataSet::MeasMode return_e;
+
+
+
+    return(return_e);
+}
+
 //******************************************************************************
 //
 //  Function: unsigned CharToMaterialTravelDistance( int data_in_hi, int data_in_lo)
@@ -285,7 +354,7 @@ DataSet::EMethod Control_Dialog::CharToEMethod(char data_in){
 //  #define MAT_TRAVEL_DIST_MAX             600
 //  #define MAT_TRAVEL_DIST_MIN             0.1
 //******************************************************************************
-unsigned Control_Dialog::CharToMaterialTravelDistance( char data_in_hi, char data_in_lo)
+unsigned Control_Dialog::CharToPTravelDistance( char data_in_hi, char data_in_lo, bool* ok )
 {
     unsigned return_distance;
 
@@ -304,7 +373,7 @@ unsigned Control_Dialog::CharToMaterialTravelDistance( char data_in_hi, char dat
 
 //******************************************************************************
 //
-//  Function: unsigned CharToMaterialTravelVelocity( int data_in_hi, int data_in_lo)
+//  Function: unsigned CharToPTravelVelocity( int data_in_hi, int data_in_lo)
 //
 //  Description:
 //  ============
@@ -314,7 +383,7 @@ unsigned Control_Dialog::CharToMaterialTravelDistance( char data_in_hi, char dat
 //  #define MAT_TRAVEL_VEL_MAX              40000
 //  #define MAT_TRAVEL_VEL_MIN              1000
 //******************************************************************************
-unsigned RemoteControl::InitMaterialTravelVelocity( int data_in_hi, int data_in_lo)
+unsigned Control_Dialog::CharToPTravelVelocity( char data_in_hi, char data_in_lo, bool* ok )
 {
     unsigned return_velocity;
 
@@ -341,12 +410,13 @@ unsigned RemoteControl::InitMaterialTravelVelocity( int data_in_hi, int data_in_
   data_in coded as follows:
 
 ******************************************************************************/
-bool Control_Dialog::CharToPicSave( char data_in )
+bool Control_Dialog::CharToPicSave( char data_in, bool* ok )
 {
 
 }
+
 /******************************************************************************
-    Function: DataSet::Pulse CharToPulse(int data_in)
+    Function: DataSet::Pulse CharToPulse( int data_in, , bool* ok )
 
     Description:
     ============
@@ -358,27 +428,79 @@ bool Control_Dialog::CharToPicSave( char data_in )
     #define PULSES_PER_SEQ_3                3
    #define PULSES_PER_SEQ_10               10
 ******************************************************************************/
-DataSet::Pulse Control_Dialog::CharToPulse(char data_in)
+DataSet::Pulse Control_Dialog::CharToPulse(char data_in , bool* ok )
 {
     DataSet::Pulse return_pulse;
-
+    ok = false;
+    int cindex = (int) data_in;
+    if( ( cindex >= 0 ) && ( cindex <= ui->comboBoxPulseRate->count() - 1 )){
+        ui->comboBoxPulseRate->setCurrentIndex( cindex );
+        ok = true;
     // Initialize the pulses per sequence
-    if (data_in == PULSES_PER_SEQ_3)
-    {
-      return_pulse = DataSet::PulsePerSeq_3;
+        if (data_in == PULSES_PER_SEQ_3){
+            return_pulse = DataSet::PulsePerSeq_3;
+        } else if (data_in == PULSES_PER_SEQ_10){
+            return_pulse = DataSet::PulsePerSeq_10;
+        }else{
+            return_pulse = DataSet::PulsePerSeq_1;
+        }
     }
-    else if (data_in == PULSES_PER_SEQ_10)
-    {
-      return_pulse = DataSet::PulsePerSeq_10;
-    }
-    else
-    {
-      return_pulse = DataSet::PulsePerSeq_1;
-    }
-
-    return(return_pulse);
+    return( return_pulse );
 }
 
+//******************************************************************************
+//
+//  Function: unsigned CharToSTravelDistance( int data_in_hi, int data_in_lo)
+//
+//  Description:
+//  ============
+//  This routine initializes the cycle time between pulse sequences
+//
+//  data_in coded as follows:
+//******************************************************************************
+unsigned Control_Dialog::CharToSTravelDistance( char data_in_hi, char data_in_lo, bool* ok )
+{
+    unsigned return_distance;
+
+    return_distance = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
+    if (return_distance < MAT_TRAVEL_DIST_MIN)
+    {
+        return_distance = MAT_TRAVEL_DIST_MIN;
+    }
+    else if (return_distance > MAT_TRAVEL_DIST_MAX)
+    {
+        return_distance = MAT_TRAVEL_DIST_MAX;
+    }
+
+    return(return_distance);
+}
+
+//******************************************************************************
+//
+//  Function: unsigned CharToSTravelVelocity( int data_in_hi, int data_in_lo)
+//
+//  Description:
+//  ============
+//  This routine initializes the cycle time between pulse sequences
+//
+//  data_in coded as follows:
+//******************************************************************************
+unsigned Control_Dialog::CharToSTravelVelocity( char data_in_hi, char data_in_lo, bool* ok )
+{
+    unsigned return_velocity;
+
+    return_velocity = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
+    if (return_velocity < MAT_TRAVEL_DIST_MIN)
+    {
+        return_velocity = MAT_TRAVEL_VEL_MIN;
+    }
+    else if (return_velocity > MAT_TRAVEL_VEL_MAX)
+    {
+        return_velocity = MAT_TRAVEL_VEL_MAX;
+    }
+
+    return(return_velocity);
+}
 /******************************************************************************
 
   Function: DataSet::Rate CharToDataSave( char data_in )
@@ -389,7 +511,7 @@ DataSet::Pulse Control_Dialog::CharToPulse(char data_in)
   data_in coded as follows:
 
 ******************************************************************************/
-DataSet::Wave Control_Dialog::CharToWaveType( char data_in_hi )
+DataSet::Wave Control_Dialog::CharToWaveType( char data_in_hi, bool* ok )
 {
 
 }
@@ -404,7 +526,7 @@ DataSet::Wave Control_Dialog::CharToWaveType( char data_in_hi )
   data_in coded as follows:
 
 ******************************************************************************/
- DataSet::Units Control_Dialog::CharToUnits( char data_in_hi )
+ DataSet::Units Control_Dialog::CharToUnits( char data_in_hi, bool* ok )
 {
 
 }
@@ -419,7 +541,7 @@ DataSet::Wave Control_Dialog::CharToWaveType( char data_in_hi )
   data_in coded as follows:
 
 ******************************************************************************/
-DataSet::Voltage Control_Dialog::CharToVoltage( char data_in_hi )
+DataSet::Voltage Control_Dialog::CharToVoltage( char data_in_hi, bool* ok )
 {
 
 }
@@ -488,20 +610,26 @@ void Control_Dialog::Set_comboBoxEMethod()
     ui->comboBoxEMethod->addItem("Simple E");
 }
 
-void Control_Dialog::Set_MaterialTravelDistance()
+void Control_Dialog::Set_comboBoxMeasMode()
 {
-    connect(ui->DistanceSpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderDistance,SLOT(setValue(int)));
-    connect(ui->horizontalSliderDistance, SIGNAL(valueChanged(int)),
-            ui->DistanceSpinBox, SLOT(setValue(int)));
+    ui->comboBoxMeasMode->addItem("Distance");
+    ui->comboBoxMeasMode->addItem("Velocity");
 }
 
-void Control_Dialog::Set_MaterialTravelVelocity()
+void Control_Dialog::Set_PTravelDistance()
 {
-    connect(ui->VelocitySpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderVelocity,SLOT(setValue(int)));
-    connect(ui->horizontalSliderVelocity, SIGNAL(valueChanged(int)),
-            ui->VelocitySpinBox, SLOT(setValue(int)));
+    connect(ui->PDistanceSpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderPDistance,SLOT(setValue(int)));
+    connect(ui->horizontalSliderPDistance, SIGNAL(valueChanged(int)),
+            ui->PDistanceSpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_PTravelVelocity()
+{
+    connect(ui->PVelocitySpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderPVelocity,SLOT(setValue(int)));
+    connect(ui->horizontalSliderPVelocity, SIGNAL(valueChanged(int)),
+            ui->PVelocitySpinBox, SLOT(setValue(int)));
 }
 
 void Control_Dialog::Set_PicSave()
@@ -515,6 +643,28 @@ void Control_Dialog::Set_comboBoxPulseRate()
     ui->comboBoxPulseRate->addItem("1");
     ui->comboBoxPulseRate->addItem("3");
     ui->comboBoxPulseRate->addItem("10");
+}
+
+void Control_Dialog::Set_comboBoxRun()
+{
+    ui->comboBoxRun->addItem("No");
+    ui->comboBoxRun->addItem("Yes");
+}
+
+void Control_Dialog::Set_STravelDistance()
+{
+    connect(ui->SDistanceSpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderSDistance,SLOT(setValue(int)));
+    connect(ui->horizontalSliderSDistance, SIGNAL(valueChanged(int)),
+            ui->SDistanceSpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_STravelVelocity()
+{
+    connect(ui->SVelocitySpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderSVelocity,SLOT(setValue(int)));
+    connect(ui->horizontalSliderSVelocity, SIGNAL(valueChanged(int)),
+            ui->SVelocitySpinBox, SLOT(setValue(int)));
 }
 
 void Control_Dialog::Set_comboBoxWaveType()
@@ -659,15 +809,15 @@ DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
     return(retemethod);
 }
 
-unsigned Control_Dialog::Ret_MaterialTravelDistance()
+unsigned Control_Dialog::Ret_PTravelDistance()
 {
-    unsigned returnui = ui->DistanceSpinBox->value();
+    unsigned returnui = ui->PDistanceSpinBox->value();
     return(returnui);
 }
 
-unsigned Control_Dialog::Ret_MaterialTravelVelocity()
+unsigned Control_Dialog::Ret_PTravelVelocity()
 {
-    unsigned returnui = ui->VelocitySpinBox->value();
+    unsigned returnui = ui->PVelocitySpinBox->value();
     return(returnui);
 }
 
@@ -699,6 +849,18 @@ DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
         break;
     }
     return(retpulse);
+}
+
+unsigned Control_Dialog::Ret_STravelDistance()
+{
+    unsigned returnui = ui->PDistanceSpinBox->value();
+    return(returnui);
+}
+
+unsigned Control_Dialog::Ret_STravelVelocity()
+{
+    unsigned returnui = ui->PVelocitySpinBox->value();
+    return(returnui);
 }
 
 DataSet::Wave Control_Dialog::Ret_comboBoxWaveType()
