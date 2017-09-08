@@ -95,7 +95,7 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
             CharToPTravelVelocity( header.at( P_Vel_Pos()), header.at(P_Vel_Pos() + 2), &ok  );
     Current_Prop.PropSTravelVelocity =
             CharToSTravelVelocity( header.at( S_Vel_Pos()), header.at( S_Vel_Pos() + 2), &ok  );
-    Current_Prop.PropRun = (bool)header.at( RE_Pos(), &ok );
+//    Current_Prop.PropRun = (bool)header.at( RE_Pos(), &ok );
     Current_Prop.PropAmpGain =
             CharToAmpGain( header.at( AmpGain_Pos()), &ok );
     Current_Prop.PropCaptureRate =
@@ -229,10 +229,10 @@ DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in, bool* ok ){
 unsigned Control_Dialog::CharToCycleTime( char data_in, bool* ok )
 {
     unsigned returntime;
-    int cindex = (int) data_in;
-    ok = false;
-    if( cindex >= CYCLE_TIME_MIN && cindex <= CYCLE_TIME_MAX ){
-        ok = true;
+    QByteArray qdata( 1,data_in );
+    int cindex = qdata.toInt( ok );
+    if( ( *ok == true ) &&( cindex >= CYCLE_TIME_MIN ) && ( cindex <= CYCLE_TIME_MAX ) ){
+        *ok = true;
         ui->CycleTimeSpinBox->setValue( cindex );
         if ((data_in > CYCLE_TIME_MIN) && (data_in < CYCLE_TIME_MAX)){
             returntime = ( unsigned ) data_in;
@@ -431,11 +431,11 @@ bool Control_Dialog::CharToPicSave( char data_in, bool* ok )
 DataSet::Pulse Control_Dialog::CharToPulse(char data_in , bool* ok )
 {
     DataSet::Pulse return_pulse;
-    ok = false;
-    int cindex = (int) data_in;
-    if( ( cindex >= 0 ) && ( cindex <= ui->comboBoxPulseRate->count() - 1 )){
+    QByteArray qdata(1,data_in);
+    int cindex = qdata.toInt(ok);
+    if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxPulseRate->count() - 1 )){
         ui->comboBoxPulseRate->setCurrentIndex( cindex );
-        ok = true;
+        *ok = true;
     // Initialize the pulses per sequence
         if (data_in == PULSES_PER_SEQ_3){
             return_pulse = DataSet::PulsePerSeq_3;
