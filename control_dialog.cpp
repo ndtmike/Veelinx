@@ -83,8 +83,8 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
     bool ok = false;
 
     Current_Prop.PropPulseRate = CharToPulse( header.at(Pulse_Pos()), &ok );
-    Current_Prop.PropCycleTime = CharToCycleTime(header.at(CycleTime_Pos()), &ok );
-    Current_Prop.PropDataSave = CharToDataSave( DataSave_Pos(), &ok  );
+    Current_Prop.PropCycleTime = CharToCycleTime(header.at( CycleTime_Pos() ), &ok );
+    Current_Prop.PropDataSave = CharToDataSave( header.at( DataSave_Pos() ), &ok  );
     Current_Prop.PropPicSave = CharToPicSave( header.at(PicSave_Pos()), &ok );
     Current_Prop.PropMeaseMode = CharToMeasMode(header.at( MeasMode_Pos()), &ok );
     Current_Prop.PropPTravelDistance =
@@ -255,8 +255,15 @@ unsigned Control_Dialog::CharToCycleTime( char data_in, bool* ok )
 ******************************************************************************/
 bool Control_Dialog::CharToDataSave( char data_in, bool* ok )
 {
-
-
+    bool returndatasave = false;
+    QByteArray qdata( 1,data_in );
+    int cindex = qdata.toInt( ok );
+    if( ( *ok == true ) &&( cindex >= 1 ) ){
+        *ok = true;
+        ui->CycleTimeSpinBox->setValue( cindex );
+        returndatasave = true;
+    }
+    return( returndatasave );
 }
 
 /******************************************************************************
@@ -335,11 +342,18 @@ DataSet::EMethod Control_Dialog::CharToEMethod( char data_in , bool* ok ){
 ******************************************************************************/
 DataSet::MeasMode Control_Dialog::CharToMeasMode( char data_in, bool* ok ){
 
-    DataSet::MeasMode return_e;
+    DataSet::MeasMode return_measmode;
+    QByteArray qdata( 1,data_in );
+    int cindex = qdata.toInt( ok );
+    if( ( *ok == true && cindex = PULSE_CALC_DISTANCE ) ){
+        ui->comboBoxMeasMode->setCurrentIndex( cindex );
+        return_measmode = DataSet::Distance;
+    }else if( *ok == true && cindex = PULSE_CALC_VELOCITY ){
+        ui->comboBoxMeasMode->setCurrentIndex( cindex );
+        return_measmode = DataSet::Velocity;
+    }
 
-
-
-    return(return_e);
+    return( return_measmode );
 }
 
 //******************************************************************************
@@ -412,7 +426,15 @@ unsigned Control_Dialog::CharToPTravelVelocity( char data_in_hi, char data_in_lo
 ******************************************************************************/
 bool Control_Dialog::CharToPicSave( char data_in, bool* ok )
 {
-
+    bool returnpicsave = false;
+    QByteArray qdata( 1,data_in );
+    int cindex = qdata.toInt( ok );
+    if( ( *ok == true ) &&( cindex >= 1 ) ){
+        *ok = true;
+        ui->CycleTimeSpinBox->setValue( cindex );
+        returnpicsave = true;
+    }
+    return( returnpicsave );
 }
 
 /******************************************************************************
@@ -430,7 +452,7 @@ bool Control_Dialog::CharToPicSave( char data_in, bool* ok )
 ******************************************************************************/
 DataSet::Pulse Control_Dialog::CharToPulse(char data_in , bool* ok )
 {
-    DataSet::Pulse return_pulse;
+    DataSet::Pulse return_pulse = DataSet::PulsePerSeq_3;
     QByteArray qdata(1,data_in);
     int cindex = qdata.toInt(ok);
     if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxPulseRate->count() - 1 )){
