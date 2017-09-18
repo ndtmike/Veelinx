@@ -83,30 +83,68 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
     bool ok = false;
 
     Current_Prop.PropPulseRate = CharToPulse( header.at(Pulse_Pos()), &ok );
-    Current_Prop.PropCycleTime = CharToCycleTime(header.at( CycleTime_Pos() ), &ok );
-    Current_Prop.PropDataSave = CharToDataSave( header.at( DataSave_Pos() ), &ok  );
-    Current_Prop.PropPicSave = CharToPicSave( header.at(PicSave_Pos()), &ok );
-    Current_Prop.PropMeaseMode = CharToMeasMode(header.at( MeasMode_Pos()), &ok );
-    Current_Prop.PropPTravelDistance =
-            CharToPTravelDistance( header.at( P_Dist_Pos()), header.at(P_Dist_Pos() + 2), &ok  );
-    Current_Prop.PropSTravelDistance =
-            CharToSTravelDistance( header.at( S_Dist_Pos()), header.at(S_Dist_Pos() + 2), &ok  );
-    Current_Prop.PropPTravelVelocity =
-            CharToPTravelVelocity( header.at( P_Vel_Pos()), header.at(P_Vel_Pos() + 2), &ok  );
-    Current_Prop.PropSTravelVelocity =
-            CharToSTravelVelocity( header.at( S_Vel_Pos()), header.at( S_Vel_Pos() + 2), &ok  );
-//    Current_Prop.PropRun = (bool)header.at( RE_Pos(), &ok );
-    Current_Prop.PropAmpGain =
-            CharToAmpGain( header.at( AmpGain_Pos()), &ok );
-    Current_Prop.PropCaptureRate =
-            CharToCaptureRate( header.at( PicRate_Pos() ), &ok );
-    Current_Prop.PropVoltage = CharToVoltage( header.at( Voltage_Pos() ), &ok );
-    Current_Prop.PropWave = CharToWaveType( header.at( Wave_Pos() ), &ok );
-    Current_Prop.PropDensity =
-            CharToDensity( header.at( Density_Pos()), header.at( Density_Pos() + 2 ), &ok );
-    Current_Prop.PropUnits = CharToUnits( header.at( Units_Pos() ), &ok );
-
-    return( true );
+    if( ok == true ){
+        Current_Prop.PropCycleTime = CharToCycleTime(header.at( CycleTime_Pos() ), &ok );
+        if( ok == true ){
+            Current_Prop.PropDataSave = CharToDataSave( header.at( DataSave_Pos() ), &ok  );
+            if( ok == true ){
+                Current_Prop.PropPicSave = CharToPicSave( header.at(PicSave_Pos()), &ok );
+                if( ok == true ){
+                    Current_Prop.PropMeaseMode = CharToMeasMode(header.at( MeasMode_Pos()), &ok );
+                    if( ok == true ){
+                        Current_Prop.PropPTravelDistance =
+                            CharToPTravelDistance( header.at( P_Dist_Pos()),
+                                                   header.at(P_Dist_Pos() + 2), &ok  );
+                        if( ok == true ){
+                            Current_Prop.PropSTravelDistance =
+                                CharToSTravelDistance( header.at( S_Dist_Pos()),
+                                                   header.at(S_Dist_Pos() + 2), &ok  );
+                            if( ok == true ){
+                                Current_Prop.PropPTravelVelocity =
+                                    CharToPTravelVelocity( header.at( P_Vel_Pos()),
+                                                       header.at(P_Vel_Pos() + 2), &ok  );
+                                if( ok == true ){
+                                    Current_Prop.PropSTravelVelocity =
+                                        CharToSTravelVelocity( header.at( S_Vel_Pos()),
+                                                               header.at( S_Vel_Pos() + 2), &ok  );
+                                    if( ok == true ){
+                                        Current_Prop.PropRun = (bool)header.at( RE_Pos() );
+                                        if( ok == true ){
+                                            Current_Prop.PropAmpGain =
+                                                CharToAmpGain( header.at( AmpGain_Pos()), &ok );
+                                            if( ok == true ){
+                                                Current_Prop.PropCaptureRate =
+                                                    CharToCaptureRate( header.at( PicRate_Pos() ), &ok );
+                                                if( ok == true ){
+                                                    Current_Prop.PropVoltage =
+                                                            CharToVoltage( header.at( Voltage_Pos() ), &ok );
+                                                    if( ok == true ){
+                                                    Current_Prop.PropWave =
+                                                            CharToWaveType( header.at( Wave_Pos() ), &ok );
+                                                        if( ok == true ){
+                                                            Current_Prop.PropDensity =
+                                                                CharToDensity( header.at( Density_Pos()),
+                                                                header.at( Density_Pos() + 2 ), &ok );
+                                                            if(ok == true ){
+                                                                Current_Prop.PropUnits =
+                                                                        CharToUnits( header.at( Units_Pos() ),
+                                                                                     &ok );
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return( ok );
 }
 
 /******************************************************************************
@@ -129,38 +167,47 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
 DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in, bool* ok ){
 
     DataSet::AmpGain return_amp_gain;
+    *ok = false;
 
     if (data_in == AMPLIFIER_GAIN_500_SETTING)
     {
         return_amp_gain = DataSet::Gain_500;
+        *ok = true;
     }
     else if (data_in == AMPLIFIER_GAIN_250_SETTING)
     {
         return_amp_gain = DataSet::Gain_250;
+        *ok = true;
     }
     else if (data_in == AMPLIFIER_GAIN_100_SETTING)
     {
         return_amp_gain = DataSet::Gain_100;
+        *ok = true;
     }
     else if (data_in == AMPLIFIER_GAIN_50_SETTING)
     {
         return_amp_gain = DataSet::Gain_50;
+        *ok = true;
     }
     else if (data_in == AMPLIFIER_GAIN_25_SETTING)
     {
         return_amp_gain = DataSet::Gain_25;
+        *ok = true;
     }
     else if (data_in == AMPLIFIER_GAIN_10_SETTING)
     {
-        return_amp_gain = DataSet::Gain_10;;
+        return_amp_gain = DataSet::Gain_10;
+        *ok = true;
     }
     else if (data_in == AMPLIFIER_GAIN_5_SETTING)
     {
-        return_amp_gain = DataSet::Gain_5;;
+        return_amp_gain = DataSet::Gain_5;
+        *ok = true;
     }
     else
     {
-        return_amp_gain = DataSet::Gain_1;;
+        return_amp_gain = DataSet::Gain_1;
+        *ok = true;
     }
 
     return(return_amp_gain);
@@ -177,10 +224,10 @@ DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in, bool* ok ){
 #define PULSE_CALC_DISTANCE             0
 #define PULSE_CALC_VELOCITY             1
 ******************************************************************************/
-DataSet::Calc Control_Dialog::CharToCalc( char data_in, bool* ok )
-{
+//DataSet::Calc Control_Dialog::CharToCalc( char data_in, bool* ok )
+//{
 
-}
+//}
 
 /******************************************************************************
 
@@ -198,22 +245,27 @@ DataSet::Calc Control_Dialog::CharToCalc( char data_in, bool* ok )
 DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in, bool* ok ){
 
     DataSet::Rate return_rate;
+    *ok = false;
 
     if (data_in == PICTURE_RATE_2000MHZ)
     {
         return_rate = DataSet::RATE_2000KHZ;
+        *ok = true;
     }
     else if (data_in == PICTURE_RATE_1000MHZ)
     {
         return_rate = DataSet::RATE_2000KHZ;
+        *ok = true;
     }
     else if (data_in == PICTURE_RATE_500MHZ)
     {
         return_rate = DataSet::RATE_500KHZ;
+        *ok = true;
     }
     else
     {
         return_rate = DataSet::RATE_250KHZ;
+        *ok = true;
     }
     return( return_rate );
 }
@@ -312,7 +364,9 @@ unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo, bool* 
 DataSet::EMethod Control_Dialog::CharToEMethod( char data_in , bool* ok ){
 
     DataSet::EMethod return_e;
-
+    QByteArray qdata( 1,data_in );
+    int cindex = qdata.toInt( ok );
+    ui->comboBoxEMethod->setCurrentIndex( cindex );
     if (data_in == CALC_METHOD_ARB_MU)
     {
         return_e = DataSet::ArbMu;
@@ -345,10 +399,10 @@ DataSet::MeasMode Control_Dialog::CharToMeasMode( char data_in, bool* ok ){
     DataSet::MeasMode return_measmode;
     QByteArray qdata( 1,data_in );
     int cindex = qdata.toInt( ok );
-    if( ( *ok == true && cindex = PULSE_CALC_DISTANCE ) ){
+    if( ( *ok == true && cindex == PULSE_CALC_DISTANCE ) ){
         ui->comboBoxMeasMode->setCurrentIndex( cindex );
         return_measmode = DataSet::Distance;
-    }else if( *ok == true && cindex = PULSE_CALC_VELOCITY ){
+    }else if( *ok == true && cindex == PULSE_CALC_VELOCITY ){
         ui->comboBoxMeasMode->setCurrentIndex( cindex );
         return_measmode = DataSet::Velocity;
     }
@@ -358,7 +412,7 @@ DataSet::MeasMode Control_Dialog::CharToMeasMode( char data_in, bool* ok ){
 
 //******************************************************************************
 //
-//  Function: unsigned CharToMaterialTravelDistance( int data_in_hi, int data_in_lo)
+//  Function: unsigned CharToPTravelDistance( int data_in_hi, int data_in_lo)
 //
 //  Description:
 //  ============
@@ -381,6 +435,8 @@ unsigned Control_Dialog::CharToPTravelDistance( char data_in_hi, char data_in_lo
     {
         return_distance = MAT_TRAVEL_DIST_MAX;
     }
+    *ok = true;
+    ui->PDistanceSpinBox->setValue( return_distance );
 
     return(return_distance);
 }
@@ -410,13 +466,15 @@ unsigned Control_Dialog::CharToPTravelVelocity( char data_in_hi, char data_in_lo
     {
         return_velocity = MAT_TRAVEL_VEL_MAX;
     }
+    *ok = true;
+    ui->PVelocitySpinBox->setValue( return_velocity );
 
     return(return_velocity);
 }
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToDataSave( char data_in )
+  Function: DataSet::Rate CharToPicSave( char data_in )
   Description:
   ============
   This routine initializes the capture rate
@@ -493,7 +551,8 @@ unsigned Control_Dialog::CharToSTravelDistance( char data_in_hi, char data_in_lo
     {
         return_distance = MAT_TRAVEL_DIST_MAX;
     }
-
+    *ok = true;
+    ui->SDistanceSpinBox->setValue( return_distance );
     return(return_distance);
 }
 
@@ -520,52 +579,81 @@ unsigned Control_Dialog::CharToSTravelVelocity( char data_in_hi, char data_in_lo
     {
         return_velocity = MAT_TRAVEL_VEL_MAX;
     }
+    *ok = true;
+    ui->SVelocitySpinBox->setValue(return_velocity);
 
-    return(return_velocity);
+    return( return_velocity );
 }
 /******************************************************************************
 
-  Function: DataSet::Rate CharToDataSave( char data_in )
+  Function: DataSet::Rate CharToWaveType( char data_in, bool *ok )
   Description:
   ============
-  This routine initializes the capture rate
+  This routine initializes the wave type
 
   data_in coded as follows:
 
 ******************************************************************************/
-DataSet::Wave Control_Dialog::CharToWaveType( char data_in_hi, bool* ok )
+DataSet::Wave Control_Dialog::CharToWaveType( char data_in, bool* ok )
 {
-
+    DataSet::Wave return_wave = DataSet::PWave;
+    QByteArray qdata( 1, data_in );
+    int cindex = qdata.toInt(ok);
+    if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxWaveType->count() - 1 )){
+        ui->comboBoxWaveType->setCurrentIndex( cindex );
+        *ok = true;
+    // Initialize the pulses per sequence
+        return_wave = cindex == 0 ? DataSet::PWave : DataSet::SWave;
+    }
+    return( return_wave );
 }
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToDataSave( char data_in )
+  Function: DataSet::Rate CharToUnits( char data_in, bool *ok )
   Description:
   ============
-  This routine initializes the capture rate
+  This routine initializes the units of measurement
 
   data_in coded as follows:
 
 ******************************************************************************/
- DataSet::Units Control_Dialog::CharToUnits( char data_in_hi, bool* ok )
+ DataSet::Units Control_Dialog::CharToUnits( char data_in, bool* ok )
 {
-
+     DataSet::Units return_units = DataSet::Metric;
+     QByteArray qdata( 1, data_in );
+     int cindex = qdata.toInt(ok);
+     if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxUnits->count() - 1 )){
+         ui->comboBoxUnits->setCurrentIndex( cindex );
+         *ok = true;
+     // Initialize the pulses per sequence
+         return_units = cindex == 0 ? DataSet::Imperial : DataSet::Metric;
+     }
+     return( return_units );
 }
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToDataSave( char data_in )
+  Function: DataSet::Rate CharToVoltage( char data_in )
   Description:
   ============
-  This routine initializes the capture rate
+  This routine initializes the pulser voltage
 
   data_in coded as follows:
 
 ******************************************************************************/
-DataSet::Voltage Control_Dialog::CharToVoltage( char data_in_hi, bool* ok )
+DataSet::Voltage Control_Dialog::CharToVoltage( char data_in, bool* ok )
 {
-
+    DataSet::Voltage return_voltage = DataSet::Hi;
+    QByteArray qdata( 1, data_in );
+    int cindex = qdata.toInt(ok);
+    if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxVoltage->count() - 1 )){
+        ui->comboBoxVoltage->setCurrentIndex( cindex );
+        *ok = true;
+    // Initialize the pulses per sequence
+        return_voltage = cindex == 0 ? DataSet::Hi : DataSet::Low;
+    }
+    return( return_voltage );
 }
 /******************************************************************************
 

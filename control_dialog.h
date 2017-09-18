@@ -75,7 +75,7 @@ private:
     DataSet::Prop Current_Prop;
 
     DataSet::AmpGain CharToAmpGain( char data_in, bool* ok );
-    DataSet::Calc CharToCalc( char data_in, bool* ok );
+ //   DataSet::Calc CharToCalc( char data_in, bool* ok );
     DataSet::Rate CharToCaptureRate( char data_in, bool* ok );
     unsigned CharToCycleTime( char data_in, bool* ok );
     bool CharToDataSave( char data_in, bool* ok );

@@ -58,9 +58,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     serial = new QSerialPort(this);
     serialTimeOut = new QTimer(this);
-
     GraphData = new DataPlot(this);
-
+    CD = new Control_Dialog(this);
     Splash = new SplashDialog();
 
     CurrentLocale = QLocale::system(); //standardized number strings
@@ -739,7 +738,6 @@ void MainWindow::showControl()
 {
 
     DataSet::Prop proptest;
-    CD = new Control_Dialog(this);
     CD->setModal( true );
     if(CD->exec() == QDialog::Accepted){
         proptest = CD->Return_Control_Dialog();
