@@ -40,8 +40,8 @@ DataPlot::DataPlot(QWidget *parent )
 DataPlot::~DataPlot()
 {
 //delete symbol creates a problem.
-    delete Curve;
-    delete Grid;
+//    delete Curve;
+//    delete Grid;
 }
 
 /*

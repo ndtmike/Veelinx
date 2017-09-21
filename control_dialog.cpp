@@ -84,7 +84,7 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
 
     Current_Prop.PropPulseRate = CharToPulse( header.at(Pulse_Pos()), &ok );
     if( ok == true ){
-        Current_Prop.PropCycleTime = CharToCycleTime(header.at( CycleTime_Pos() ), &ok );
+        Current_Prop.PropCycleTime = CharToCycleTime( header.at( CycleTime_Pos() ), &ok );
         if( ok == true ){
             Current_Prop.PropDataSave = CharToDataSave( header.at( DataSave_Pos() ), &ok  );
             if( ok == true ){
@@ -280,11 +280,10 @@ DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in, bool* ok ){
 ******************************************************************************/
 unsigned Control_Dialog::CharToCycleTime( char data_in, bool* ok )
 {
-    unsigned returntime;
+    unsigned returntime = 0;
     QByteArray qdata( 1,data_in );
     int cindex = qdata.toInt( ok );
     if( ( *ok == true ) &&( cindex >= CYCLE_TIME_MIN ) && ( cindex <= CYCLE_TIME_MAX ) ){
-        *ok = true;
         ui->CycleTimeSpinBox->setValue( cindex );
         if ((data_in > CYCLE_TIME_MIN) && (data_in < CYCLE_TIME_MAX)){
             returntime = ( unsigned ) data_in;

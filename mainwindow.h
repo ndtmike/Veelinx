@@ -72,14 +72,18 @@
 #include "remotecontrol.h"
 
 //test Regular Operation
-#define TEST_REG
+//#define TEST_REG
+
+//test Control Dialog
+#define TEST_CD
 
 //test Graph
 //#define TEST_GRAPH
 
 //test Control Dialog one Dialog at a time
 #ifndef TEST_GRAPH
-//#define TEST_CD
+//test Example File
+//#define TEST_EX
 #endif
 
 //message codes from uC five bytes

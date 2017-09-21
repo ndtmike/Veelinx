@@ -81,15 +81,40 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifndef QT_DEBUG
     QTimer* init_timer = new QTimer(this);
     init_timer->singleShot(1, this, SLOT(showSplash())); //delay before splash screen
-#else
+#endif
 #ifdef TEST_REG
     QTimer* init_timer = new QTimer(this);
     init_timer->singleShot(1, this, SLOT(showSplash()));  //delay before splash screen
-#else
+#endif
+#ifdef TEST_CD
+//    QByteArray data("Z@10ÿ2
+//                     ÿ0ÿ1ÿ
+//                     0ÿ0ÿ0
+//                     ÿ0ÿ45ÿ
+//                     0ÿ7ÿ2
+//                     ÿ128ÿ0ÿ
+//                     0ÿ50ÿ0
+//                     ÿ0ÿ1ÿ
+//                     0ÿ£");
+    QByteArray data;
+    data.resize( 43 );
+    data[0] = 0x5a; data[1] = 0x40; data [2] = 0x0a; data[3] = 0xff; data[4] = 0x02;
+    data[5] = 0xff; data[6] = 0x00; data [7] = 0xff; data[8] = 0x01; data[9] = 0xff;
+    data[10] = 0x00; data[11] = 0xff; data [12] = 0x00; data[13] = 0xff; data[14] = 0x00;
+    data[15] = 0xff; data[16] = 0x00; data [17] = 0xff; data[18] = 0x2d; data[19] = 0xff;
+    data[20] = 0x00; data[21] = 0xff; data [22] = 0x07; data[23] = 0xff; data[24] = 0x02;
+    data[25] = 0xff; data[26] = 0x80; data [27] = 0xff; data[28] = 0x00; data[29] = 0xff;
+    data[30] = 0x00; data[31] = 0xff; data [32] = 0x32; data[33] = 0xff; data[34] = 0x00;
+    data[35] = 0xff; data[36] = 0x00; data [37] = 0xff; data[38] = 0x01; data[39] = 0xff;
+    data[40] = 0x00; data[41] = 0xff; data [42] = 0xa3;
+    CD->Set_Control_Dialog(data);
+#endif
+#ifdef TEST_EX
     QTimer* init_timer = new QTimer(this);
     init_timer->singleShot(1, this, SLOT(loadExampleFile()));
+
 #endif
-#endif
+
 //    connectTimer = new QTimer(this);
 }
 
@@ -538,8 +563,8 @@ void MainWindow::lngEspanol()
 void MainWindow::LNGLoadTranslator()
 {
     if(Translator->isEmpty()){
-            Translator->load(CurrentLocale.language(), "Internationalization","_");
-            qApp->installTranslator(Translator);
+        Translator->load(CurrentLocale.language(), "Internationalization","_");
+        qApp->installTranslator(Translator);
     }else{
         qApp->removeTranslator(Translator);
         Translator->load(CurrentLocale.language(), "Internationalization","_");
@@ -744,7 +769,7 @@ void MainWindow::showControl()
         QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);        
     }
 
-    delete CD;
+//    delete CD;
 }
 
 /******************************************************************************

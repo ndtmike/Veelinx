@@ -130,23 +130,23 @@ private:
 
 //C++ #defines
     static int Pulse_Pos(void) { return(2); }
-    static int CycleTime_Pos( void) { return(4); }
-    static int DataSave_Pos( void ) { return(6); }
-    static int PicSave_Pos( void ) {return(8); }
-    static int MeasMode_Pos( void ) {return( 10 );}
-    static int P_Dist_Pos( void ) { return( 12 );}
-    static int S_Dist_Pos( void ) { return( 16 );}
-    static int P_Vel_Pos( void ) { return( 20 );}
-    static int S_Vel_Pos( void ) {return( 24 );}
-    static int RE_Pos( void ) { return( 28 );}
-    static int AmpGain_Pos ( void ) { return( 30 );}
-    static int PicRate_Pos ( void ) { return( 32 );}
-    static int Voltage_Pos ( void ) { return( 34 );}
-    static int Wave_Pos ( void ) { return( 36 );}
-    static int Density_Pos ( void ) { return( 38 );}
-    static int E_Pos ( void ) { return( 42 );}
-    static int Review_Pos ( void ) { return( 44 ); }
-    static int Units_Pos (void ) { return( 48 ); }
+    static int CycleTime_Pos( void) { return(6); }
+    static int DataSave_Pos( void ) { return(8); }
+    static int PicSave_Pos( void ) {return(9); }
+    static int MeasMode_Pos( void ) {return( 11 );}
+    static int P_Dist_Pos( void ) { return( 13 );}
+    static int S_Dist_Pos( void ) { return( 17 );}
+    static int P_Vel_Pos( void ) { return( 21 );}
+    static int S_Vel_Pos( void ) {return( 25 );}
+    static int RE_Pos( void ) { return( 29 );}
+    static int AmpGain_Pos ( void ) { return( 31 );}
+    static int PicRate_Pos ( void ) { return( 33 );}
+    static int Voltage_Pos ( void ) { return( 35 );}
+    static int Wave_Pos ( void ) { return( 37 );}
+    static int Density_Pos ( void ) { return( 39 );}
+    static int E_Pos ( void ) { return( 43 );}
+    static int Review_Pos ( void ) { return( 45 ); }
+    static int Units_Pos (void ) { return( 49 ); }
 
 };
 
