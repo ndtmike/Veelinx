@@ -72,10 +72,10 @@
 #include "remotecontrol.h"
 
 //test Regular Operation
-//#define TEST_REG
+#define TEST_REG
 
 //test Control Dialog
-#define TEST_CD
+//#define TEST_CD
 
 //test Graph
 //#define TEST_GRAPH

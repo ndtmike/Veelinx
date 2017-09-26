@@ -75,7 +75,7 @@ private:
     QByteArray RemoveAscii(QByteArray &in);
 
     DataSet::AmpGain QStringtoAmpGain(QString in);
-    DataSet::Calc QStringtoCalc(QString in);
+    //DataSet::Calc QStringtoCalc(QString in);
     tm QStringtoDateTime(QString in);
     unsigned QStringtoDensity(QString in);
     DataSet::EMethod QStringtoEMethod(QString in);

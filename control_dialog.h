@@ -72,28 +72,29 @@ private slots:
 private:
     Ui::Control_Dialog *ui;
 
+    int CreateValue( QByteArray* working, bool* ok );
+    unsigned ReviewNumber;
+
     DataSet::Prop Current_Prop;
 
-    DataSet::AmpGain CharToAmpGain( char data_in, bool* ok );
- //   DataSet::Calc CharToCalc( char data_in, bool* ok );
-    DataSet::Rate CharToCaptureRate( char data_in, bool* ok );
-    unsigned CharToCycleTime( char data_in, bool* ok );
-    bool CharToDataSave( char data_in, bool* ok );
-    unsigned CharToDensity( char data_in_hi, char data_in_lo, bool* ok );
-    DataSet::EMethod CharToEMethod( char data_in, bool* ok );
-    DataSet::MeasMode CharToMeasMode( char data_in, bool* ok );
-    unsigned CharToPTravelDistance( char data_in_hi, char data_in_lo, bool* ok );
-    unsigned CharToPTravelVelocity( char data_in_hi, char data_in_lo, bool* ok );
-    bool CharToPicSave( char data_in, bool* ok );
-    DataSet::Pulse CharToPulse(char data_in, bool* ok );
-    unsigned CharToSTravelDistance( char data_in_hi, char data_in_lo, bool* ok );
-    unsigned CharToSTravelVelocity( char data_in_hi, char data_in_lo, bool* ok );
-    DataSet::Wave CharToWaveType( char data_in, bool* ok );
-    DataSet::Units CharToUnits( char data_in, bool* ok );
-    DataSet::Voltage CharToVoltage( char data_in, bool* ok );
+    DataSet::AmpGain IntToAmpGain( int data_in, bool* ok );
+    DataSet::Rate IntToCaptureRate( int data_in, bool* ok );
+    unsigned IntToCycleTime( int data_in, bool* ok );
+    bool IntToDataSave( int data_in, bool* ok );
+    unsigned IntToDensity( char data_in_hi, char data_in_lo, bool* ok );
+    DataSet::EMethod IntToEMethod( int data_in, bool* ok );
+    DataSet::MeasMode IntToMeasMode( int data_in, bool* ok );
+    unsigned IntToPTravelDistance( int data_in_hi, int data_in_lo, bool* ok );
+    unsigned IntToPTravelVelocity( int data_in_hi, int data_in_lo, bool* ok );
+    bool IntToPicSave( int data_in, bool* ok );
+    DataSet::Pulse IntToPulse(int data_in, bool* ok );
+    unsigned IntToReview( int data_in_hi, int data_in_lo, bool* ok );
+    DataSet::Wave IntToWaveType( int data_in, bool* ok );
+    DataSet::Units IntToUnits( int data_in, bool* ok );
+    DataSet::Voltage IntToVoltage( int data_in, bool* ok );
 
     DataSet::AmpGain Ret_comboBoxAmpGain();
-    DataSet::Calc Ret_comboBoxCalc();
+    DataSet::MeasMode Ret_comboBoxCalc();
     DataSet::Rate Ret_comboBoxCaptureRate();
     unsigned Ret_CycleTime();
     bool Ret_DataSave();
@@ -130,23 +131,28 @@ private:
 
 //C++ #defines
     static int Pulse_Pos(void) { return(2); }
-    static int CycleTime_Pos( void) { return(6); }
-    static int DataSave_Pos( void ) { return(8); }
-    static int PicSave_Pos( void ) {return(9); }
-    static int MeasMode_Pos( void ) {return( 11 );}
-    static int P_Dist_Pos( void ) { return( 13 );}
-    static int S_Dist_Pos( void ) { return( 17 );}
-    static int P_Vel_Pos( void ) { return( 21 );}
-    static int S_Vel_Pos( void ) {return( 25 );}
-    static int RE_Pos( void ) { return( 29 );}
-    static int AmpGain_Pos ( void ) { return( 31 );}
-    static int PicRate_Pos ( void ) { return( 33 );}
-    static int Voltage_Pos ( void ) { return( 35 );}
-    static int Wave_Pos ( void ) { return( 37 );}
-    static int Density_Pos ( void ) { return( 39 );}
-    static int E_Pos ( void ) { return( 43 );}
-    static int Review_Pos ( void ) { return( 45 ); }
-    static int Units_Pos (void ) { return( 49 ); }
+    static int Pulse_Index1(void) {return(1);}
+    static int Pulse_Index3(void) {return(2);}
+    static int Pulse_Index10(void) {return(3);}
+    static int CycleTime_Pos(void) { return(4); }
+    static int DataSave_Pos(void) { return(6); }
+    static int DataSave_Index_Off(void) {return(0);}
+    static int DataSave_Index_On(void) {return(1);}
+    static int PicSave_Pos( void ) {return(8); }
+    static int MeasMode_Pos( void ) {return( 10 );}
+    static int P_Dist_Pos( void ) { return( 12 );}
+    static int S_Dist_Pos( void ) { return( 16 );}
+    static int P_Vel_Pos( void ) { return( 16 );}
+    static int S_Vel_Pos( void ) {return( 24 );}
+    static int RE_Pos( void ) { return( 28 );}
+    static int AmpGain_Pos ( void ) { return( 22 );}
+    static int PicRate_Pos ( void ) { return( 24 );}
+    static int Voltage_Pos ( void ) { return( 26 );}
+    static int Wave_Pos ( void ) { return( 28 );}
+    static int Density_Pos ( void ) { return( 30 );}
+    static int E_Pos ( void ) { return( 34 );}
+    static int Review_Pos ( void ) { return( 36 ); }
+    static int Units_Pos (void ) { return( 40 ); }
 
 };
 

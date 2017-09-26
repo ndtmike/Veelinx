@@ -65,7 +65,7 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     return_prop.PropAmpGain = QStringtoAmpGain( sl.at(n));
 
     n=sl.indexOf(QRegExp(".*Measured.*"));
-    return_prop.PropCalc = QStringtoCalc( sl.at(n));
+//    return_prop.PropCalc = QStringtoCalc( sl.at(n));
 
     n=sl.indexOf(QRegExp(".*Young's modulus:.*"));
     return_prop.PropEMethod = QStringtoEMethod(sl.at(n));
@@ -82,9 +82,9 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
 
     n=sl.indexOf(QRegExp("Measured P-VELOCITY:.*"));
     if(n != -1 ){
-        return_prop.PropCalc = DataSet::Vel;
+        return_prop.PropMeaseMode = DataSet::Velocity;
     }else{
-        return_prop.PropCalc = DataSet::Dist;
+        return_prop.PropMeaseMode = DataSet::Distance;
     }
 
     n=sl.indexOf(QRegExp("WAVE TYPE:.*"));
@@ -167,7 +167,7 @@ DataSet::AmpGain Parser::QStringtoAmpGain(QString in)
 
     return(return_value);
 }
-
+/*
 DataSet::Calc Parser::QStringtoCalc(QString in)
 {
     DataSet::Calc return_value;
@@ -179,7 +179,7 @@ DataSet::Calc Parser::QStringtoCalc(QString in)
     }
     return(return_value);
 }
-
+*/
 
 tm Parser::QStringtoDateTime(QString in)
 {
@@ -388,11 +388,11 @@ QString Parser::ToQStrCalc(std::vector<DataSet::Test>::iterator itr_test)
 {
     QString return_string;
 
-    switch (Data->GetTest( itr_test ).TestProp.PropCalc) {
-    case DataSet::Dist:
+    switch (Data->GetTest( itr_test ).TestProp.PropMeaseMode) {
+    case DataSet::Distance:
          return_string = tr(" Distance ");
          break;
-    case  DataSet::Vel:
+    case  DataSet::Velocity:
         return_string = tr(" Velocity ");
         break;
     }

@@ -35,13 +35,26 @@ Control_Dialog::~Control_Dialog()
     delete ui;
 }
 
+int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
+
+    int result = -1;
+    *ok = false;
+
+    if( working->indexOf( 0xff) != -1){
+        QByteArray value = working->left( working->indexOf( 0xff));
+        result = value.toInt( ok );
+        *working = working->right( working->size() - value.size() - 1);
+        *ok = true;
+    }
+    return( result );
+}
 
 DataSet::Prop Control_Dialog::Return_Control_Dialog()
 {
     DataSet::Prop returnprop;
 
     returnprop.PropAmpGain = Ret_comboBoxAmpGain();
-    returnprop.PropCalc = Ret_comboBoxCalc();
+//    returnprop.PropCalc = Ret_comboBoxCalc();
     returnprop.PropCaptureRate = Ret_comboBoxCaptureRate();
     returnprop.PropCycleTime = Ret_CycleTime();
     returnprop.PropDataSave = Ret_DataSave();
@@ -51,8 +64,6 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
     returnprop.PropPTravelVelocity = Ret_PTravelVelocity();
     returnprop.PropPicSave = Ret_PicSave();
     returnprop.PropPulseRate = Ret_comboBoxPulseRate();
-    returnprop.PropSTravelDistance = Ret_STravelDistance();
-    returnprop.PropSTravelVelocity = Ret_STravelVelocity();
     returnprop.PropWave = Ret_comboBoxWaveType();
     returnprop.PropUnits = Ret_comboBoxUnits();
     returnprop.PropVoltage = Ret_Voltage();
@@ -81,75 +92,95 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
 bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
 {
     bool ok = false;
+    int buffer = -1;
+    QByteArray working = header.right( header.size() - 2 );
 
-    Current_Prop.PropPulseRate = CharToPulse( header.at(Pulse_Pos()), &ok );
+    buffer = CreateValue( &working, &ok );
+    if( ok == true){
+    Current_Prop.PropPulseRate = IntToPulse( buffer, &ok );
+    buffer = CreateValue( &working, &ok );
     if( ok == true ){
-        Current_Prop.PropCycleTime = CharToCycleTime( header.at( CycleTime_Pos() ), &ok );
+        Current_Prop.PropCycleTime = IntToCycleTime( buffer, &ok );
+        buffer = CreateValue( &working, &ok );
         if( ok == true ){
-            Current_Prop.PropDataSave = CharToDataSave( header.at( DataSave_Pos() ), &ok  );
+            Current_Prop.PropDataSave = IntToDataSave( buffer, &ok  );
+            buffer = CreateValue( &working, &ok );
             if( ok == true ){
-                Current_Prop.PropPicSave = CharToPicSave( header.at(PicSave_Pos()), &ok );
+                Current_Prop.PropPicSave = IntToPicSave( buffer, &ok );
+                buffer = CreateValue( &working, &ok );
                 if( ok == true ){
-                    Current_Prop.PropMeaseMode = CharToMeasMode(header.at( MeasMode_Pos()), &ok );
-                    if( ok == true ){
+                    Current_Prop.PropMeaseMode = IntToMeasMode( buffer, &ok );
+                    buffer = CreateValue( &working, &ok );
+                    bool ok_low = false;
+                    int buffer_low = CreateValue( &working, &ok_low );
+                    if( ok == true && ok_low == true ){
                         Current_Prop.PropPTravelDistance =
-                            CharToPTravelDistance( header.at( P_Dist_Pos()),
-                                                   header.at(P_Dist_Pos() + 2), &ok  );
-                        if( ok == true ){
-                            Current_Prop.PropSTravelDistance =
-                                CharToSTravelDistance( header.at( S_Dist_Pos()),
-                                                   header.at(S_Dist_Pos() + 2), &ok  );
+                            IntToPTravelDistance( buffer, buffer_low, &ok  );
+                            buffer = CreateValue( &working, &ok );
+                            buffer_low = CreateValue( &working, &ok_low );
                             if( ok == true ){
                                 Current_Prop.PropPTravelVelocity =
-                                    CharToPTravelVelocity( header.at( P_Vel_Pos()),
-                                                       header.at(P_Vel_Pos() + 2), &ok  );
-                                if( ok == true ){
-                                    Current_Prop.PropSTravelVelocity =
-                                        CharToSTravelVelocity( header.at( S_Vel_Pos()),
-                                                               header.at( S_Vel_Pos() + 2), &ok  );
+                                    IntToPTravelVelocity( buffer, buffer_low, &ok  );
+                                    buffer = CreateValue( &working, &ok );
                                     if( ok == true ){
-                                        Current_Prop.PropRun = (bool)header.at( RE_Pos() );
+                                        Current_Prop.PropRun = (bool)false;
+                                        buffer = CreateValue( &working, &ok );
                                         if( ok == true ){
                                             Current_Prop.PropAmpGain =
-                                                CharToAmpGain( header.at( AmpGain_Pos()), &ok );
+                                                IntToAmpGain( buffer, &ok );
+                                                buffer = CreateValue( &working, &ok );
                                             if( ok == true ){
                                                 Current_Prop.PropCaptureRate =
-                                                    CharToCaptureRate( header.at( PicRate_Pos() ), &ok );
+                                                    IntToCaptureRate( buffer, &ok );
+                                                buffer = CreateValue( &working, &ok );
                                                 if( ok == true ){
                                                     Current_Prop.PropVoltage =
-                                                            CharToVoltage( header.at( Voltage_Pos() ), &ok );
+                                                            IntToVoltage( buffer, &ok );
+                                                    buffer = CreateValue( &working, &ok );
                                                     if( ok == true ){
-                                                    Current_Prop.PropWave =
-                                                            CharToWaveType( header.at( Wave_Pos() ), &ok );
+                                                        Current_Prop.PropWave =
+                                                            IntToWaveType( buffer, &ok );
+                                                        buffer = CreateValue( &working, &ok );
+                                                        buffer_low = CreateValue( &working, &ok_low );
                                                         if( ok == true ){
                                                             Current_Prop.PropDensity =
-                                                                CharToDensity( header.at( Density_Pos()),
-                                                                header.at( Density_Pos() + 2 ), &ok );
-                                                            if(ok == true ){
-                                                                Current_Prop.PropUnits =
-                                                                        CharToUnits( header.at( Units_Pos() ),
-                                                                                     &ok );
+                                                                IntToDensity( buffer,
+                                                                buffer_low, &ok );
+                                                             buffer = CreateValue( &working, &ok );
+                                                            if( ok == true ){
+                                                                Current_Prop.PropEMethod =
+                                                                        IntToEMethod( buffer, &ok );
+                                                                buffer = CreateValue( &working, &ok );
+                                                                buffer_low = CreateValue( &working, &ok );
+                                                                if( ok == true && ok_low ){
+                                                                    ReviewNumber = IntToReview( buffer,
+                                                                         buffer_low, &ok);
+                                                                    buffer = CreateValue( &working, &ok );
+                                                                    if( ok == true ){
+                                                                        Current_Prop.PropUnits =
+                                                                                IntToUnits(buffer, &ok);
+                                                                    }
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                }
-                            }
+                                   }
                         }
                     }
                 }
             }
         }
     }
+    }
     return( ok );
 }
 
 /******************************************************************************
 
-  Function: DataSet::AmpGain CharToAmpGain( char data_in )
+  Function: DataSet::AmpGain IntToAmpGain( char data_in )
   Description:
   ============
   This routine initializes the amplifier gain
@@ -164,7 +195,7 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
     #define AMPLIFIER_GAIN_250_SETTING      6
     #define AMPLIFIER_GAIN_500_SETTING      7
 ******************************************************************************/
-DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in, bool* ok ){
+DataSet::AmpGain Control_Dialog::IntToAmpGain( int data_in, bool* ok ){
 
     DataSet::AmpGain return_amp_gain;
     *ok = false;
@@ -215,23 +246,7 @@ DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in, bool* ok ){
 
 /******************************************************************************
 
-  Function: DataSet::Calc CharToCalc( char data_in )
-  Description:
-  ============
-  This routine initializes the capture rate
-
-  data_in coded as follows:
-#define PULSE_CALC_DISTANCE             0
-#define PULSE_CALC_VELOCITY             1
-******************************************************************************/
-//DataSet::Calc Control_Dialog::CharToCalc( char data_in, bool* ok )
-//{
-
-//}
-
-/******************************************************************************
-
-  Function: DataSet::Rate CharToCaptureRate( char data_in )
+  Function: DataSet::Rate IntToCaptureRate( char data_in )
   Description:
   ============
   This routine initializes the capture rate
@@ -242,7 +257,7 @@ DataSet::AmpGain Control_Dialog::CharToAmpGain( char data_in, bool* ok ){
 #define PICTURE_RATE_1000MHZ            2
 #define PICTURE_RATE_2000MHZ            3
 ******************************************************************************/
-DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in, bool* ok ){
+DataSet::Rate Control_Dialog::IntToCaptureRate( int data_in, bool* ok ){
 
     DataSet::Rate return_rate;
     *ok = false;
@@ -273,53 +288,57 @@ DataSet::Rate Control_Dialog::CharToCaptureRate( char data_in, bool* ok ){
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToCycleTime( char data_in_hi, char data_in_lo, bool* ok )
+  Function: DataSet::Rate IntToCycleTime( char data_in_hi, char data_in_lo, bool* ok )
   Description:
   ============
 
 ******************************************************************************/
-unsigned Control_Dialog::CharToCycleTime( char data_in, bool* ok )
+unsigned Control_Dialog::IntToCycleTime( int data_in, bool* ok )
 {
     unsigned returntime = 0;
-    QByteArray qdata( 1,data_in );
-    int cindex = qdata.toInt( ok );
-    if( ( *ok == true ) &&( cindex >= CYCLE_TIME_MIN ) && ( cindex <= CYCLE_TIME_MAX ) ){
-        ui->CycleTimeSpinBox->setValue( cindex );
-        if ((data_in > CYCLE_TIME_MIN) && (data_in < CYCLE_TIME_MAX)){
+
+    if( ( data_in >= CYCLE_TIME_MIN ) && ( data_in <= CYCLE_TIME_MAX ) ){
+        ui->CycleTimeSpinBox->setValue( data_in );
+        if ((data_in >= CYCLE_TIME_MIN) && (data_in <= CYCLE_TIME_MAX)){
             returntime = ( unsigned ) data_in;
         }else{
             returntime = CYCLE_TIME_MIN;
         }
     }
+    ui->CycleTimeSpinBox->setValue( returntime );
+    *ok = true;
     return( returntime );
 }
 
 
 /******************************************************************************
 
-  Function: DataSet::Calc CharToDataSave( char data_in )
+  Function: DataSet::Calc IntToDataSave( char data_in )
   Description:
   ============
   This routine converts the DataSave Parameter
 
           1
 ******************************************************************************/
-bool Control_Dialog::CharToDataSave( char data_in, bool* ok )
+bool Control_Dialog::IntToDataSave( int data_in, bool* ok )
 {
     bool returndatasave = false;
-    QByteArray qdata( 1,data_in );
-    int cindex = qdata.toInt( ok );
-    if( ( *ok == true ) &&( cindex >= 1 ) ){
-        *ok = true;
-        ui->CycleTimeSpinBox->setValue( cindex );
+    *ok = false;
+    if( data_in == 1 ){
+        ui->comboBoxDataSave->setCurrentIndex( DataSave_Index_On() );
         returndatasave = true;
+        *ok = true;
+    }else  if( data_in == 0 ){
+        ui->comboBoxDataSave->setCurrentIndex( DataSave_Index_Off() );
+        returndatasave = false;
+        *ok = true;
     }
     return( returndatasave );
 }
 
 /******************************************************************************
 
-  Function: unsigned CharToDensity( char data_in_hi, char data_in_lo )
+  Function: unsigned IntToDensity( char data_in_hi, char data_in_lo )
 
   Description:
   ============
@@ -329,12 +348,13 @@ bool Control_Dialog::CharToDataSave( char data_in, bool* ok )
     #define MAT_DENSITY_MAX                 500
     #define MAT_DENSITY_MIN                 50
 ******************************************************************************/
-unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo, bool* ok ){
+unsigned Control_Dialog::IntToDensity( char data_in_hi, char data_in_lo, bool* ok ){
 
     unsigned return_density;
-
+    *ok = true;
     // Initialize the material density
-    return_density = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
+    return_density =  ((int)data_in_hi * 0x0100) + (int)(data_in_lo);//move the hi-byte two places add the low byte
+
     if (return_density < MAT_DENSITY_MIN)
     {
         return_density = MAT_DENSITY_MIN;
@@ -349,7 +369,7 @@ unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo, bool* 
 
 /******************************************************************************
 
-  Function: DataSet::EMethod CharToEMethod( int data_in )
+  Function: DataSet::EMethod IntToEMethod( int data_in )
 
   Description:
   ============
@@ -360,12 +380,11 @@ unsigned Control_Dialog::CharToDensity( char data_in_hi, char data_in_lo, bool* 
 #define CALC_METHOD_DERIVED_MU          1
 #define CALC_METHOD_SIMPLE_E            0
 ******************************************************************************/
-DataSet::EMethod Control_Dialog::CharToEMethod( char data_in , bool* ok ){
+DataSet::EMethod Control_Dialog::IntToEMethod( int data_in , bool* ok ){
 
     DataSet::EMethod return_e;
-    QByteArray qdata( 1,data_in );
-    int cindex = qdata.toInt( ok );
-    ui->comboBoxEMethod->setCurrentIndex( cindex );
+    *ok = false;
+    ui->comboBoxEMethod->setCurrentIndex( data_in );
     if (data_in == CALC_METHOD_ARB_MU)
     {
         return_e = DataSet::ArbMu;
@@ -384,7 +403,7 @@ DataSet::EMethod Control_Dialog::CharToEMethod( char data_in , bool* ok ){
 
 /******************************************************************************
 
-  Function: DataSet::EMethod CharToMeasMode( int data_in )
+  Function: DataSet::EMethod IntToMeasMode( int data_in )
 
   Description:
   ============
@@ -393,17 +412,19 @@ DataSet::EMethod Control_Dialog::CharToEMethod( char data_in , bool* ok ){
   data_in coded as follows:
 
 ******************************************************************************/
-DataSet::MeasMode Control_Dialog::CharToMeasMode( char data_in, bool* ok ){
+DataSet::MeasMode Control_Dialog::IntToMeasMode( int data_in, bool* ok ){
 
     DataSet::MeasMode return_measmode;
-    QByteArray qdata( 1,data_in );
-    int cindex = qdata.toInt( ok );
-    if( ( *ok == true && cindex == PULSE_CALC_DISTANCE ) ){
-        ui->comboBoxMeasMode->setCurrentIndex( cindex );
+    *ok = false;
+
+    if( data_in == PULSE_CALC_DISTANCE ){
+        ui->comboBoxMeasMode->setCurrentIndex( data_in );
         return_measmode = DataSet::Distance;
-    }else if( *ok == true && cindex == PULSE_CALC_VELOCITY ){
-        ui->comboBoxMeasMode->setCurrentIndex( cindex );
+        *ok = true;
+    }else if( data_in == PULSE_CALC_VELOCITY ){
+        ui->comboBoxMeasMode->setCurrentIndex( data_in );
         return_measmode = DataSet::Velocity;
+        *ok = true;
     }
 
     return( return_measmode );
@@ -411,7 +432,7 @@ DataSet::MeasMode Control_Dialog::CharToMeasMode( char data_in, bool* ok ){
 
 //******************************************************************************
 //
-//  Function: unsigned CharToPTravelDistance( int data_in_hi, int data_in_lo)
+//  Function: unsigned IntToPTravelDistance( int data_in_hi, int data_in_lo)
 //
 //  Description:
 //  ============
@@ -420,12 +441,13 @@ DataSet::MeasMode Control_Dialog::CharToMeasMode( char data_in, bool* ok ){
 //  data_in coded as follows:
 //  #define MAT_TRAVEL_DIST_MAX             600
 //  #define MAT_TRAVEL_DIST_MIN             0.1
+//  needs to be chhecked with equipment
 //******************************************************************************
-unsigned Control_Dialog::CharToPTravelDistance( char data_in_hi, char data_in_lo, bool* ok )
+unsigned Control_Dialog::IntToPTravelDistance( int data_in_hi, int data_in_lo, bool* ok )
 {
     unsigned return_distance;
+    return_distance =  (data_in_hi * 0x0100) + (data_in_lo);//move the hi-byte two places add the low byte
 
-    return_distance = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
     if (return_distance < MAT_TRAVEL_DIST_MIN)
     {
         return_distance = MAT_TRAVEL_DIST_MIN;
@@ -442,7 +464,7 @@ unsigned Control_Dialog::CharToPTravelDistance( char data_in_hi, char data_in_lo
 
 //******************************************************************************
 //
-//  Function: unsigned CharToPTravelVelocity( int data_in_hi, int data_in_lo)
+//  Function: unsigned IntToPTravelVelocity( int data_in_hi, int data_in_lo)
 //
 //  Description:
 //  ============
@@ -451,13 +473,15 @@ unsigned Control_Dialog::CharToPTravelDistance( char data_in_hi, char data_in_lo
 //  data_in coded as follows:
 //  #define MAT_TRAVEL_VEL_MAX              40000
 //  #define MAT_TRAVEL_VEL_MIN              1000
+//  needs to be checked with equipment
 //******************************************************************************
-unsigned Control_Dialog::CharToPTravelVelocity( char data_in_hi, char data_in_lo, bool* ok )
+unsigned Control_Dialog::IntToPTravelVelocity( int data_in_hi, int data_in_lo, bool* ok )
 {
     unsigned return_velocity;
 
-    return_velocity = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
-    if (return_velocity < MAT_TRAVEL_DIST_MIN)
+    return_velocity =  (data_in_hi * 0x0100) + (data_in_lo);//move the hi-byte two places add the low byte
+
+    if (return_velocity < MAT_TRAVEL_VEL_MIN)
     {
         return_velocity = MAT_TRAVEL_VEL_MIN;
     }
@@ -473,7 +497,7 @@ unsigned Control_Dialog::CharToPTravelVelocity( char data_in_hi, char data_in_lo
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToPicSave( char data_in )
+  Function: DataSet::Rate IntToPicSave( char data_in )
   Description:
   ============
   This routine initializes the capture rate
@@ -481,21 +505,23 @@ unsigned Control_Dialog::CharToPTravelVelocity( char data_in_hi, char data_in_lo
   data_in coded as follows:
 
 ******************************************************************************/
-bool Control_Dialog::CharToPicSave( char data_in, bool* ok )
+bool Control_Dialog::IntToPicSave( int data_in, bool* ok )
 {
     bool returnpicsave = false;
-    QByteArray qdata( 1,data_in );
-    int cindex = qdata.toInt( ok );
-    if( ( *ok == true ) &&( cindex >= 1 ) ){
-        *ok = true;
-        ui->CycleTimeSpinBox->setValue( cindex );
+    *ok = false;
+    if( data_in == 1 ){
+        ui->comboBoxPicSave->setCurrentIndex( DataSave_Index_On() ); //use the DataSaveIndex
         returnpicsave = true;
+        *ok = true;
+    } else if(data_in == 0 ){
+        ui->comboBoxPicSave->setCurrentIndex( DataSave_Index_Off() ); //use the DataSaveIndex
+        returnpicsave = false;
+        *ok = true;
     }
-    return( returnpicsave );
-}
+    return( returnpicsave );}
 
 /******************************************************************************
-    Function: DataSet::Pulse CharToPulse( int data_in, , bool* ok )
+    Function: DataSet::Pulse IntToPulse( int data_in, , bool* ok )
 
     Description:
     ============
@@ -507,85 +533,65 @@ bool Control_Dialog::CharToPicSave( char data_in, bool* ok )
     #define PULSES_PER_SEQ_3                3
    #define PULSES_PER_SEQ_10               10
 ******************************************************************************/
-DataSet::Pulse Control_Dialog::CharToPulse(char data_in , bool* ok )
+DataSet::Pulse Control_Dialog::IntToPulse(int data_in , bool* ok )
 {
     DataSet::Pulse return_pulse = DataSet::PulsePerSeq_3;
-    QByteArray qdata(1,data_in);
-    int cindex = qdata.toInt(ok);
-    if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxPulseRate->count() - 1 )){
-        ui->comboBoxPulseRate->setCurrentIndex( cindex );
+    if(( data_in == PULSES_PER_SEQ_3 ) || ( data_in == PULSES_PER_SEQ_10 )
+            || ( data_in == PULSES_PER_SEQ_1 )){
         *ok = true;
     // Initialize the pulses per sequence
         if (data_in == PULSES_PER_SEQ_3){
             return_pulse = DataSet::PulsePerSeq_3;
+            ui->comboBoxPulseRate->setCurrentIndex( Pulse_Index3() );
         } else if (data_in == PULSES_PER_SEQ_10){
             return_pulse = DataSet::PulsePerSeq_10;
+            ui->comboBoxPulseRate->setCurrentIndex( Pulse_Index10() );
         }else{
             return_pulse = DataSet::PulsePerSeq_1;
+            ui->comboBoxPulseRate->setCurrentIndex( Pulse_Index1() );
         }
+    }else{
+        *ok = false;
     }
+
     return( return_pulse );
 }
 
 //******************************************************************************
 //
-//  Function: unsigned CharToSTravelDistance( int data_in_hi, int data_in_lo)
+//  Function: unsigned IntToReview( int data_in_hi, int data_in_lo)
 //
 //  Description:
 //  ============
 //  This routine initializes the cycle time between pulse sequences
 //
 //  data_in coded as follows:
+// #define REVIEW_TEST_NUM_MAX             1800
+// #define REVIEW_TEST_NUM_MIN             1
 //******************************************************************************
-unsigned Control_Dialog::CharToSTravelDistance( char data_in_hi, char data_in_lo, bool* ok )
-{
-    unsigned return_distance;
-
-    return_distance = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
-    if (return_distance < MAT_TRAVEL_DIST_MIN)
-    {
-        return_distance = MAT_TRAVEL_DIST_MIN;
-    }
-    else if (return_distance > MAT_TRAVEL_DIST_MAX)
-    {
-        return_distance = MAT_TRAVEL_DIST_MAX;
-    }
-    *ok = true;
-    ui->SDistanceSpinBox->setValue( return_distance );
-    return(return_distance);
-}
-
-//******************************************************************************
-//
-//  Function: unsigned CharToSTravelVelocity( int data_in_hi, int data_in_lo)
-//
-//  Description:
-//  ============
-//  This routine initializes the cycle time between pulse sequences
-//
-//  data_in coded as follows:
-//******************************************************************************
-unsigned Control_Dialog::CharToSTravelVelocity( char data_in_hi, char data_in_lo, bool* ok )
+unsigned Control_Dialog::IntToReview( int data_in_hi, int data_in_lo, bool* ok )
 {
     unsigned return_velocity;
 
-    return_velocity = (((data_in_hi) & 0xFF00) >> 8) + ((data_in_lo) & 0x00FF);
-    if (return_velocity < MAT_TRAVEL_DIST_MIN)
+    return_velocity =  (data_in_hi * 0x0100) + (data_in_lo);//move the hi-byte two places add the low byte
+
+    if (return_velocity < REVIEW_TEST_NUM_MIN )
     {
-        return_velocity = MAT_TRAVEL_VEL_MIN;
+        return_velocity = REVIEW_TEST_NUM_MIN;
     }
-    else if (return_velocity > MAT_TRAVEL_VEL_MAX)
+    else if (return_velocity > REVIEW_TEST_NUM_MAX )
     {
-        return_velocity = MAT_TRAVEL_VEL_MAX;
+        return_velocity = REVIEW_TEST_NUM_MAX;
     }
     *ok = true;
-    ui->SVelocitySpinBox->setValue(return_velocity);
+    ui->PVelocitySpinBox->setValue( return_velocity );
 
-    return( return_velocity );
+    return(return_velocity);
 }
+
 /******************************************************************************
 
-  Function: DataSet::Rate CharToWaveType( char data_in, bool *ok )
+  Function: DataSet::Rate IntToWaveType( char data_in, bool *ok )
   Description:
   ============
   This routine initializes the wave type
@@ -593,23 +599,22 @@ unsigned Control_Dialog::CharToSTravelVelocity( char data_in_hi, char data_in_lo
   data_in coded as follows:
 
 ******************************************************************************/
-DataSet::Wave Control_Dialog::CharToWaveType( char data_in, bool* ok )
+DataSet::Wave Control_Dialog::IntToWaveType( int data_in, bool* ok )
 {
     DataSet::Wave return_wave = DataSet::PWave;
-    QByteArray qdata( 1, data_in );
-    int cindex = qdata.toInt(ok);
-    if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxWaveType->count() - 1 )){
-        ui->comboBoxWaveType->setCurrentIndex( cindex );
+    *ok = false;
+    if( ( data_in >= 0 ) && ( data_in <= ui->comboBoxWaveType->count() - 1 )){
+        ui->comboBoxWaveType->setCurrentIndex( data_in );
         *ok = true;
     // Initialize the pulses per sequence
-        return_wave = cindex == 0 ? DataSet::PWave : DataSet::SWave;
+        return_wave = data_in == 0 ? DataSet::PWave : DataSet::SWave;
     }
     return( return_wave );
 }
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToUnits( char data_in, bool *ok )
+  Function: DataSet::Rate IntToUnits( char data_in, bool *ok )
   Description:
   ============
   This routine initializes the units of measurement
@@ -617,23 +622,22 @@ DataSet::Wave Control_Dialog::CharToWaveType( char data_in, bool* ok )
   data_in coded as follows:
 
 ******************************************************************************/
- DataSet::Units Control_Dialog::CharToUnits( char data_in, bool* ok )
+ DataSet::Units Control_Dialog::IntToUnits( int data_in, bool* ok )
 {
      DataSet::Units return_units = DataSet::Metric;
-     QByteArray qdata( 1, data_in );
-     int cindex = qdata.toInt(ok);
-     if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxUnits->count() - 1 )){
-         ui->comboBoxUnits->setCurrentIndex( cindex );
+     *ok = false;
+     if( ( data_in >= 0 ) && ( data_in <= ui->comboBoxUnits->count() - 1 )){
+         ui->comboBoxUnits->setCurrentIndex( data_in );
          *ok = true;
      // Initialize the pulses per sequence
-         return_units = cindex == 0 ? DataSet::Imperial : DataSet::Metric;
+         return_units = data_in == 0 ? DataSet::Imperial : DataSet::Metric;
      }
      return( return_units );
 }
 
 /******************************************************************************
 
-  Function: DataSet::Rate CharToVoltage( char data_in )
+  Function: DataSet::Rate IntToVoltage( char data_in )
   Description:
   ============
   This routine initializes the pulser voltage
@@ -641,16 +645,15 @@ DataSet::Wave Control_Dialog::CharToWaveType( char data_in, bool* ok )
   data_in coded as follows:
 
 ******************************************************************************/
-DataSet::Voltage Control_Dialog::CharToVoltage( char data_in, bool* ok )
+DataSet::Voltage Control_Dialog::IntToVoltage( int data_in, bool* ok )
 {
     DataSet::Voltage return_voltage = DataSet::Hi;
-    QByteArray qdata( 1, data_in );
-    int cindex = qdata.toInt(ok);
-    if( ( *ok == true ) && ( cindex >= 0 ) && ( cindex <= ui->comboBoxVoltage->count() - 1 )){
-        ui->comboBoxVoltage->setCurrentIndex( cindex );
+    *ok = false;
+    if( ( data_in >= 0 ) && ( data_in <= ui->comboBoxVoltage->count() - 1 )){
+        ui->comboBoxVoltage->setCurrentIndex( data_in );
         *ok = true;
     // Initialize the pulses per sequence
-        return_voltage = cindex == 0 ? DataSet::Hi : DataSet::Low;
+        return_voltage = data_in == 0 ? DataSet::Hi : DataSet::Low;
     }
     return( return_voltage );
 }
@@ -832,17 +835,17 @@ DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
     return(retampgain);
 }
 
-DataSet::Calc Control_Dialog::Ret_comboBoxCalc()
+DataSet::MeasMode Control_Dialog::Ret_comboBoxCalc()
 {
     int intvar;
-    DataSet::Calc retcalc;
+    DataSet::MeasMode retcalc;
     intvar = ui->comboBoxCalcVar->currentIndex();
     switch (intvar) {
     case 0:
-        retcalc = DataSet::Vel;
+        retcalc = DataSet::Velocity;
         break;
     case 1:
-        retcalc = DataSet::Dist;
+        retcalc = DataSet::Distance;
         break;
     default:
         QMessageBox::information(this, "Control_Dialog" ,QString("Calc %1").arg(intvar));

@@ -32,7 +32,7 @@ class DataSet
 {
 public:
     enum AmpGain{ Gain_1 = 0, Gain_5, Gain_10, Gain_25, Gain_50, Gain_100, Gain_250, Gain_500 };
-    enum Calc{ Vel = 0, Dist };
+//    enum Calc{ Vel = 0, Dist };
     enum EMethod{ ArbMu = 0, DerivedMu, SimpleE };
     enum MeasMode{ Distance, Velocity };
     enum Pulse{ PulsePerSeq_1 = 1, PulsePerSeq_3 = 3, PulsePerSeq_10 = 10};
@@ -43,7 +43,7 @@ public:
 
     struct Prop{ //material property parameters for Windsor Probe
         AmpGain PropAmpGain;
-        Calc PropCalc;
+//        Calc PropCalc;
         Rate PropCaptureRate;
         unsigned PropCycleTime;
         bool PropDataSave;
@@ -55,14 +55,12 @@ public:
         bool PropRun;
         bool PropPicSave;
         Pulse PropPulseRate;
-        unsigned PropSTravelDistance;
-        unsigned PropSTravelVelocity;
         Wave PropWave;
         Units PropUnits;
         Voltage PropVoltage;
     };
 
-    struct Test{ //test for the Windsor Probe raw data
+    struct Test{
         std::vector<long> ADC;
         double TransitTime;
         Prop TestProp;
