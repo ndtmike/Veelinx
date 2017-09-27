@@ -20,7 +20,7 @@
 #define CALC_METHOD_DERIVED_MU          1
 #define CALC_METHOD_SIMPLE_E            0
 #define CYCLE_TIME_MAX                  10
-#define CYCLE_TIME_MIN                  0
+#define CYCLE_TIME_MIN                  2
 #define MAT_DENSITY_MAX                 500
 #define MAT_DENSITY_MAX_MET             8010
 #define MAT_DENSITY_MET_TO_IMP          0.062428
@@ -123,36 +123,16 @@ private:
     void Set_PicSave();
     void Set_comboBoxPulseRate();
     void Set_comboBoxRun();
-    void Set_STravelDistance();
-    void Set_STravelVelocity();
     void Set_comboBoxWaveType();
     void Set_comboBoxUnits();
     void Set_Voltage();
 
-//C++ #defines
-    static int Pulse_Pos(void) { return(2); }
+//C++ #define
     static int Pulse_Index1(void) {return(1);}
     static int Pulse_Index3(void) {return(2);}
     static int Pulse_Index10(void) {return(3);}
-    static int CycleTime_Pos(void) { return(4); }
-    static int DataSave_Pos(void) { return(6); }
     static int DataSave_Index_Off(void) {return(0);}
     static int DataSave_Index_On(void) {return(1);}
-    static int PicSave_Pos( void ) {return(8); }
-    static int MeasMode_Pos( void ) {return( 10 );}
-    static int P_Dist_Pos( void ) { return( 12 );}
-    static int S_Dist_Pos( void ) { return( 16 );}
-    static int P_Vel_Pos( void ) { return( 16 );}
-    static int S_Vel_Pos( void ) {return( 24 );}
-    static int RE_Pos( void ) { return( 28 );}
-    static int AmpGain_Pos ( void ) { return( 22 );}
-    static int PicRate_Pos ( void ) { return( 24 );}
-    static int Voltage_Pos ( void ) { return( 26 );}
-    static int Wave_Pos ( void ) { return( 28 );}
-    static int Density_Pos ( void ) { return( 30 );}
-    static int E_Pos ( void ) { return( 34 );}
-    static int Review_Pos ( void ) { return( 36 ); }
-    static int Units_Pos (void ) { return( 40 ); }
 
 };
 

@@ -20,8 +20,6 @@ Control_Dialog::Control_Dialog(QWidget *parent) :
     Set_PicSave();
     Set_comboBoxPulseRate();
     Set_comboBoxRun();
-    Set_STravelDistance();
-    Set_STravelVelocity();
     Set_comboBoxWaveType();
     Set_comboBoxUnits();
     Set_Voltage();
@@ -54,7 +52,6 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
     DataSet::Prop returnprop;
 
     returnprop.PropAmpGain = Ret_comboBoxAmpGain();
-//    returnprop.PropCalc = Ret_comboBoxCalc();
     returnprop.PropCaptureRate = Ret_comboBoxCaptureRate();
     returnprop.PropCycleTime = Ret_CycleTime();
     returnprop.PropDataSave = Ret_DataSave();
@@ -197,48 +194,44 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
 ******************************************************************************/
 DataSet::AmpGain Control_Dialog::IntToAmpGain( int data_in, bool* ok ){
 
-    DataSet::AmpGain return_amp_gain;
+    DataSet::AmpGain return_amp_gain = DataSet::Gain_1;
     *ok = false;
 
-    if (data_in == AMPLIFIER_GAIN_500_SETTING)
-    {
-        return_amp_gain = DataSet::Gain_500;
-        *ok = true;
-    }
-    else if (data_in == AMPLIFIER_GAIN_250_SETTING)
-    {
-        return_amp_gain = DataSet::Gain_250;
-        *ok = true;
-    }
-    else if (data_in == AMPLIFIER_GAIN_100_SETTING)
-    {
-        return_amp_gain = DataSet::Gain_100;
-        *ok = true;
-    }
-    else if (data_in == AMPLIFIER_GAIN_50_SETTING)
-    {
-        return_amp_gain = DataSet::Gain_50;
-        *ok = true;
-    }
-    else if (data_in == AMPLIFIER_GAIN_25_SETTING)
-    {
-        return_amp_gain = DataSet::Gain_25;
-        *ok = true;
-    }
-    else if (data_in == AMPLIFIER_GAIN_10_SETTING)
-    {
-        return_amp_gain = DataSet::Gain_10;
-        *ok = true;
-    }
-    else if (data_in == AMPLIFIER_GAIN_5_SETTING)
-    {
-        return_amp_gain = DataSet::Gain_5;
-        *ok = true;
-    }
-    else
-    {
-        return_amp_gain = DataSet::Gain_1;
-        *ok = true;
+    if(data_in >= AMPLIFIER_GAIN_1_SETTING && data_in <= AMPLIFIER_GAIN_500_SETTING ){
+        switch (data_in){
+        case AMPLIFIER_GAIN_500_SETTING:
+            return_amp_gain = DataSet::Gain_500;
+            *ok = true;
+            break;
+        case AMPLIFIER_GAIN_250_SETTING:
+            return_amp_gain = DataSet::Gain_250;
+            *ok = true;
+            break;
+        case AMPLIFIER_GAIN_100_SETTING:
+            return_amp_gain = DataSet::Gain_100;
+            *ok = true;
+            break;
+        case AMPLIFIER_GAIN_50_SETTING:
+            return_amp_gain = DataSet::Gain_50;
+            *ok = true;
+            break;
+        case AMPLIFIER_GAIN_25_SETTING:
+            return_amp_gain = DataSet::Gain_25;
+            *ok = true;
+            break;
+        case AMPLIFIER_GAIN_10_SETTING:
+            return_amp_gain = DataSet::Gain_10;
+            *ok = true;
+            break;
+        case AMPLIFIER_GAIN_5_SETTING:
+            return_amp_gain = DataSet::Gain_5;
+            *ok = true;
+            break;
+        default:
+            return_amp_gain = DataSet::Gain_1;
+            *ok = true;
+        }
+        ui->comboBoxAmpGain->setCurrentIndex( data_in );
     }
 
     return(return_amp_gain);
@@ -259,29 +252,27 @@ DataSet::AmpGain Control_Dialog::IntToAmpGain( int data_in, bool* ok ){
 ******************************************************************************/
 DataSet::Rate Control_Dialog::IntToCaptureRate( int data_in, bool* ok ){
 
-    DataSet::Rate return_rate;
+    DataSet::Rate return_rate = DataSet::RATE_2000KHZ;
     *ok = false;
 
-    if (data_in == PICTURE_RATE_2000MHZ)
-    {
+    switch (data_in){
+    case PICTURE_RATE_2000MHZ:
         return_rate = DataSet::RATE_2000KHZ;
         *ok = true;
-    }
-    else if (data_in == PICTURE_RATE_1000MHZ)
-    {
+        break;
+    case PICTURE_RATE_1000MHZ:
         return_rate = DataSet::RATE_2000KHZ;
         *ok = true;
-    }
-    else if (data_in == PICTURE_RATE_500MHZ)
-    {
+        break;
+    case PICTURE_RATE_500MHZ:
         return_rate = DataSet::RATE_500KHZ;
         *ok = true;
-    }
-    else
-    {
+        break;
+    default:
         return_rate = DataSet::RATE_250KHZ;
         *ok = true;
     }
+    ui->comboBoxCaptureRate->setCurrentIndex( data_in );
     return( return_rate );
 }
 
@@ -355,15 +346,15 @@ unsigned Control_Dialog::IntToDensity( char data_in_hi, char data_in_lo, bool* o
     // Initialize the material density
     return_density =  ((int)data_in_hi * 0x0100) + (int)(data_in_lo);//move the hi-byte two places add the low byte
 
-    if (return_density < MAT_DENSITY_MIN)
+    if ( return_density < MAT_DENSITY_MIN )
     {
         return_density = MAT_DENSITY_MIN;
     }
-    else if (return_density > MAT_DENSITY_MAX)
+    else if ( return_density > MAT_DENSITY_MAX )
     {
         return_density = MAT_DENSITY_MAX;
     }
-
+    ui->DensitySpinBox->setValue( return_density );
     return( return_density );
 }
 
@@ -384,20 +375,19 @@ DataSet::EMethod Control_Dialog::IntToEMethod( int data_in , bool* ok ){
 
     DataSet::EMethod return_e;
     *ok = false;
-    ui->comboBoxEMethod->setCurrentIndex( data_in );
-    if (data_in == CALC_METHOD_ARB_MU)
-    {
-        return_e = DataSet::ArbMu;
-    }
-    else if (data_in == CALC_METHOD_DERIVED_MU)
-    {
-        return_e = DataSet::DerivedMu;
-    }
-    else
-    {
+    if( data_in >= CALC_METHOD_SIMPLE_E && data_in <= CALC_METHOD_ARB_MU ){
+        switch (data_in){
+        case CALC_METHOD_ARB_MU:
+            return_e = DataSet::ArbMu;
+            break;
+        case CALC_METHOD_DERIVED_MU:
+            return_e = DataSet::DerivedMu;
+            break;
+        default:
         return_e = DataSet::SimpleE;
+        }
+        ui->comboBoxEMethod->setCurrentIndex( data_in );
     }
-
     return(return_e);
 }
 
@@ -695,6 +685,10 @@ void Control_Dialog::Set_comboBoxCaptureRate()
 
 void Control_Dialog::Set_CycleTime()
 {
+    ui->CycleTimeSpinBox->setMinimum( CYCLE_TIME_MIN );
+    ui->CycleTimeSpinBox->setMaximum( CYCLE_TIME_MAX );
+    ui->horizontalSliderCycleTime->setMinimum( CYCLE_TIME_MIN );
+    ui->horizontalSliderCycleTime->setMaximum( CYCLE_TIME_MAX );
     connect(ui->CycleTimeSpinBox, SIGNAL(valueChanged(int)),
             ui->horizontalSliderCycleTime,SLOT(setValue(int)));
     connect(ui->horizontalSliderCycleTime, SIGNAL(valueChanged(int)),
@@ -703,12 +697,16 @@ void Control_Dialog::Set_CycleTime()
 
 void Control_Dialog::Set_DataSave()
 {
-    ui->comboBoxDataSave->addItem("Yes");
     ui->comboBoxDataSave->addItem("No");
+    ui->comboBoxDataSave->addItem("Yes");
 }
 
 void Control_Dialog::Set_Density()
 {
+    ui->DensitySpinBox->setMinimum( MAT_DENSITY_MIN );
+    ui->DensitySpinBox->setMaximum( MAT_DENSITY_MAX );
+    ui->horizontalSliderDensity->setMinimum( MAT_DENSITY_MIN );
+    ui->horizontalSliderDensity->setMaximum( MAT_DENSITY_MAX );
     connect(ui->DensitySpinBox, SIGNAL(valueChanged(int)),
             ui->horizontalSliderDensity,SLOT(setValue(int)));
     connect(ui->horizontalSliderDensity, SIGNAL(valueChanged(int)),
@@ -717,9 +715,9 @@ void Control_Dialog::Set_Density()
 
 void Control_Dialog::Set_comboBoxEMethod()
 {
-    ui->comboBoxEMethod->addItem("Arb. Mu");
-    ui->comboBoxEMethod->addItem("Derived Mu");
     ui->comboBoxEMethod->addItem("Simple E");
+    ui->comboBoxEMethod->addItem("Derived Mu");
+    ui->comboBoxEMethod->addItem("Arb. Mu");
 }
 
 void Control_Dialog::Set_comboBoxMeasMode()
@@ -761,22 +759,6 @@ void Control_Dialog::Set_comboBoxRun()
 {
     ui->comboBoxRun->addItem("No");
     ui->comboBoxRun->addItem("Yes");
-}
-
-void Control_Dialog::Set_STravelDistance()
-{
-    connect(ui->SDistanceSpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderSDistance,SLOT(setValue(int)));
-    connect(ui->horizontalSliderSDistance, SIGNAL(valueChanged(int)),
-            ui->SDistanceSpinBox, SLOT(setValue(int)));
-}
-
-void Control_Dialog::Set_STravelVelocity()
-{
-    connect(ui->SVelocitySpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderSVelocity,SLOT(setValue(int)));
-    connect(ui->horizontalSliderSVelocity, SIGNAL(valueChanged(int)),
-            ui->SVelocitySpinBox, SLOT(setValue(int)));
 }
 
 void Control_Dialog::Set_comboBoxWaveType()
