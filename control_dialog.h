@@ -24,16 +24,19 @@
 #define MAT_DENSITY_MAX                 500
 #define MAT_DENSITY_MAX_MET             8010
 #define MAT_DENSITY_MET_TO_IMP          0.062428
+#define MAT_DENSITY_IMP_TO_MET          16
 #define MAT_DENSITY_MIN                 50
 #define MAT_DENSITY_MIN_MET             801
 #define MAT_TRAVEL_DIST_MAX             600
 #define MAT_TRAVEL_DIST_MAX_MET         15.240000
 #define MAT_TRAVEL_DIST_MET_TO_IMP      39.370079
+#define MAT_TRAVEL_DIST_IMP_TO_MET      254 / 10000
 #define MAT_TRAVEL_DIST_MIN             0.1
 #define MAT_TRAVEL_DIST_MIN_MET         0.002540
 #define MAT_TRAVEL_VEL_MAX              40000
 #define MAT_TRAVEL_VEL_MAX_MET          12191
 #define MAT_TRAVEL_VEL_MET_TO_IMP       3.280851
+#define MAT_TRAVEL_VEL_IMP_TO_MET       3047 / 10000
 #define MAT_TRAVEL_VEL_MIN              1000
 #define MAT_TRAVEL_VEL_MIN_MET          304
 #define PICTURE_RATE_250MHZ             0
@@ -77,6 +80,8 @@ private:
 
     DataSet::Prop Current_Prop;
 
+    void ConvertToMetric( void );
+
     DataSet::AmpGain IntToAmpGain( int data_in, bool* ok );
     DataSet::Rate IntToCaptureRate( int data_in, bool* ok );
     unsigned IntToCycleTime( int data_in, bool* ok );
@@ -104,8 +109,6 @@ private:
     unsigned Ret_PTravelVelocity();
     bool Ret_PicSave();
     DataSet::Pulse Ret_comboBoxPulseRate();
-    unsigned Ret_STravelDistance();
-    unsigned Ret_STravelVelocity();
     DataSet::Wave Ret_comboBoxWaveType();
     DataSet::Units Ret_comboBoxUnits();
     DataSet::Voltage Ret_Voltage();
@@ -128,9 +131,9 @@ private:
     void Set_Voltage();
 
 //C++ #define
-    static int Pulse_Index1(void) {return(1);}
-    static int Pulse_Index3(void) {return(2);}
-    static int Pulse_Index10(void) {return(3);}
+    static int Pulse_Index1(void) {return(0);}
+    static int Pulse_Index3(void) {return(1);}
+    static int Pulse_Index10(void) {return(2);}
     static int DataSave_Index_Off(void) {return(0);}
     static int DataSave_Index_On(void) {return(1);}
 

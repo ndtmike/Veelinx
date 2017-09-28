@@ -33,6 +33,31 @@ Control_Dialog::~Control_Dialog()
     delete ui;
 }
 
+void Control_Dialog::ConvertToMetric( void ){
+    ui->DensitySpinBox->setMinimum( MAT_DENSITY_MIN * MAT_DENSITY_IMP_TO_MET );
+    ui->DensitySpinBox->setMaximum( MAT_DENSITY_MAX * MAT_DENSITY_IMP_TO_MET );
+    ui->horizontalSliderDensity->setMinimum( MAT_DENSITY_MIN * MAT_DENSITY_IMP_TO_MET );
+    ui->horizontalSliderDensity->setMaximum( MAT_DENSITY_MAX * MAT_DENSITY_IMP_TO_MET );
+
+    ui->PVelocitySpinBox->setMaximum( MAT_TRAVEL_VEL_MAX
+                                      *  MAT_TRAVEL_VEL_IMP_TO_MET );
+    ui->PVelocitySpinBox->setMinimum( MAT_TRAVEL_VEL_MIN
+                                      *  MAT_TRAVEL_VEL_IMP_TO_MET );
+    ui->horizontalSliderPVelocity->setMaximum( MAT_TRAVEL_VEL_MAX
+                                               *  MAT_TRAVEL_VEL_IMP_TO_MET );
+    ui->horizontalSliderPVelocity->setMinimum( MAT_TRAVEL_VEL_MIN
+                                               *  MAT_TRAVEL_VEL_IMP_TO_MET );
+
+    ui->PDistanceSpinBox->setMaximum( MAT_TRAVEL_DIST_MAX
+                                      * MAT_TRAVEL_DIST_IMP_TO_MET );
+    ui->PDistanceSpinBox->setMinimum( MAT_TRAVEL_DIST_MIN
+                                      * MAT_TRAVEL_DIST_IMP_TO_MET );
+    ui->horizontalSliderPDistance->setMaximum( MAT_TRAVEL_DIST_MAX
+                                               * MAT_TRAVEL_DIST_IMP_TO_MET );
+    ui->horizontalSliderPDistance->setMinimum( MAT_TRAVEL_DIST_MIN
+                                               * MAT_TRAVEL_DIST_IMP_TO_MET );
+}
+
 int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
 
     int result = -1;
@@ -47,133 +72,6 @@ int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
     return( result );
 }
 
-DataSet::Prop Control_Dialog::Return_Control_Dialog()
-{
-    DataSet::Prop returnprop;
-
-    returnprop.PropAmpGain = Ret_comboBoxAmpGain();
-    returnprop.PropCaptureRate = Ret_comboBoxCaptureRate();
-    returnprop.PropCycleTime = Ret_CycleTime();
-    returnprop.PropDataSave = Ret_DataSave();
-    returnprop.PropDensity = Ret_Density();
-    returnprop.PropEMethod = Ret_comboBoxEMethod();
-    returnprop.PropPTravelDistance = Ret_PTravelDistance();
-    returnprop.PropPTravelVelocity = Ret_PTravelVelocity();
-    returnprop.PropPicSave = Ret_PicSave();
-    returnprop.PropPulseRate = Ret_comboBoxPulseRate();
-    returnprop.PropWave = Ret_comboBoxWaveType();
-    returnprop.PropUnits = Ret_comboBoxUnits();
-    returnprop.PropVoltage = Ret_Voltage();
-
-    return(returnprop);
-}
-
-/******************************************************************************
-
-  Function: bool Set_Control_Dialog(const QByteArray)
-  Description:
-  ============
-  Sets the parameter of the control dialog box from the incoming string
-
-  data_in coded as follows:
-  "Z@number_of_pulses ÿ repeat_time ÿ test_is_saved ÿ show_the_picture ÿ measurement_mode ÿ
-    p_distance_high ÿ p_distance_low ÿ s_distance_high ÿ s_distance_low ÿ
-    p_velocity_high ÿ p_velocity_low ÿ s_velocity_high ÿ s_velocity_low ÿ
-    run_enable ÿ amp_gain_index ÿ picture_rate_index ÿ pulser_voltage ÿ wave_type ÿ density_hi ÿ density_lo
-    e_type ÿ review_number_hi ÿ review_number_lo ÿ display_units"
-
-  Sample string
-  Z@10ÿ2ÿ0ÿ1ÿ0ÿ0ÿ0ÿ0ÿ45ÿ0ÿ7ÿ2ÿ128ÿ0ÿ0ÿ50ÿ0ÿ0ÿ1ÿ0ÿ£
-
-******************************************************************************/
-bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
-{
-    bool ok = false;
-    int buffer = -1;
-    QByteArray working = header.right( header.size() - 2 );
-
-    buffer = CreateValue( &working, &ok );
-    if( ok == true){
-    Current_Prop.PropPulseRate = IntToPulse( buffer, &ok );
-    buffer = CreateValue( &working, &ok );
-    if( ok == true ){
-        Current_Prop.PropCycleTime = IntToCycleTime( buffer, &ok );
-        buffer = CreateValue( &working, &ok );
-        if( ok == true ){
-            Current_Prop.PropDataSave = IntToDataSave( buffer, &ok  );
-            buffer = CreateValue( &working, &ok );
-            if( ok == true ){
-                Current_Prop.PropPicSave = IntToPicSave( buffer, &ok );
-                buffer = CreateValue( &working, &ok );
-                if( ok == true ){
-                    Current_Prop.PropMeaseMode = IntToMeasMode( buffer, &ok );
-                    buffer = CreateValue( &working, &ok );
-                    bool ok_low = false;
-                    int buffer_low = CreateValue( &working, &ok_low );
-                    if( ok == true && ok_low == true ){
-                        Current_Prop.PropPTravelDistance =
-                            IntToPTravelDistance( buffer, buffer_low, &ok  );
-                            buffer = CreateValue( &working, &ok );
-                            buffer_low = CreateValue( &working, &ok_low );
-                            if( ok == true ){
-                                Current_Prop.PropPTravelVelocity =
-                                    IntToPTravelVelocity( buffer, buffer_low, &ok  );
-                                    buffer = CreateValue( &working, &ok );
-                                    if( ok == true ){
-                                        Current_Prop.PropRun = (bool)false;
-                                        buffer = CreateValue( &working, &ok );
-                                        if( ok == true ){
-                                            Current_Prop.PropAmpGain =
-                                                IntToAmpGain( buffer, &ok );
-                                                buffer = CreateValue( &working, &ok );
-                                            if( ok == true ){
-                                                Current_Prop.PropCaptureRate =
-                                                    IntToCaptureRate( buffer, &ok );
-                                                buffer = CreateValue( &working, &ok );
-                                                if( ok == true ){
-                                                    Current_Prop.PropVoltage =
-                                                            IntToVoltage( buffer, &ok );
-                                                    buffer = CreateValue( &working, &ok );
-                                                    if( ok == true ){
-                                                        Current_Prop.PropWave =
-                                                            IntToWaveType( buffer, &ok );
-                                                        buffer = CreateValue( &working, &ok );
-                                                        buffer_low = CreateValue( &working, &ok_low );
-                                                        if( ok == true ){
-                                                            Current_Prop.PropDensity =
-                                                                IntToDensity( buffer,
-                                                                buffer_low, &ok );
-                                                             buffer = CreateValue( &working, &ok );
-                                                            if( ok == true ){
-                                                                Current_Prop.PropEMethod =
-                                                                        IntToEMethod( buffer, &ok );
-                                                                buffer = CreateValue( &working, &ok );
-                                                                buffer_low = CreateValue( &working, &ok );
-                                                                if( ok == true && ok_low ){
-                                                                    ReviewNumber = IntToReview( buffer,
-                                                                         buffer_low, &ok);
-                                                                    buffer = CreateValue( &working, &ok );
-                                                                    if( ok == true ){
-                                                                        Current_Prop.PropUnits =
-                                                                                IntToUnits(buffer, &ok);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                   }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    }
-    return( ok );
-}
 
 /******************************************************************************
 
@@ -574,7 +472,6 @@ unsigned Control_Dialog::IntToReview( int data_in_hi, int data_in_lo, bool* ok )
         return_velocity = REVIEW_TEST_NUM_MAX;
     }
     *ok = true;
-    ui->PVelocitySpinBox->setValue( return_velocity );
 
     return(return_velocity);
 }
@@ -616,7 +513,7 @@ DataSet::Wave Control_Dialog::IntToWaveType( int data_in, bool* ok )
 {
      DataSet::Units return_units = DataSet::Metric;
      *ok = false;
-     if( ( data_in >= 0 ) && ( data_in <= ui->comboBoxUnits->count() - 1 )){
+     if( ( data_in == UNITS_IMPERIAL ) || ( data_in == UNITS_METRIC )){
          ui->comboBoxUnits->setCurrentIndex( data_in );
          *ok = true;
      // Initialize the pulses per sequence
@@ -637,146 +534,24 @@ DataSet::Wave Control_Dialog::IntToWaveType( int data_in, bool* ok )
 ******************************************************************************/
 DataSet::Voltage Control_Dialog::IntToVoltage( int data_in, bool* ok )
 {
+    const int pulse_hi_volt = 128;
+    const int pulse_hi_volt_pos = 1;
+    const int pulse_lo_volt = 0;
+    const int pulse_lo_volt_pos = 0;
+
     DataSet::Voltage return_voltage = DataSet::Hi;
     *ok = false;
-    if( ( data_in >= 0 ) && ( data_in <= ui->comboBoxVoltage->count() - 1 )){
-        ui->comboBoxVoltage->setCurrentIndex( data_in );
+    if( ( data_in == pulse_lo_volt ) || ( data_in == pulse_hi_volt )){
+        if(data_in == pulse_hi_volt ){
+            ui->comboBoxVoltage->setCurrentIndex( pulse_hi_volt_pos );
+            return_voltage = DataSet::Hi;
+        }else{
+            ui->comboBoxVoltage->setCurrentIndex( pulse_lo_volt_pos );
+            return_voltage = DataSet::Low;
+        }
         *ok = true;
-    // Initialize the pulses per sequence
-        return_voltage = data_in == 0 ? DataSet::Hi : DataSet::Low;
     }
     return( return_voltage );
-}
-/******************************************************************************
-
-  Function: Set_comboBoxAmpGain
-
-  Description:
-  ============
-  Set Items in AmpGain comboBox
-
-******************************************************************************/
-void Control_Dialog::Set_comboBoxAmpGain(){
-
-    ui->comboBoxAmpGain->addItem("1x Gain");
-    ui->comboBoxAmpGain->addItem("5x Gain");
-    ui->comboBoxAmpGain->addItem("10x Gain");
-    ui->comboBoxAmpGain->addItem("25x Gain");
-    ui->comboBoxAmpGain->addItem("50x Gain");
-    ui->comboBoxAmpGain->addItem("100x Gain");
-    ui->comboBoxAmpGain->addItem("250x Gain");
-    ui->comboBoxAmpGain->addItem("500x Gain");
-
-}
-
-void Control_Dialog::Set_comboBoxCalc()
-{
-    ui->comboBoxCalcVar->addItem("Velocity");
-    ui->comboBoxCalcVar->addItem("Distance");
-}
-
-void Control_Dialog::Set_comboBoxCaptureRate()
-{
-    ui->comboBoxCaptureRate->addItem("250 kHz");
-    ui->comboBoxCaptureRate->addItem("500 kHz");
-    ui->comboBoxCaptureRate->addItem("1.0 MHz");
-    ui->comboBoxCaptureRate->addItem("2.0 MHz");
-}
-
-void Control_Dialog::Set_CycleTime()
-{
-    ui->CycleTimeSpinBox->setMinimum( CYCLE_TIME_MIN );
-    ui->CycleTimeSpinBox->setMaximum( CYCLE_TIME_MAX );
-    ui->horizontalSliderCycleTime->setMinimum( CYCLE_TIME_MIN );
-    ui->horizontalSliderCycleTime->setMaximum( CYCLE_TIME_MAX );
-    connect(ui->CycleTimeSpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderCycleTime,SLOT(setValue(int)));
-    connect(ui->horizontalSliderCycleTime, SIGNAL(valueChanged(int)),
-            ui->CycleTimeSpinBox, SLOT(setValue(int)));
-}
-
-void Control_Dialog::Set_DataSave()
-{
-    ui->comboBoxDataSave->addItem("No");
-    ui->comboBoxDataSave->addItem("Yes");
-}
-
-void Control_Dialog::Set_Density()
-{
-    ui->DensitySpinBox->setMinimum( MAT_DENSITY_MIN );
-    ui->DensitySpinBox->setMaximum( MAT_DENSITY_MAX );
-    ui->horizontalSliderDensity->setMinimum( MAT_DENSITY_MIN );
-    ui->horizontalSliderDensity->setMaximum( MAT_DENSITY_MAX );
-    connect(ui->DensitySpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderDensity,SLOT(setValue(int)));
-    connect(ui->horizontalSliderDensity, SIGNAL(valueChanged(int)),
-            ui->DensitySpinBox, SLOT(setValue(int)));
-}
-
-void Control_Dialog::Set_comboBoxEMethod()
-{
-    ui->comboBoxEMethod->addItem("Simple E");
-    ui->comboBoxEMethod->addItem("Derived Mu");
-    ui->comboBoxEMethod->addItem("Arb. Mu");
-}
-
-void Control_Dialog::Set_comboBoxMeasMode()
-{
-    ui->comboBoxMeasMode->addItem("Distance");
-    ui->comboBoxMeasMode->addItem("Velocity");
-}
-
-void Control_Dialog::Set_PTravelDistance()
-{
-    connect(ui->PDistanceSpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderPDistance,SLOT(setValue(int)));
-    connect(ui->horizontalSliderPDistance, SIGNAL(valueChanged(int)),
-            ui->PDistanceSpinBox, SLOT(setValue(int)));
-}
-
-void Control_Dialog::Set_PTravelVelocity()
-{
-    connect(ui->PVelocitySpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderPVelocity,SLOT(setValue(int)));
-    connect(ui->horizontalSliderPVelocity, SIGNAL(valueChanged(int)),
-            ui->PVelocitySpinBox, SLOT(setValue(int)));
-}
-
-void Control_Dialog::Set_PicSave()
-{
-    ui->comboBoxPicSave->addItem("Yes");
-    ui->comboBoxPicSave->addItem("No");
-}
-
-void Control_Dialog::Set_comboBoxPulseRate()
-{
-    ui->comboBoxPulseRate->addItem("1");
-    ui->comboBoxPulseRate->addItem("3");
-    ui->comboBoxPulseRate->addItem("10");
-}
-
-void Control_Dialog::Set_comboBoxRun()
-{
-    ui->comboBoxRun->addItem("No");
-    ui->comboBoxRun->addItem("Yes");
-}
-
-void Control_Dialog::Set_comboBoxWaveType()
-{
-    ui->comboBoxWaveType->addItem("P Wave");
-    ui->comboBoxWaveType->addItem("S Wave");
-}
-
-void Control_Dialog::Set_Voltage()
-{
-    ui->comboBoxVoltage->addItem("Hi");
-    ui->comboBoxVoltage->addItem("Low");
-}
-
-void Control_Dialog::Set_comboBoxUnits()
-{
-    ui->comboBoxUnits->addItem("Standard");
-    ui->comboBoxUnits->addItem("Metric");
 }
 
 DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
@@ -903,6 +678,27 @@ DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
     return(retemethod);
 }
 
+DataSet::Prop Control_Dialog::Return_Control_Dialog()
+{
+    DataSet::Prop returnprop;
+
+    returnprop.PropAmpGain = Ret_comboBoxAmpGain();
+    returnprop.PropCaptureRate = Ret_comboBoxCaptureRate();
+    returnprop.PropCycleTime = Ret_CycleTime();
+    returnprop.PropDataSave = Ret_DataSave();
+    returnprop.PropDensity = Ret_Density();
+    returnprop.PropEMethod = Ret_comboBoxEMethod();
+    returnprop.PropPTravelDistance = Ret_PTravelDistance();
+    returnprop.PropPTravelVelocity = Ret_PTravelVelocity();
+    returnprop.PropPicSave = Ret_PicSave();
+    returnprop.PropPulseRate = Ret_comboBoxPulseRate();
+    returnprop.PropWave = Ret_comboBoxWaveType();
+    returnprop.PropUnits = Ret_comboBoxUnits();
+    returnprop.PropVoltage = Ret_Voltage();
+
+    return(returnprop);
+}
+
 unsigned Control_Dialog::Ret_PTravelDistance()
 {
     unsigned returnui = ui->PDistanceSpinBox->value();
@@ -943,18 +739,6 @@ DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
         break;
     }
     return(retpulse);
-}
-
-unsigned Control_Dialog::Ret_STravelDistance()
-{
-    unsigned returnui = ui->PDistanceSpinBox->value();
-    return(returnui);
-}
-
-unsigned Control_Dialog::Ret_STravelVelocity()
-{
-    unsigned returnui = ui->PVelocitySpinBox->value();
-    return(returnui);
 }
 
 DataSet::Wave Control_Dialog::Ret_comboBoxWaveType()
@@ -1014,3 +798,254 @@ DataSet::Voltage Control_Dialog::Ret_Voltage()
     return(retvolt);
 }
 
+
+
+/******************************************************************************
+
+  Function: Set_comboBoxAmpGain
+
+  Description:
+  ============
+  Set Items in AmpGain comboBox
+
+******************************************************************************/
+void Control_Dialog::Set_comboBoxAmpGain(){
+
+    ui->comboBoxAmpGain->addItem("1x Gain");
+    ui->comboBoxAmpGain->addItem("5x Gain");
+    ui->comboBoxAmpGain->addItem("10x Gain");
+    ui->comboBoxAmpGain->addItem("25x Gain");
+    ui->comboBoxAmpGain->addItem("50x Gain");
+    ui->comboBoxAmpGain->addItem("100x Gain");
+    ui->comboBoxAmpGain->addItem("250x Gain");
+    ui->comboBoxAmpGain->addItem("500x Gain");
+}
+
+void Control_Dialog::Set_comboBoxCalc()
+{
+    ui->comboBoxCalcVar->addItem("Velocity");
+    ui->comboBoxCalcVar->addItem("Distance");
+}
+
+void Control_Dialog::Set_comboBoxCaptureRate()
+{
+    ui->comboBoxCaptureRate->addItem("250 kHz");
+    ui->comboBoxCaptureRate->addItem("500 kHz");
+    ui->comboBoxCaptureRate->addItem("1.0 MHz");
+    ui->comboBoxCaptureRate->addItem("2.0 MHz");
+}
+
+/******************************************************************************
+
+  Function: bool Set_Control_Dialog(const QByteArray)
+  Description:
+  ============
+  Sets the parameter of the control dialog box from the incoming string
+
+  data_in coded as follows:
+  "Z@number_of_pulses ÿ repeat_time ÿ test_is_saved ÿ show_the_picture ÿ measurement_mode ÿ
+    p_distance_high ÿ p_distance_low ÿ s_distance_high ÿ s_distance_low ÿ
+    p_velocity_high ÿ p_velocity_low ÿ s_velocity_high ÿ s_velocity_low ÿ
+    run_enable ÿ amp_gain_index ÿ picture_rate_index ÿ pulser_voltage ÿ wave_type ÿ density_hi ÿ density_lo
+    e_type ÿ review_number_hi ÿ review_number_lo ÿ display_units"
+
+  Sample string
+  Z@10ÿ2ÿ0ÿ1ÿ0ÿ0ÿ0ÿ0ÿ45ÿ0ÿ7ÿ2ÿ128ÿ0ÿ0ÿ50ÿ0ÿ0ÿ1ÿ0ÿ£
+
+******************************************************************************/
+bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
+{
+    bool ok = false;
+    int buffer = -1;
+    QByteArray working = header.right( header.size() - 2 );
+
+    buffer = CreateValue( &working, &ok );
+    if( ok == true){
+    Current_Prop.PropPulseRate = IntToPulse( buffer, &ok );
+    buffer = CreateValue( &working, &ok );
+    if( ok == true ){
+        Current_Prop.PropCycleTime = IntToCycleTime( buffer, &ok );
+        buffer = CreateValue( &working, &ok );
+        if( ok == true ){
+            Current_Prop.PropDataSave = IntToDataSave( buffer, &ok  );
+            buffer = CreateValue( &working, &ok );
+            if( ok == true ){
+                Current_Prop.PropPicSave = IntToPicSave( buffer, &ok );
+                buffer = CreateValue( &working, &ok );
+                if( ok == true ){
+                    Current_Prop.PropMeaseMode = IntToMeasMode( buffer, &ok );
+                    buffer = CreateValue( &working, &ok );
+                    bool ok_low = false;
+                    int buffer_low = CreateValue( &working, &ok_low );
+                    if( ok == true && ok_low == true ){
+                        Current_Prop.PropPTravelDistance =
+                            IntToPTravelDistance( buffer, buffer_low, &ok  );
+                            buffer = CreateValue( &working, &ok );
+                            buffer_low = CreateValue( &working, &ok_low );
+                            if( ok == true ){
+                                Current_Prop.PropPTravelVelocity =
+                                    IntToPTravelVelocity( buffer, buffer_low, &ok  );
+                                    buffer = CreateValue( &working, &ok );
+                                    if( ok == true ){
+                                        Current_Prop.PropRun = (bool)false;
+                                        buffer = CreateValue( &working, &ok );
+                                        if( ok == true ){
+                                            Current_Prop.PropAmpGain =
+                                                IntToAmpGain( buffer, &ok );
+                                                buffer = CreateValue( &working, &ok );
+                                            if( ok == true ){
+                                                Current_Prop.PropCaptureRate =
+                                                    IntToCaptureRate( buffer, &ok );
+                                                buffer = CreateValue( &working, &ok );
+                                                if( ok == true ){
+                                                    Current_Prop.PropVoltage =
+                                                            IntToVoltage( buffer, &ok );
+                                                    buffer = CreateValue( &working, &ok );
+                                                    if( ok == true ){
+                                                        Current_Prop.PropWave =
+                                                            IntToWaveType( buffer, &ok );
+                                                        buffer = CreateValue( &working, &ok );
+                                                        buffer_low = CreateValue( &working, &ok_low );
+                                                        if( ok == true ){
+                                                            Current_Prop.PropDensity =
+                                                                IntToDensity( buffer,
+                                                                buffer_low, &ok );
+                                                             buffer = CreateValue( &working, &ok );
+                                                            if( ok == true ){
+                                                                Current_Prop.PropEMethod =
+                                                                        IntToEMethod( buffer, &ok );
+                                                                buffer = CreateValue( &working, &ok );
+                                                                buffer_low = CreateValue( &working, &ok );
+                                                                if( ok == true && ok_low ){
+                                                                    ReviewNumber = IntToReview( buffer,
+                                                                         buffer_low, &ok);
+                                                                    buffer = CreateValue( &working, &ok );
+                                                                    if( ok == true ){
+                                                                        Current_Prop.PropUnits =
+                                                                                IntToUnits(buffer, &ok);
+                                                                        if(Current_Prop.PropUnits == DataSet::Metric){
+                                                                            ConvertToMetric();
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                   }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }
+    return( ok );
+}
+
+void Control_Dialog::Set_CycleTime()
+{
+    ui->CycleTimeSpinBox->setMinimum( CYCLE_TIME_MIN );
+    ui->CycleTimeSpinBox->setMaximum( CYCLE_TIME_MAX );
+    ui->horizontalSliderCycleTime->setMinimum( CYCLE_TIME_MIN );
+    ui->horizontalSliderCycleTime->setMaximum( CYCLE_TIME_MAX );
+    connect(ui->CycleTimeSpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderCycleTime,SLOT(setValue(int)));
+    connect(ui->horizontalSliderCycleTime, SIGNAL(valueChanged(int)),
+            ui->CycleTimeSpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_DataSave()
+{
+    ui->comboBoxDataSave->addItem("No");
+    ui->comboBoxDataSave->addItem("Yes");
+}
+
+void Control_Dialog::Set_Density()
+{
+    ui->DensitySpinBox->setMinimum( MAT_DENSITY_MIN );
+    ui->DensitySpinBox->setMaximum( MAT_DENSITY_MAX );
+    ui->horizontalSliderDensity->setMinimum( MAT_DENSITY_MIN );
+    ui->horizontalSliderDensity->setMaximum( MAT_DENSITY_MAX );
+    connect(ui->DensitySpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderDensity,SLOT(setValue(int)));
+    connect(ui->horizontalSliderDensity, SIGNAL(valueChanged(int)),
+            ui->DensitySpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_comboBoxEMethod()
+{
+    ui->comboBoxEMethod->addItem("Simple E");
+    ui->comboBoxEMethod->addItem("Derived Mu");
+    ui->comboBoxEMethod->addItem("Arb. Mu");
+}
+
+void Control_Dialog::Set_comboBoxMeasMode()
+{
+    ui->comboBoxMeasMode->addItem("Velocity");
+    ui->comboBoxMeasMode->addItem("Distance");
+}
+
+void Control_Dialog::Set_PTravelDistance()
+{
+    ui->PDistanceSpinBox->setMaximum( MAT_TRAVEL_DIST_MAX );
+    ui->PDistanceSpinBox->setMinimum( MAT_TRAVEL_DIST_MIN );
+    ui->horizontalSliderPDistance->setMaximum( MAT_TRAVEL_DIST_MAX );
+    ui->horizontalSliderPDistance->setMinimum( MAT_TRAVEL_DIST_MIN );
+    connect(ui->PDistanceSpinBox, SIGNAL(valueChanged(int)),
+            ui->horizontalSliderPDistance,SLOT(setValue(int)));
+    connect(ui->horizontalSliderPDistance, SIGNAL(valueChanged(int)),
+            ui->PDistanceSpinBox, SLOT(setValue(int)));
+}
+
+void Control_Dialog::Set_PTravelVelocity()
+{
+    ui->PVelocitySpinBox->setMaximum( MAT_TRAVEL_VEL_MAX );
+    ui->PVelocitySpinBox->setMinimum( MAT_TRAVEL_VEL_MIN );
+    ui->horizontalSliderPVelocity->setMaximum( MAT_TRAVEL_VEL_MAX );
+    ui->horizontalSliderPVelocity->setMinimum( MAT_TRAVEL_VEL_MIN );
+    connect(ui->PVelocitySpinBox, SIGNAL( valueChanged( int )),
+            ui->horizontalSliderPVelocity,SLOT( setValue( int )));
+    connect(ui->horizontalSliderPVelocity, SIGNAL( valueChanged( int )),
+            ui->PVelocitySpinBox, SLOT( setValue( int )));
+}
+
+void Control_Dialog::Set_PicSave()
+{
+    ui->comboBoxPicSave->addItem("No");
+    ui->comboBoxPicSave->addItem("Yes");
+}
+
+void Control_Dialog::Set_comboBoxPulseRate()
+{
+    ui->comboBoxPulseRate->addItem("1");
+    ui->comboBoxPulseRate->addItem("3");
+    ui->comboBoxPulseRate->addItem("10");
+}
+
+void Control_Dialog::Set_comboBoxRun()
+{
+    ui->comboBoxRun->addItem("No");
+    ui->comboBoxRun->addItem("Yes");
+}
+
+void Control_Dialog::Set_comboBoxWaveType()
+{
+    ui->comboBoxWaveType->addItem("P Wave");
+    ui->comboBoxWaveType->addItem("S Wave");
+}
+
+void Control_Dialog::Set_Voltage()
+{
+    ui->comboBoxVoltage->addItem("Low");
+    ui->comboBoxVoltage->addItem("Hi");
+}
+
+void Control_Dialog::Set_comboBoxUnits()
+{
+    ui->comboBoxUnits->addItem("Standard");
+    ui->comboBoxUnits->addItem("Metric");
+}
