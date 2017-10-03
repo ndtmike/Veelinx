@@ -93,7 +93,7 @@ int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
 DataSet::AmpGain Control_Dialog::IntToAmpGain( int data_in, bool* ok ){
 
     DataSet::AmpGain return_amp_gain = DataSet::Gain_1;
-    *ok = false;
+    *ok = false;    
 
     if(data_in >= AMPLIFIER_GAIN_1_SETTING && data_in <= AMPLIFIER_GAIN_500_SETTING ){
         switch (data_in){
@@ -128,6 +128,7 @@ DataSet::AmpGain Control_Dialog::IntToAmpGain( int data_in, bool* ok ){
         default:
             return_amp_gain = DataSet::Gain_1;
             *ok = true;
+
         }
         ui->comboBoxAmpGain->setCurrentIndex( data_in );
     }
@@ -174,7 +175,6 @@ DataSet::Rate Control_Dialog::IntToCaptureRate( int data_in, bool* ok ){
     return( return_rate );
 }
 
-
 /******************************************************************************
 
   Function: DataSet::Rate IntToCycleTime( char data_in_hi, char data_in_lo, bool* ok )
@@ -198,7 +198,6 @@ unsigned Control_Dialog::IntToCycleTime( int data_in, bool* ok )
     *ok = true;
     return( returntime );
 }
-
 
 /******************************************************************************
 
@@ -560,29 +559,46 @@ DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
     DataSet::AmpGain retampgain;
     intvar = ui->comboBoxAmpGain->currentIndex();
 
+//    const char amp_buffer500[] = {0x5A, 0x10, 0x07, 0xFF, 0xA3};
+//    const char amp_buffer250[] = {0x5A, 0x10, 0x06, 0xFF, 0xA3};
+//    const char amp_buffer100[] = {0x5A, 0x10, 0x05, 0xFF, 0xA3};
+//    const char amp_buffer50[] = {0x5A, 0x10, 0x04, 0xFF, 0xA3};
+//    const char amp_buffer25[] = {0x5A, 0x10, 0x03, 0xFF, 0xA3};
+//    const char amp_buffer10[] = {0x5A, 0x10, 0x02, 0xFF, 0xA3};
+//    const char amp_buffer5[] = {0x5A, 0x10, 0x01, 0xFF, 0xA3};
+    static const char amp_buffer1[] = {0x5A, 0x10, 0x00, 0xFF, 0xA3};
+    QByteArray ab1( amp_buffer1, sizeof(amp_buffer1));
     switch (intvar) {
     case 0:
         retampgain = DataSet::Gain_1;
+        BufferAmpGain = ab1;
         break;
     case 1:
         retampgain = DataSet::Gain_5;
+        BufferAmpGain = QByteArray::fromHex("5a1001ffa3");
         break;
     case 2:
         retampgain = DataSet::Gain_10;
+        BufferAmpGain = QByteArray::fromHex("5a1002ffa3");
         break;
     case 3:
         retampgain = DataSet::Gain_25;
+        BufferAmpGain = QByteArray::fromHex("5a1003ffa3");
         break;
     case 4:
+        BufferAmpGain = QByteArray::fromHex("5a1004ffa3");
         retampgain = DataSet::Gain_50;
         break;
     case 5:
+        BufferAmpGain = QByteArray::fromHex("5a1005ffa3");
         retampgain = DataSet::Gain_100;
         break;
     case 6:
+        BufferAmpGain = QByteArray::fromHex("5a1006ffa3");
         retampgain = DataSet::Gain_250;
         break;
     case 7:
+        BufferAmpGain = QByteArray::fromHex("5a1007ffa3");
         retampgain = DataSet::Gain_500;
         break;
     default:
@@ -799,7 +815,6 @@ DataSet::Voltage Control_Dialog::Ret_Voltage()
 }
 
 
-
 /******************************************************************************
 
   Function: Set_comboBoxAmpGain
@@ -821,12 +836,31 @@ void Control_Dialog::Set_comboBoxAmpGain(){
     ui->comboBoxAmpGain->addItem("500x Gain");
 }
 
+
+/******************************************************************************
+
+  Function: Set_comboBoxCalc
+
+  Description:
+  ============
+  Set Items
+
+******************************************************************************/
 void Control_Dialog::Set_comboBoxCalc()
 {
     ui->comboBoxCalcVar->addItem("Velocity");
     ui->comboBoxCalcVar->addItem("Distance");
 }
 
+
+/******************************************************************************
+
+  Function: Set_comboBoxCaptureRate
+
+  Description:
+  ============
+  Set Items
+******************************************************************************/
 void Control_Dialog::Set_comboBoxCaptureRate()
 {
     ui->comboBoxCaptureRate->addItem("250 kHz");

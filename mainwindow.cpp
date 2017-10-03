@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serialTimeOut,SIGNAL(timeout()), this,SLOT(endUpload()));
 
     DataUpload = false;
+    ControlDialogData = false; //is V-Meter on?
 
 #ifndef QT_DEBUG
     QTimer* init_timer = new QTimer(this);
@@ -86,43 +87,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer* init_timer = new QTimer(this);
     init_timer->singleShot(1, this, SLOT(showSplash()));  //delay before splash screen
 #endif
-#ifdef TEST_CD
-//    QByteArray data("Z@10ÿ2
-//                     ÿ0ÿ1ÿ
-//                     0ÿ0ÿ0
-//                     ÿ0ÿ45ÿ
-//                     0ÿ7ÿ2
-//                     ÿ128ÿ0ÿ
-//                     0ÿ50ÿ0
-//                     ÿ0ÿ1ÿ
-//                     0ÿ£");
-    QByteArray data;
-    data.resize( 43 );
-    data[0] = 0x5a; data[1] = 0x40; data [2] = 0x0a; data[3] = 0xff; data[4] = 0x02;
-    data[5] = 0xff; data[6] = 0x00; data [7] = 0xff; data[8] = 0x01; data[9] = 0xff;
-    data[10] = 0x00; data[11] = 0xff; data [12] = 0x00; data[13] = 0xff; data[14] = 0x00;
-    data[15] = 0xff; data[16] = 0x00; data [17] = 0xff; data[18] = 0x2d; data[19] = 0xff;
-    data[20] = 0x00; data[21] = 0xff; data [22] = 0x07; data[23] = 0xff; data[24] = 0x02;
-    data[25] = 0xff; data[26] = 0x80; data [27] = 0xff; data[28] = 0x00; data[29] = 0xff;
-    data[30] = 0x00; data[31] = 0xff; data [32] = 0x32; data[33] = 0xff; data[34] = 0x00;
-    data[35] = 0xff; data[36] = 0x00; data [37] = 0xff; data[38] = 0x01; data[39] = 0xff;
-    data[40] = 0x00; data[41] = 0xff; data [42] = 0xa3;
-    CD->Set_Control_Dialog(data);
-#endif
 #ifdef TEST_EX
     QTimer* init_timer = new QTimer(this);
     init_timer->singleShot(1, this, SLOT(loadExampleFile()));
 
 #endif
-
-//    connectTimer = new QTimer(this);
 }
 
 MainWindow::~MainWindow()
 {
     delete GraphData;
     closeSerialPort();
-//    delete connectTimer;
     delete ui;
     delete console;
     delete serial;
@@ -346,6 +321,7 @@ void MainWindow::endUpload()
         QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
         if( header == init ){
+            ControlDialogData = true; //got ControlDialogData V-Meter is on
             if(!CD->Set_Control_Dialog(Data)){
                 QMessageBox::warning(this, "endUpload", tr("Restart Program Before Uploading More Data"));
                 close();
@@ -409,35 +385,21 @@ QByteArray MainWindow::GetCurrentSettings()
             return( returnarray.append(SERIAL_PORT_ERROR));
     }
 
+    serial->close();
+    serial->open( QIODevice::ReadWrite );
+
+    static const char amp_buffer1[] = {0x5A, 0x10, 0x00, 0xFF, 0xA3};
+    qint64 newbytesWritten;
+    if( serial->clear()){
+        newbytesWritten = serial->write( amp_buffer1 );
+    }
+
     QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+        returnarray.append( SERIAL_PORT_OK );
  //       standardOutput << QObject::tr("Data successfully sent to port %1").arg(serialPortName) << endl;
-
-
-    returnarray.resize(20);
-    returnarray[0] = 0x02;  //pulse per seq
-    returnarray[1] = 0x02;  //cycletime
-    returnarray[2] = 0x00;  //save data
-    returnarray[3] = 0x00;  //picture display
-    returnarray[4] = 0x01;  //measurement mode
-    returnarray[5] = 0x02;  //distance
-    returnarray[6] = 0x02;  //distance
-    returnarray[7] = 0x02;  //velocity
-    returnarray[8] = 0x02;  //velocity
-    returnarray[9] = 0x02;  //unused?
-    returnarray[10] = 0x02; //gain
-    returnarray[11] = 0x02; //picture rate
-    returnarray[12] = 0x00; //pulser voltage
-    returnarray[13] = 0x02; //wave type
-    returnarray[14] = 0x02; //Density
-    returnarray[15] = 0x02; //Density
-    returnarray[16] = 0x00; //mu calc method
-    returnarray[17] = 0x02; //test number
-    returnarray[18] = 0x02; //test number
-    returnarray[19] = 0x00; //metric/imp
-    returnarray[20] = 0x02;
-
     return(returnarray);
 }
+
 /******************************************************************************
 
   Function: handleError(QSerialPort::SerialPortError error)
@@ -675,8 +637,7 @@ void MainWindow::processSerialPort()
 {
     foundSerialPort = checkSerialPort();
     if(foundSerialPort){
-        openSerialPort();
-        GetCurrentSettings();
+        openSerialPort();       
     }
 }
 
@@ -694,8 +655,8 @@ void MainWindow::readData()
 //    connectTimer->stop();
     serialTimeOut->start(500);
     Data += serial->readAll();
-//    console->putData(serial->readAll());
 }
+
 
 /******************************************************************************
 
@@ -752,6 +713,42 @@ bool MainWindow::saveFile(const QString &fileName)
 
 /******************************************************************************
 
+  Function: sendVmeterMsg( QByteArray msg )
+
+  Description:
+  ============
+  Return QByteArray of CurrentSettings from V-Meter Serial Port
+******************************************************************************/
+bool MainWindow::sendVmeterMsg( QByteArray msg )
+{
+    bool return_result = false;
+    static const char amp_buffer1[] = {0x5A, 0x10, 0x00, 0xFF, 0xA3};
+    qint64 bytesWritten;
+    if( serial->clear()){
+//        bytesWritten = serial->write(msg.data());
+        bytesWritten = serial->write( amp_buffer1 );
+    }
+    QByteArray confirm_msg;
+
+    if (bytesWritten == -1) {
+        QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write the data to port %1, error: %2")
+                             .arg(serial->portName(), serial->errorString()));
+    } else if (bytesWritten != msg.size()) {
+        QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write all the data to port %1, error: %2")
+                             .arg(serial->portName(), serial->errorString()));
+    } else if (!serial->waitForBytesWritten(5000)) {
+        QMessageBox::information(this,"GetCurrentSettings", tr("Operation timed out or an error occurred for port %1, error: %2")
+                             .arg(serial->portName(), serial->errorString()));
+    }else{
+        confirm_msg = serial->readAll();
+        QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+        return_result = true;
+    }
+    return(return_result);
+}
+
+/******************************************************************************
+
   Function: showControl()
 
   Description:
@@ -761,15 +758,25 @@ bool MainWindow::saveFile(const QString &fileName)
 ******************************************************************************/
 void MainWindow::showControl()
 {
+    const QByteArray serial_port_ok_macro( 1, SERIAL_PORT_OK );
+    QByteArray current_settings;
+    current_settings.append( GetCurrentSettings() );
 
-    DataSet::Prop proptest;
-    CD->setModal( true );
-    if(CD->exec() == QDialog::Accepted){
-        proptest = CD->Return_Control_Dialog();
-        QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);        
+    if( serial_port_ok_macro == current_settings && ControlDialogData == true ){
+        DataSet::Prop proptest;
+        CD->setModal( true );
+        if(CD->exec() == QDialog::Accepted){
+            proptest = CD->Return_Control_Dialog();
+            QByteArray msg = CD->BufferAmpGain;
+            if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);
+            }
+#endif
+        }
+    }else{
+        QMessageBox::information( this, "showControl","Check V-Meter Connected and Turned On!");
     }
-
-//    delete CD;
 }
 
 /******************************************************************************
@@ -790,7 +797,7 @@ void MainWindow::showSplash()
     Splash->show();
 #ifdef QT_DEBUG
     QTimer* init_timer = new QTimer(this);
-    init_timer->singleShot(10, this, SLOT(processSerialPort()));
+    init_timer->singleShot( 500, this, SLOT(processSerialPort( )));
 #else
     QTimer* init_timer = new QTimer(this);
     init_timer->singleShot(five_sec, this, SLOT(processSerialPort()));

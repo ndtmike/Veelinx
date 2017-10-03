@@ -69,6 +69,7 @@ public:
 
     DataSet::Prop Return_Control_Dialog();
     bool Set_Control_Dialog( const QByteArray );
+    QByteArray BufferAmpGain;
 
 private slots:
 

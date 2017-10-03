@@ -69,13 +69,9 @@
 #include "inst_data.h"
 #include "parser.h"
 #include "splash.h"
-#include "remotecontrol.h"
 
 //test Regular Operation
 #define TEST_REG
-
-//test Control Dialog
-//#define TEST_CD
 
 //test Graph
 //#define TEST_GRAPH
@@ -115,6 +111,7 @@
 #define REMOTE_CTRL_MSG_SETS            2
 #define REMOTE_CTRL_MSG_SIZE            5
 #define SERIAL_PORT_ERROR               0xAA
+#define SERIAL_PORT_OK                  0x55
 
 QT_BEGIN_NAMESPACE
 
@@ -169,6 +166,7 @@ private:
     Console *console;
     QByteArray Data;
     bool DataUpload;
+    bool ControlDialogData;
     bool foundSerialPort;
     DataPlot *GraphData;
     QSerialPort *serial;
@@ -179,6 +177,7 @@ private:
 
     bool checkSerialPort();
     QByteArray GetCurrentSettings();
+    bool sendVmeterMsg( QByteArray msg);
     void initActionsConnections();
     QString resultsFormat( Parser &r, std::vector<DataSet::Test>::iterator itr);
     bool saveFile(const QString &fileName);

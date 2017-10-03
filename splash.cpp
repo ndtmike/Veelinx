@@ -20,7 +20,7 @@ SplashDialog::SplashDialog(QWidget *parent) :
     ui(new Ui::SplashDialog)
 {
 #ifdef QT_DEBUG
-    const int five_sec = 10;
+    const int five_sec = 500;
 #else
     const int five_sec = 5000;  //need to change both 5 sec here and in "mainwindow"
 #endif
