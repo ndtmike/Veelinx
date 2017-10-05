@@ -55,6 +55,29 @@
 #define UNITS_IMPERIAL                  0
 #define UNITS_METRIC                    1
 
+#define REMOTE_CTRL_HEADER              0x5A
+#define REMOTE_CTRL_FOOTER              0xA3
+#define REMOTE_CTRL_MSG_SIZE            5
+
+#define MSG_CODE_PULSE_FREQ             0x00
+#define MSG_CODE_PULSE_CYCLE_TIME       0x01
+#define MSG_CODE_SAVE_TEST              0x02
+#define MSG_CODE_DISPLAY_SIG            0x03
+#define MSG_CODE_MSMT_MODE              0x04
+#define MSG_CODE_DISTANCE               0x05
+#define MSG_CODE_VELOCITY               0x06
+#define MSG_CODE_RUN_A_TEST             0x07
+#define MSG_CODE_AMP_GAIN               0x10
+#define MSG_CODE_PICTURE_RATE           0x11
+#define MSG_CODE_PULSER_VOLTAGE         0x12
+#define MSG_CODE_WAVE_TYPE              0x20
+#define MSG_CODE_DENSITY                0x21
+#define MSG_CODE_E_MU_CALC_METHOD       0x22
+#define MSG_CODE_REVIEW_TEST_NUM        0x30
+#define MSG_CODE_INITIAL_SETTINGS       0x40
+#define MSG_CODE_WATCHDOG_RESET         0x50
+#define MSG_CODE_FILL                   0xFF
+
 namespace Ui {
 class Control_Dialog;
 }

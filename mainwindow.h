@@ -167,6 +167,7 @@ private:
     QByteArray Data;
     bool DataUpload;
     bool ControlDialogData;
+    bool ControlDialogConfirm;
     bool foundSerialPort;
     DataPlot *GraphData;
     QSerialPort *serial;

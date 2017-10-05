@@ -559,46 +559,58 @@ DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
     DataSet::AmpGain retampgain;
     intvar = ui->comboBoxAmpGain->currentIndex();
 
-//    const char amp_buffer500[] = {0x5A, 0x10, 0x07, 0xFF, 0xA3};
-//    const char amp_buffer250[] = {0x5A, 0x10, 0x06, 0xFF, 0xA3};
-//    const char amp_buffer100[] = {0x5A, 0x10, 0x05, 0xFF, 0xA3};
-//    const char amp_buffer50[] = {0x5A, 0x10, 0x04, 0xFF, 0xA3};
-//    const char amp_buffer25[] = {0x5A, 0x10, 0x03, 0xFF, 0xA3};
-//    const char amp_buffer10[] = {0x5A, 0x10, 0x02, 0xFF, 0xA3};
-//    const char amp_buffer5[] = {0x5A, 0x10, 0x01, 0xFF, 0xA3};
-    static const char amp_buffer1[] = {0x5A, 0x10, 0x00, 0xFF, 0xA3};
-    QByteArray ab1( amp_buffer1, sizeof(amp_buffer1));
+    const char buffer500_amp[] = {0x5A, 0x10, 0x07, 0xFF, 0xA3};
+    QByteArray ba500( buffer500_amp, sizeof( buffer500_amp));
+    const char buffer250_amp[] = {0x5A, 0x10, 0x06, 0xFF, 0xA3};
+    QByteArray ba250( buffer250_amp, sizeof( buffer250_amp));
+    const char buffer100_amp[] = {0x5A, 0x10, 0x05, 0xFF, 0xA3};
+    QByteArray ba100( buffer100_amp, sizeof( buffer100_amp));
+    const char buffer50_amp[] = {0x5A, 0x10, 0x04, 0xFF, 0xA3};
+    QByteArray ba50( buffer50_amp, sizeof( buffer50_amp ));
+    const char buffer25_amp[] = {0x5A, 0x10, 0x03, 0xFF, 0xA3};
+    QByteArray ba25( buffer25_amp, sizeof( buffer25_amp ));
+    const char buffer10_amp[] = {0x5A, 0x10, 0x02, 0xFF, 0xA3};
+    QByteArray ba10( buffer10_amp, sizeof( buffer10_amp ));
+    const char buffer5_amp[] = {0x5A, 0x10, 0x01, 0xFF, 0xA3};
+    QByteArray ba5( buffer5_amp, sizeof( buffer5_amp ));
+
+    QByteArray ba1;
+    ba1.resize( REMOTE_CTRL_MSG_SIZE );
+    ba1[0] = REMOTE_CTRL_HEADER; ba1[1] =  MSG_CODE_AMP_GAIN;
+    ba1[2] = AMPLIFIER_GAIN_1_SETTING;
+    ba1[3] = MSG_CODE_FILL; ba1[4] = REMOTE_CTRL_FOOTER;
+
     switch (intvar) {
     case 0:
         retampgain = DataSet::Gain_1;
-        BufferAmpGain = ab1;
+        BufferAmpGain = ba1;
         break;
     case 1:
         retampgain = DataSet::Gain_5;
-        BufferAmpGain = QByteArray::fromHex("5a1001ffa3");
+        BufferAmpGain = ba5;
         break;
     case 2:
         retampgain = DataSet::Gain_10;
-        BufferAmpGain = QByteArray::fromHex("5a1002ffa3");
+        BufferAmpGain = ba10;
         break;
     case 3:
         retampgain = DataSet::Gain_25;
-        BufferAmpGain = QByteArray::fromHex("5a1003ffa3");
+        BufferAmpGain = ba25;
         break;
     case 4:
-        BufferAmpGain = QByteArray::fromHex("5a1004ffa3");
+        BufferAmpGain = ba50;
         retampgain = DataSet::Gain_50;
         break;
     case 5:
-        BufferAmpGain = QByteArray::fromHex("5a1005ffa3");
+        BufferAmpGain = ba100;
         retampgain = DataSet::Gain_100;
         break;
     case 6:
-        BufferAmpGain = QByteArray::fromHex("5a1006ffa3");
+        BufferAmpGain = ba250;
         retampgain = DataSet::Gain_250;
         break;
     case 7:
-        BufferAmpGain = QByteArray::fromHex("5a1007ffa3");
+        BufferAmpGain = ba500;
         retampgain = DataSet::Gain_500;
         break;
     default:

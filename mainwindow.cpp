@@ -1,4 +1,4 @@
-/****************************************************************************
+ /****************************************************************************
 **
 ** Copyright (C) 2012 Denis Shienkov <denis.shienkov@gmail.com>
 ** Copyright (C) 2012 Laszlo Papp <lpapp@kde.org>
@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     DataUpload = false;
     ControlDialogData = false; //is V-Meter on?
+    ControlDialogConfirm = false; //waiting to confirm v-meter update
 
 #ifndef QT_DEBUG
     QTimer* init_timer = new QTimer(this);
@@ -187,7 +188,7 @@ bool MainWindow::checkSerialPort()
     const QString noport = tr("No Available Ports") + '\n'
                               + tr("Check instrument is plugged in") + '\n'
                               + tr("or serial port installed properly") + '\n'
-                              + tr("then restart Windsorlinx");
+                              + tr("then restart Veelinx");
     const QString messageTitle = tr("Check Serial Port");
     const QString connected = tr("Connected to ");
     QList <QSerialPortInfo> availablePorts;
@@ -315,7 +316,7 @@ void MainWindow::endUpload()
 
     serialTimeOut->stop();
 
-    if(DataUpload == false){
+    if(DataUpload == false && ControlDialogConfirm == false){
         QMessageBox::information(this, "endUpload", tr("Upload Complete"));
 #ifndef QT_NO_CURSOR
         QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -337,14 +338,10 @@ void MainWindow::endUpload()
 #ifndef QT_NO_CURSOR
         QApplication::restoreOverrideCursor();
 #endif
-    }else{
+    }else if( DataUpload == true && ControlDialogConfirm == false ){
         QMessageBox::information(this, "endUpload", tr("Restart Program Before Uploading More Data"));
         close();
     }
-
-    ui->actionSaveAs->setEnabled(true);
-    ui->action_Open->setEnabled(false);
-    ui->actionPlot->setEnabled(true);
 }
 
 /******************************************************************************
@@ -371,32 +368,18 @@ QByteArray MainWindow::GetCurrentSettings()
     if (bytesWritten == -1) {
         QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write the data to port %1, error: %2")
                              .arg(serial->portName(), serial->errorString()));
-//            standardOutput << QObject::tr("Failed to write the data to port %1, error: %2").arg(serialPortName).arg(serialPort.errorString()) << endl;
             return( returnarray.append(SERIAL_PORT_ERROR));
     } else if (bytesWritten != initmsg.size()) {
         QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write all the data to port %1, error: %2")
                              .arg(serial->portName(), serial->errorString()));
-//            standardOutput << QObject::tr("Failed to write all the data to port %1, error: %2").arg(serialPortName).arg(serialPort.errorString()) << endl;
             return( returnarray.append(SERIAL_PORT_ERROR));
     } else if (!serial->waitForBytesWritten(5000)) {
         QMessageBox::information(this,"GetCurrentSettings", tr("Operation timed out or an error occurred for port %1, error: %2")
                              .arg(serial->portName(), serial->errorString()));
-//            standardOutput << QObject::tr("Operation timed out or an error occurred for port %1, error: %2").arg(serialPortName).arg(serialPort.errorString()) << endl;
             return( returnarray.append(SERIAL_PORT_ERROR));
     }
-
-    serial->close();
-    serial->open( QIODevice::ReadWrite );
-
-    static const char amp_buffer1[] = {0x5A, 0x10, 0x00, 0xFF, 0xA3};
-    qint64 newbytesWritten;
-    if( serial->clear()){
-        newbytesWritten = serial->write( amp_buffer1 );
-    }
-
     QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
         returnarray.append( SERIAL_PORT_OK );
- //       standardOutput << QObject::tr("Data successfully sent to port %1").arg(serialPortName) << endl;
     return(returnarray);
 }
 
@@ -652,7 +635,6 @@ void MainWindow::processSerialPort()
 
 void MainWindow::readData()
 {
-//    connectTimer->stop();
     serialTimeOut->start(500);
     Data += serial->readAll();
 }
@@ -722,28 +704,23 @@ bool MainWindow::saveFile(const QString &fileName)
 bool MainWindow::sendVmeterMsg( QByteArray msg )
 {
     bool return_result = false;
-    static const char amp_buffer1[] = {0x5A, 0x10, 0x00, 0xFF, 0xA3};
-    qint64 bytesWritten;
+    ControlDialogConfirm = true;
+    serialTimeOut->stop();
+    Data = "";
     if( serial->clear()){
-//        bytesWritten = serial->write(msg.data());
-        bytesWritten = serial->write( amp_buffer1 );
+        for(int i = 0; i< msg.size(); ++i){
+            serial->putChar(msg[i]);
+        }
     }
-    QByteArray confirm_msg;
 
-    if (bytesWritten == -1) {
-        QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write the data to port %1, error: %2")
-                             .arg(serial->portName(), serial->errorString()));
-    } else if (bytesWritten != msg.size()) {
-        QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write all the data to port %1, error: %2")
-                             .arg(serial->portName(), serial->errorString()));
-    } else if (!serial->waitForBytesWritten(5000)) {
-        QMessageBox::information(this,"GetCurrentSettings", tr("Operation timed out or an error occurred for port %1, error: %2")
-                             .arg(serial->portName(), serial->errorString()));
-    }else{
-        confirm_msg = serial->readAll();
-        QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
-        return_result = true;
-    }
+    QTime dieTime= QTime::currentTime().addSecs(2); // wait one second
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+    QByteArray confirm_msg = Data;
+    QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+    return_result = true;
+    serialTimeOut->start(500);
     return(return_result);
 }
 
