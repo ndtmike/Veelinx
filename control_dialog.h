@@ -93,6 +93,10 @@ public:
     DataSet::Prop Return_Control_Dialog();
     bool Set_Control_Dialog( const QByteArray );
     QByteArray BufferAmpGain;
+    QByteArray BufferCalc;
+    QByteArray BufferCaptureRate;
+    QByteArray BufferEMethod;
+    QByteArray BufferPulseRate;
 
 private slots:
 

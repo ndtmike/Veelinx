@@ -559,21 +559,42 @@ DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
     DataSet::AmpGain retampgain;
     intvar = ui->comboBoxAmpGain->currentIndex();
 
-    const char buffer500_amp[] = {0x5A, 0x10, 0x07, 0xFF, 0xA3};
-    QByteArray ba500( buffer500_amp, sizeof( buffer500_amp));
-    const char buffer250_amp[] = {0x5A, 0x10, 0x06, 0xFF, 0xA3};
-    QByteArray ba250( buffer250_amp, sizeof( buffer250_amp));
-    const char buffer100_amp[] = {0x5A, 0x10, 0x05, 0xFF, 0xA3};
-    QByteArray ba100( buffer100_amp, sizeof( buffer100_amp));
-    const char buffer50_amp[] = {0x5A, 0x10, 0x04, 0xFF, 0xA3};
-    QByteArray ba50( buffer50_amp, sizeof( buffer50_amp ));
-    const char buffer25_amp[] = {0x5A, 0x10, 0x03, 0xFF, 0xA3};
-    QByteArray ba25( buffer25_amp, sizeof( buffer25_amp ));
-    const char buffer10_amp[] = {0x5A, 0x10, 0x02, 0xFF, 0xA3};
-    QByteArray ba10( buffer10_amp, sizeof( buffer10_amp ));
-    const char buffer5_amp[] = {0x5A, 0x10, 0x01, 0xFF, 0xA3};
-    QByteArray ba5( buffer5_amp, sizeof( buffer5_amp ));
 
+    QByteArray ba500;
+    ba500.resize( REMOTE_CTRL_MSG_SIZE );
+    ba500[0] = REMOTE_CTRL_HEADER; ba500[1] =  MSG_CODE_AMP_GAIN;
+    ba500[2] = AMPLIFIER_GAIN_500_SETTING;
+    ba500[3] = MSG_CODE_FILL; ba500[4] = REMOTE_CTRL_FOOTER;
+    QByteArray ba250;
+    ba250.resize( REMOTE_CTRL_MSG_SIZE );
+    ba250[0] = REMOTE_CTRL_HEADER; ba250[1] =  MSG_CODE_AMP_GAIN;
+    ba250[2] = AMPLIFIER_GAIN_250_SETTING;
+    ba250[3] = MSG_CODE_FILL; ba250[4] = REMOTE_CTRL_FOOTER;
+    QByteArray ba100;
+    ba100.resize( REMOTE_CTRL_MSG_SIZE );
+    ba100[0] = REMOTE_CTRL_HEADER; ba100[1] =  MSG_CODE_AMP_GAIN;
+    ba100[2] = AMPLIFIER_GAIN_100_SETTING;
+    ba100[3] = MSG_CODE_FILL; ba100[4] = REMOTE_CTRL_FOOTER;
+    QByteArray ba50;
+    ba50.resize( REMOTE_CTRL_MSG_SIZE );
+    ba50[0] = REMOTE_CTRL_HEADER; ba50[1] =  MSG_CODE_AMP_GAIN;
+    ba50[2] = AMPLIFIER_GAIN_50_SETTING;
+    ba50[3] = MSG_CODE_FILL; ba50[4] = REMOTE_CTRL_FOOTER;
+    QByteArray ba25;
+    ba25.resize( REMOTE_CTRL_MSG_SIZE );
+    ba25[0] = REMOTE_CTRL_HEADER; ba25[1] =  MSG_CODE_AMP_GAIN;
+    ba25[2] = AMPLIFIER_GAIN_25_SETTING;
+    ba25[3] = MSG_CODE_FILL; ba25[4] = REMOTE_CTRL_FOOTER;
+    QByteArray ba10;
+    ba10.resize( REMOTE_CTRL_MSG_SIZE);
+    ba10[0] = REMOTE_CTRL_HEADER; ba10[1] =  MSG_CODE_AMP_GAIN;
+    ba10[2] = AMPLIFIER_GAIN_10_SETTING;
+    ba10[3] = MSG_CODE_FILL; ba10[4] = REMOTE_CTRL_FOOTER;
+    QByteArray ba5;
+    ba5.resize( REMOTE_CTRL_MSG_SIZE );
+    ba5[0] = REMOTE_CTRL_HEADER; ba5[1] =  MSG_CODE_AMP_GAIN;
+    ba5[2] = AMPLIFIER_GAIN_5_SETTING;
+    ba5[3] = MSG_CODE_FILL; ba5[4] = REMOTE_CTRL_FOOTER;
     QByteArray ba1;
     ba1.resize( REMOTE_CTRL_MSG_SIZE );
     ba1[0] = REMOTE_CTRL_HEADER; ba1[1] =  MSG_CODE_AMP_GAIN;
@@ -624,12 +645,26 @@ DataSet::MeasMode Control_Dialog::Ret_comboBoxCalc()
 {
     int intvar;
     DataSet::MeasMode retcalc;
+
+    QByteArray bdistance;
+    bdistance.resize( REMOTE_CTRL_MSG_SIZE );
+    bdistance[0] = REMOTE_CTRL_HEADER; bdistance[1] =  MSG_CODE_DISTANCE;
+    bdistance[2] = 0;
+    bdistance[3] = MSG_CODE_FILL; bdistance[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bvelocity;
+    bvelocity.resize( REMOTE_CTRL_MSG_SIZE );
+    bvelocity[0] = REMOTE_CTRL_HEADER; bvelocity[1] =  MSG_CODE_VELOCITY;
+    bvelocity[2] = 0;
+    bvelocity[3] = MSG_CODE_FILL; bvelocity[4] = REMOTE_CTRL_FOOTER;
+
     intvar = ui->comboBoxCalcVar->currentIndex();
     switch (intvar) {
     case 0:
+        BufferCalc = bvelocity;
         retcalc = DataSet::Velocity;
         break;
     case 1:
+        BufferCalc = bdistance;
         retcalc = DataSet::Distance;
         break;
     default:
@@ -643,18 +678,43 @@ DataSet::Rate Control_Dialog::Ret_comboBoxCaptureRate()
 {
     int intvar;
     DataSet::Rate retrate;
+    QByteArray bpr250;
+    bpr250.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr250[0] = REMOTE_CTRL_HEADER; bpr250[1] =  MSG_CODE_PICTURE_RATE;
+    bpr250[2] = PICTURE_RATE_250MHZ;
+    bpr250[3] = MSG_CODE_FILL; bpr250[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bpr500;
+    bpr500.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr500[0] = REMOTE_CTRL_HEADER; bpr500[1] =  MSG_CODE_PICTURE_RATE;
+    bpr500[2] = PICTURE_RATE_500MHZ;
+    bpr500[3] = MSG_CODE_FILL; bpr500[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bpr1000;
+    bpr1000.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr1000[0] = REMOTE_CTRL_HEADER; bpr1000[1] =  MSG_CODE_PICTURE_RATE;
+    bpr1000[2] = PICTURE_RATE_1000MHZ;
+    bpr1000[3] = MSG_CODE_FILL; bpr1000[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bpr2000;
+    bpr2000.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr2000[0] = REMOTE_CTRL_HEADER; bpr2000[1] =  MSG_CODE_PICTURE_RATE;
+    bpr2000[2] = PICTURE_RATE_2000MHZ;
+    bpr2000[3] = MSG_CODE_FILL; bpr2000[4] = REMOTE_CTRL_FOOTER;
+
     intvar = ui->comboBoxCaptureRate->currentIndex();
     switch (intvar) {
     case 0:
+        BufferCaptureRate = bpr250;
         retrate = DataSet::RATE_250KHZ;
         break;
     case 1:
+        BufferCaptureRate = bpr500;
         retrate = DataSet::RATE_500KHZ;
         break;
     case 2:
+        BufferCaptureRate = bpr1000;
         retrate = DataSet::RATE_1000KHZ;
         break;
     case 3:
+        BufferCaptureRate = bpr2000;
         retrate = DataSet::RATE_2000KHZ;
         break;
     default:
@@ -688,15 +748,34 @@ DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
 {
     int intvar;
     DataSet::EMethod retemethod;
+    QByteArray bearbmu;
+    bearbmu.resize( REMOTE_CTRL_MSG_SIZE );
+    bearbmu[0] = REMOTE_CTRL_HEADER; bearbmu[1] =  MSG_CODE_E_MU_CALC_METHOD;
+    bearbmu[2] = CALC_METHOD_ARB_MU;
+    bearbmu[3] = MSG_CODE_FILL; bearbmu[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bedermu;
+    bedermu.resize( REMOTE_CTRL_MSG_SIZE );
+    bedermu[0] = REMOTE_CTRL_HEADER; bedermu[1] =  MSG_CODE_E_MU_CALC_METHOD;
+    bedermu[2] = CALC_METHOD_DERIVED_MU;
+    bedermu[3] = MSG_CODE_FILL; bedermu[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bsimple;
+    bsimple.resize( REMOTE_CTRL_MSG_SIZE );
+    bsimple[0] = REMOTE_CTRL_HEADER; bsimple[1] =  MSG_CODE_E_MU_CALC_METHOD;
+    bsimple[2] = CALC_METHOD_SIMPLE_E;
+    bsimple[3] = MSG_CODE_FILL; bsimple[4] = REMOTE_CTRL_FOOTER;
+
     intvar = ui->comboBoxEMethod->currentIndex();
     switch (intvar) {
     case 0:
+        BufferEMethod = bearbmu;
         retemethod = DataSet::ArbMu;
         break;
     case 1:
+        BufferEMethod = bedermu;
         retemethod = DataSet::DerivedMu;
         break;
     case 2:
+        BufferEMethod = bsimple;
         retemethod = DataSet::SimpleE;
         break;
     default:
@@ -751,15 +830,33 @@ DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
 {
     int intvar;
     DataSet::Pulse retpulse;
+    QByteArray bpr1;
+    bpr1.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr1[0] = REMOTE_CTRL_HEADER; bpr1[1] =  MSG_CODE_PULSE_FREQ;//??
+    bpr1[2] = PULSES_PER_SEQ_1;
+    bpr1[3] = MSG_CODE_FILL; bpr1[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bpr3;
+    bpr3.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr3[0] = REMOTE_CTRL_HEADER; bpr3[1] =  MSG_CODE_PULSE_FREQ;//??
+    bpr3[2] = PULSES_PER_SEQ_3;
+    bpr3[3] = MSG_CODE_FILL; bpr3[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bpr10;
+    bpr10.resize( REMOTE_CTRL_MSG_SIZE );
+    bpr10[0] = REMOTE_CTRL_HEADER; bpr10[1] =  MSG_CODE_PULSE_FREQ;//??
+    bpr10[2] = PULSES_PER_SEQ_10;
+    bpr10[3] = MSG_CODE_FILL; bpr10[4] = REMOTE_CTRL_FOOTER;
     intvar = ui->comboBoxPulseRate->currentIndex();
     switch (intvar) {
     case 0:
+        BufferPulseRate = bpr1;
         retpulse = DataSet::PulsePerSeq_1;
         break;
     case 1:
+        BufferPulseRate = bpr3;
         retpulse = DataSet::PulsePerSeq_3;
         break;
     case 2:
+        BufferPulseRate = bpr10;
         retpulse = DataSet::PulsePerSeq_10;
         break;
     default:

@@ -78,7 +78,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     DataUpload = false;
     ControlDialogData = false; //is V-Meter on?
-    ControlDialogConfirm = false; //waiting to confirm v-meter update
 
 #ifndef QT_DEBUG
     QTimer* init_timer = new QTimer(this);
@@ -311,25 +310,23 @@ void MainWindow::endUpload()
 
     init.append('Z'); //set to check init bytes
     init.append('@');
-
     header = Data.left(2);
-
     serialTimeOut->stop();
-
-    if(DataUpload == false && ControlDialogConfirm == false){
-        QMessageBox::information(this, "endUpload", tr("Upload Complete"));
+    if( DataUpload == false ){
 #ifndef QT_NO_CURSOR
         QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
         if( header == init ){
             ControlDialogData = true; //got ControlDialogData V-Meter is on
-            if(!CD->Set_Control_Dialog(Data)){
-                QMessageBox::warning(this, "endUpload", tr("Restart Program Before Uploading More Data"));
+            if(!CD->Set_Control_Dialog( Data )){
+                QMessageBox::warning(this, "endUpload", tr("Check V-Meter Connected to PC and Turned on!"));
                 close();
             }
             Data = ""; //empty array
             DataUpload = false;
-        }else{//uploading data
+        }else if( header[0] == init[0] ){ //confirming change
+        }else{        //uploading data
+            QMessageBox::information(this, "endUpload", tr("Upload Complete"));
             displayData();
             ui->actionSaveAs->setEnabled(true);
             ui->action_Open->setEnabled(false);
@@ -338,7 +335,7 @@ void MainWindow::endUpload()
 #ifndef QT_NO_CURSOR
         QApplication::restoreOverrideCursor();
 #endif
-    }else if( DataUpload == true && ControlDialogConfirm == false ){
+    }else if( DataUpload == true ){
         QMessageBox::information(this, "endUpload", tr("Restart Program Before Uploading More Data"));
         close();
     }
@@ -352,9 +349,9 @@ void MainWindow::endUpload()
   ============
   Return QByteArray of CurrentSettings from V-Meter Serial Port
 ******************************************************************************/
-QByteArray MainWindow::GetCurrentSettings()
+bool MainWindow::GetCurrentSettings()
 {
-    QByteArray returnarray;
+    bool returnbool = false;
     QByteArray initmsg;
     initmsg.resize( REMOTE_CTRL_MSG_SIZE );
     initmsg[0] = REMOTE_CTRL_HEADER;
@@ -368,19 +365,18 @@ QByteArray MainWindow::GetCurrentSettings()
     if (bytesWritten == -1) {
         QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write the data to port %1, error: %2")
                              .arg(serial->portName(), serial->errorString()));
-            return( returnarray.append(SERIAL_PORT_ERROR));
     } else if (bytesWritten != initmsg.size()) {
         QMessageBox::information(this,"GetCurrentSettings", tr("Failed to write all the data to port %1, error: %2")
                              .arg(serial->portName(), serial->errorString()));
-            return( returnarray.append(SERIAL_PORT_ERROR));
     } else if (!serial->waitForBytesWritten(5000)) {
         QMessageBox::information(this,"GetCurrentSettings", tr("Operation timed out or an error occurred for port %1, error: %2")
                              .arg(serial->portName(), serial->errorString()));
-            return( returnarray.append(SERIAL_PORT_ERROR));
+    } else{
+        QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+        returnbool = true;
     }
-    QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
-        returnarray.append( SERIAL_PORT_OK );
-    return(returnarray);
+
+    return( returnbool );
 }
 
 /******************************************************************************
@@ -704,8 +700,6 @@ bool MainWindow::saveFile(const QString &fileName)
 bool MainWindow::sendVmeterMsg( QByteArray msg )
 {
     bool return_result = false;
-    ControlDialogConfirm = true;
-    serialTimeOut->stop();
     Data = "";
     if( serial->clear()){
         for(int i = 0; i< msg.size(); ++i){
@@ -718,7 +712,7 @@ bool MainWindow::sendVmeterMsg( QByteArray msg )
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     QByteArray confirm_msg = Data;
-    QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+    QMessageBox::information(this,"sendVmeterMsg", tr("Data successfully sent to port %1").arg(serial->portName()));
     return_result = true;
     serialTimeOut->start(500);
     return(return_result);
@@ -735,11 +729,12 @@ bool MainWindow::sendVmeterMsg( QByteArray msg )
 ******************************************************************************/
 void MainWindow::showControl()
 {
-    const QByteArray serial_port_ok_macro( 1, SERIAL_PORT_OK );
-    QByteArray current_settings;
-    current_settings.append( GetCurrentSettings() );
+    const bool serial_port_ok = true;
+    bool current_settings;
 
-    if( serial_port_ok_macro == current_settings && ControlDialogData == true ){
+    current_settings = GetCurrentSettings();
+
+    if( serial_port_ok == current_settings && ControlDialogData == true ){
         DataSet::Prop proptest;
         CD->setModal( true );
         if(CD->exec() == QDialog::Accepted){
@@ -747,7 +742,7 @@ void MainWindow::showControl()
             QByteArray msg = CD->BufferAmpGain;
             if( sendVmeterMsg( msg )){
 #ifdef QT_DEBUG
-            QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);
+//            QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);
             }
 #endif
         }

@@ -167,7 +167,6 @@ private:
     QByteArray Data;
     bool DataUpload;
     bool ControlDialogData;
-    bool ControlDialogConfirm;
     bool foundSerialPort;
     DataPlot *GraphData;
     QSerialPort *serial;
@@ -177,7 +176,7 @@ private:
     Ui::MainWindow *ui;
 
     bool checkSerialPort();
-    QByteArray GetCurrentSettings();
+    bool GetCurrentSettings();
     bool sendVmeterMsg( QByteArray msg);
     void initActionsConnections();
     QString resultsFormat( Parser &r, std::vector<DataSet::Test>::iterator itr);
