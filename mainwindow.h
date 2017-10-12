@@ -91,8 +91,8 @@
 #define MSG_CODE_SAVE_TEST              0x02
 #define MSG_CODE_DISPLAY_SIG            0x03
 #define MSG_CODE_MSMT_MODE              0x04
-#define MSG_CODE_DISTANCE               0x05
-#define MSG_CODE_VELOCITY               0x06
+#define MSG_CODE_DISTANCE               0x00
+#define MSG_CODE_VELOCITY               0x01
 #define MSG_CODE_RUN_A_TEST             0x07
 #define MSG_CODE_AMP_GAIN               0x10
 #define MSG_CODE_PICTURE_RATE           0x11

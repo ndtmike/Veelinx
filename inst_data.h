@@ -32,9 +32,8 @@ class DataSet
 {
 public:
     enum AmpGain{ Gain_1 = 0, Gain_5, Gain_10, Gain_25, Gain_50, Gain_100, Gain_250, Gain_500 };
-//    enum Calc{ Vel = 0, Dist };
     enum EMethod{ ArbMu = 0, DerivedMu, SimpleE };
-    enum MeasMode{ Distance, Velocity };
+    enum Calc{ Distance, Velocity };
     enum Pulse{ PulsePerSeq_1 = 1, PulsePerSeq_3 = 3, PulsePerSeq_10 = 10};
     enum Rate{ RATE_250KHZ = 0, RATE_500KHZ, RATE_1000KHZ, RATE_2000KHZ };
     enum Units{ Imperial = 0, Metric};
@@ -43,13 +42,13 @@ public:
 
     struct Prop{ //material property parameters for Windsor Probe
         AmpGain PropAmpGain;
-//        Calc PropCalc;
+        Calc PropCalc;
         Rate PropCaptureRate;
         unsigned PropCycleTime;
         bool PropDataSave;
         unsigned PropDensity;
         EMethod PropEMethod;
-        MeasMode PropMeaseMode;
+        Calc PropMeaseMode;
         unsigned PropPTravelDistance;
         unsigned PropPTravelVelocity;
         bool PropRun;

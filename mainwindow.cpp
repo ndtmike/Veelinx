@@ -794,19 +794,32 @@ void MainWindow::ProgramWaveType(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
 
+    QByteArray bedermu;
+    bedermu.resize( REMOTE_CTRL_MSG_SIZE );
+    bedermu[0] = REMOTE_CTRL_HEADER; bedermu[1] =  MSG_CODE_E_MU_CALC_METHOD;
+    bedermu[2] = CALC_METHOD_DERIVED_MU;
+    bedermu[3] = MSG_CODE_FILL; bedermu[4] = REMOTE_CTRL_FOOTER;
+
     if( CD->CheckWaveType == true ){
 #ifdef QT_DEBUG
-        QMessageBox::information( this, "showControl", "WaveType Changed", QMessageBox::Ok );
+        QMessageBox::information( this, "ProgramWaveType", "WaveType Changed", QMessageBox::Ok );
 #endif
         msg = CD->BufferWaveType;
     }
     if( msg != no_change ){
-        if( sendVmeterMsg( msg )){
+        if( sendVmeterMsg( msg)){
 #ifdef QT_DEBUG
-            QMessageBox::information(this,"showControl", "Accepted WaveType Changed",QMessageBox::Ok);
+            QMessageBox::information(this,"ProgramWaveType", "Accepted EType Changed",QMessageBox::Ok);
 #endif
         }else{
-            QMessageBox::information(this,"showControl", "Problem Programming WaveType",QMessageBox::Ok);
+            QMessageBox::information(this,"ProgramWaveType", "Problem Programming EType ",QMessageBox::Ok);
+        }
+        if( sendVmeterMsg( bedermu )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"ProgramWaveType", "Accepted WaveType Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"ProgramWaveType", "Problem Programming WaveType",QMessageBox::Ok);
         }
     }
 }

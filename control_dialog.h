@@ -64,8 +64,8 @@
 #define MSG_CODE_SAVE_TEST              0x02
 #define MSG_CODE_DISPLAY_SIG            0x03
 #define MSG_CODE_MSMT_MODE              0x04
-#define MSG_CODE_DISTANCE               0x05
-#define MSG_CODE_VELOCITY               0x06
+#define MSG_CODE_DISTANCE               0x00
+#define MSG_CODE_VELOCITY               0x01
 #define MSG_CODE_RUN_A_TEST             0x07
 #define MSG_CODE_AMP_GAIN               0x10
 #define MSG_CODE_PICTURE_RATE           0x11
@@ -100,6 +100,7 @@ public:
     QByteArray BufferAmpGain;
     QByteArray BufferCalc;
     QByteArray BufferCaptureRate;
+    QByteArray BufferCycleTime;
     QByteArray BufferDataSave;
     QByteArray BufferEMethod;
     QByteArray BufferPicSave;
@@ -145,7 +146,7 @@ private:
     bool IntToDataSave( int data_in, bool* ok );
     unsigned IntToDensity( char data_in_hi, char data_in_lo, bool* ok );
     DataSet::EMethod IntToEMethod( int data_in, bool* ok );
-    DataSet::MeasMode IntToMeasMode( int data_in, bool* ok );
+    DataSet::Calc IntToCalc( int data_in, bool* ok );
     unsigned IntToPTravelDistance( int data_in_hi, int data_in_lo, bool* ok );
     unsigned IntToPTravelVelocity( int data_in_hi, int data_in_lo, bool* ok );
     bool IntToPicSave( int data_in, bool* ok );
@@ -156,7 +157,7 @@ private:
     DataSet::Voltage IntToVoltage( int data_in, bool* ok );
 
     DataSet::AmpGain Ret_comboBoxAmpGain();
-    DataSet::MeasMode Ret_comboBoxCalc();
+    DataSet::Calc Ret_comboBoxCalc();
     DataSet::Rate Ret_comboBoxCaptureRate();
     unsigned Ret_CycleTime();
     bool Ret_DataSave();
