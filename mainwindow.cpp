@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serialTimeOut,SIGNAL(timeout()), this,SLOT(endUpload()));
 
     DataUpload = false;
-    ControlDialogData = false; //is V-Meter on?
+//    ControlDialogData = false; //is V-Meter on?
 
 #ifndef QT_DEBUG
     QTimer* init_timer = new QTimer(this);
@@ -305,7 +305,7 @@ void MainWindow::closeSerialPort()
 ******************************************************************************/
 void MainWindow::endUpload()
 {
-    QByteArray header;
+   QByteArray header;
     QByteArray init;
 
     init.append('Z'); //set to check init bytes
@@ -317,7 +317,7 @@ void MainWindow::endUpload()
         QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
         if( header == init ){
-            ControlDialogData = true; //got ControlDialogData V-Meter is on
+//            ControlDialogData = true; //got ControlDialogData V-Meter is on
             if(!CD->Set_Control_Dialog( Data )){
                 QMessageBox::warning(this, "endUpload", tr("Check V-Meter Connected to PC and Turned on!"));
                 close();
@@ -325,7 +325,7 @@ void MainWindow::endUpload()
             Data = ""; //empty array
             DataUpload = false;
         }else if( header[0] == init[0] ){ //confirming change
-        }else{        //uploading data
+        }else if(Data != "" ){        //uploading data
             QMessageBox::information(this, "endUpload", tr("Upload Complete"));
             displayData();
             ui->actionSaveAs->setEnabled(true);
@@ -372,7 +372,9 @@ bool MainWindow::GetCurrentSettings()
         QMessageBox::information(this,"GetCurrentSettings", tr("Operation timed out or an error occurred for port %1, error: %2")
                              .arg(serial->portName(), serial->errorString()));
     } else{
-        QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+#ifdef QT_DEBUG
+//        QMessageBox::information(this,"GetCurrentSettings", tr("Data successfully sent to port %1").arg(serial->portName()));
+#endif
         returnbool = true;
     }
 
@@ -620,6 +622,195 @@ void MainWindow::processSerialPort()
     }
 }
 
+void MainWindow::ProgramAmpGain(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if(CD->CheckAmpGain == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "AmpGain Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferAmpGain;
+    }
+    if(msg != no_change){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+//                  QMessageBox::information(this,"showControl", "Accepted AmpGain Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming AmpGain",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramCalc(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckCalc == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "Calc Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferCalc;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+//                  QMessageBox::information(this,"showControl", "Accepted Calc Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming Calc",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramCaptureRate(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckCaptureRate == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "CaptureRate Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferCaptureRate;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted CaptureRate Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming CaptureRate",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramDataSave(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckDataSave == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "DataSave Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferDataSave;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted DataSave Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming DataSave",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramEMethod(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckEMethod == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "EMethod Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferEMethod;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted EMethod Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming EMethod",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramPicSave(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckPicSave == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information( this, "showControl", "PicSave Changed", QMessageBox::Ok );
+#endif
+        msg = CD->BufferPicSave;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted PicSave Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming PicSave",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramPulseRate(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckPulseRate == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information( this, "showControl", "PulseRate Changed", QMessageBox::Ok );
+#endif
+        msg = CD->BufferPulseRate;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted PulseRate Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming PulseRate",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramVolt(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckVolt == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information( this, "showControl", "Volt Changed", QMessageBox::Ok );
+#endif
+        msg = CD->BufferVolt;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted Volt Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming Volt",QMessageBox::Ok);
+        }
+    }
+}
+
+void MainWindow::ProgramWaveType(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckWaveType == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information( this, "showControl", "WaveType Changed", QMessageBox::Ok );
+#endif
+        msg = CD->BufferWaveType;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted WaveType Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming WaveType",QMessageBox::Ok);
+        }
+    }
+}
+
 /******************************************************************************
 
   Function: readData()
@@ -707,14 +898,14 @@ bool MainWindow::sendVmeterMsg( QByteArray msg )
         }
     }
 
-    QTime dieTime= QTime::currentTime().addSecs(2); // wait one second
+    QTime dieTime = QTime::currentTime().addSecs(2); // wait one second
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     QByteArray confirm_msg = Data;
-    QMessageBox::information(this,"sendVmeterMsg", tr("Data successfully sent to port %1").arg(serial->portName()));
-    return_result = true;
-    serialTimeOut->start(500);
+
+    if(confirm_msg[0] == 'Z') return_result = true;
+
     return(return_result);
 }
 
@@ -729,26 +920,35 @@ bool MainWindow::sendVmeterMsg( QByteArray msg )
 ******************************************************************************/
 void MainWindow::showControl()
 {
-    const bool serial_port_ok = true;
     bool current_settings;
-
     current_settings = GetCurrentSettings();
 
-    if( serial_port_ok == current_settings && ControlDialogData == true ){
+    serialTimeOut->stop();
+
+    if( current_settings == true ){
         DataSet::Prop proptest;
         CD->setModal( true );
-        if(CD->exec() == QDialog::Accepted){
-            proptest = CD->Return_Control_Dialog();
-            QByteArray msg = CD->BufferAmpGain;
-            if( sendVmeterMsg( msg )){
-#ifdef QT_DEBUG
-//            QMessageBox::information(this,"showControl", "Accepted",QMessageBox::Ok);
+        if( CD->exec() == QDialog::Accepted ){
+            if(CD->CheckFormChange == true){
+                proptest = CD->Return_Control_Dialog();
+                ProgramAmpGain();
+                ProgramCalc();
+                ProgramCaptureRate();
+                ProgramDataSave();
+                ProgramEMethod();
+                ProgramPicSave();
+                ProgramPulseRate();
+                ProgramVolt();
+                ProgramWaveType();
             }
-#endif
         }
     }else{
         QMessageBox::information( this, "showControl","Check V-Meter Connected and Turned On!");
     }
+
+    serial->clear();
+    serialTimeOut->start(500);
+    CD->CheckFormChange = false;
 }
 
 /******************************************************************************

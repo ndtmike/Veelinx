@@ -14,18 +14,39 @@ Control_Dialog::Control_Dialog(QWidget *parent) :
     Set_DataSave();
     Set_Density();
     Set_comboBoxEMethod();
-    Set_comboBoxMeasMode();
     Set_PTravelDistance();
     Set_PTravelVelocity();
     Set_PicSave();
     Set_comboBoxPulseRate();
     Set_comboBoxRun();
     Set_comboBoxWaveType();
-    Set_comboBoxUnits();
+    //Set_comboBoxUnits();
     Set_Voltage();
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    BufferAmpGain = "";
+    BufferCalc = "";
+    BufferCaptureRate = "";
+    BufferDataSave = "";
+    BufferEMethod = "";
+    BufferPicSave = "";
+    BufferPulseRate = "";
+    BufferWaveType = "";
+    BufferVolt = "";
+
+    CheckAmpGain = false;
+    CheckCalc = false;
+    CheckCaptureRate = false;
+    CheckDataSave = false;
+    CheckEMethod = false;
+    CheckPicSave = false;
+    CheckPulseRate = false;
+    CheckWaveType = false;
+    CheckVolt = false;
+    CheckFormChange = false;
+
 }
 
 Control_Dialog::~Control_Dialog()
@@ -72,6 +93,50 @@ int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
     return( result );
 }
 
+void Control_Dialog::EditAmpGain(){
+    CheckAmpGain = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditCalc(){
+    CheckCalc = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditCaptureRate(){
+    CheckCaptureRate = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditDataSave(){
+    CheckDataSave = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditEMethod(){
+    CheckEMethod = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditPicSave(){
+    CheckPicSave = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditPulseRate(){
+    CheckPulseRate = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditWaveType(){
+    CheckWaveType = true;
+    CheckFormChange = true;
+}
+
+void Control_Dialog::EditVolt(){
+    CheckVolt = true;
+    CheckFormChange = true;
+}
 
 /******************************************************************************
 
@@ -131,6 +196,7 @@ DataSet::AmpGain Control_Dialog::IntToAmpGain( int data_in, bool* ok ){
 
         }
         ui->comboBoxAmpGain->setCurrentIndex( data_in );
+        connect(ui->comboBoxAmpGain, SIGNAL(currentIndexChanged( int )),this, SLOT( EditAmpGain() ));
     }
 
     return(return_amp_gain);
@@ -172,6 +238,7 @@ DataSet::Rate Control_Dialog::IntToCaptureRate( int data_in, bool* ok ){
         *ok = true;
     }
     ui->comboBoxCaptureRate->setCurrentIndex( data_in );
+    connect(ui->comboBoxCaptureRate, SIGNAL(currentIndexChanged( int )),this, SLOT( EditCaptureRate()));
     return( return_rate );
 }
 
@@ -285,6 +352,7 @@ DataSet::EMethod Control_Dialog::IntToEMethod( int data_in , bool* ok ){
         }
         ui->comboBoxEMethod->setCurrentIndex( data_in );
     }
+    connect(ui->comboBoxEMethod, SIGNAL(currentIndexChanged( int )),this, SLOT( EditEMethod()));
     return(return_e);
 }
 
@@ -305,15 +373,15 @@ DataSet::MeasMode Control_Dialog::IntToMeasMode( int data_in, bool* ok ){
     *ok = false;
 
     if( data_in == PULSE_CALC_DISTANCE ){
-        ui->comboBoxMeasMode->setCurrentIndex( data_in );
+        ui->comboBoxCalcVar->setCurrentIndex( data_in );
         return_measmode = DataSet::Distance;
         *ok = true;
     }else if( data_in == PULSE_CALC_VELOCITY ){
-        ui->comboBoxMeasMode->setCurrentIndex( data_in );
+        ui->comboBoxCalcVar->setCurrentIndex( data_in );
         return_measmode = DataSet::Velocity;
         *ok = true;
     }
-
+    connect(ui->comboBoxCalcVar, SIGNAL(currentIndexChanged( int )),this, SLOT( EditCalc()));
     return( return_measmode );
 }
 
@@ -405,7 +473,10 @@ bool Control_Dialog::IntToPicSave( int data_in, bool* ok )
         returnpicsave = false;
         *ok = true;
     }
-    return( returnpicsave );}
+
+    connect(ui->comboBoxPicSave, SIGNAL(currentIndexChanged( int )),this, SLOT( EditPicSave()));
+    return( returnpicsave );
+}
 
 /******************************************************************************
     Function: DataSet::Pulse IntToPulse( int data_in, , bool* ok )
@@ -440,7 +511,7 @@ DataSet::Pulse Control_Dialog::IntToPulse(int data_in , bool* ok )
     }else{
         *ok = false;
     }
-
+    connect(ui->comboBoxPulseRate, SIGNAL(currentIndexChanged( int )),this, SLOT( EditPulseRate()));
     return( return_pulse );
 }
 
@@ -495,6 +566,7 @@ DataSet::Wave Control_Dialog::IntToWaveType( int data_in, bool* ok )
     // Initialize the pulses per sequence
         return_wave = data_in == 0 ? DataSet::PWave : DataSet::SWave;
     }
+    connect(ui->comboBoxWaveType, SIGNAL(currentIndexChanged( int )),this, SLOT( EditWaveType()));
     return( return_wave );
 }
 
@@ -513,7 +585,7 @@ DataSet::Wave Control_Dialog::IntToWaveType( int data_in, bool* ok )
      DataSet::Units return_units = DataSet::Metric;
      *ok = false;
      if( ( data_in == UNITS_IMPERIAL ) || ( data_in == UNITS_METRIC )){
-         ui->comboBoxUnits->setCurrentIndex( data_in );
+ //        ui->comboBoxUnits->setCurrentIndex( data_in );
          *ok = true;
      // Initialize the pulses per sequence
          return_units = data_in == 0 ? DataSet::Imperial : DataSet::Metric;
@@ -550,6 +622,7 @@ DataSet::Voltage Control_Dialog::IntToVoltage( int data_in, bool* ok )
         }
         *ok = true;
     }
+    connect(ui->comboBoxVoltage, SIGNAL(currentIndexChanged( int )),this, SLOT( EditVolt()));
     return( return_voltage );
 }
 
@@ -732,9 +805,22 @@ unsigned Control_Dialog::Ret_CycleTime()
 
 bool Control_Dialog::Ret_DataSave()
 {
+    QByteArray bdst;
+    bdst.resize( REMOTE_CTRL_MSG_SIZE );
+    bdst[0] = REMOTE_CTRL_HEADER; bdst[1] =  MSG_CODE_E_MU_CALC_METHOD;
+    bdst[2] = CALC_METHOD_ARB_MU;
+    bdst[3] = MSG_CODE_FILL; bdst[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bdsf;
+    bdsf.resize( REMOTE_CTRL_MSG_SIZE );
+    bdsf[0] = REMOTE_CTRL_HEADER; bdsf[1] =  MSG_CODE_E_MU_CALC_METHOD;
+    bdsf[2] = CALC_METHOD_ARB_MU;
+    bdsf[3] = MSG_CODE_FILL; bdsf[4] = REMOTE_CTRL_FOOTER;
+
     bool returnbool;
     int intvar = ui->comboBoxDataSave->currentIndex();
     returnbool = intvar == 0 ? true : false;
+    BufferDataSave = returnbool == true ? bdst : bdsf ;
+
     return(returnbool);
 }
 
@@ -800,7 +886,7 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
     returnprop.PropPicSave = Ret_PicSave();
     returnprop.PropPulseRate = Ret_comboBoxPulseRate();
     returnprop.PropWave = Ret_comboBoxWaveType();
-    returnprop.PropUnits = Ret_comboBoxUnits();
+//    returnprop.PropUnits = Ret_comboBoxUnits();
     returnprop.PropVoltage = Ret_Voltage();
 
     return(returnprop);
@@ -820,9 +906,22 @@ unsigned Control_Dialog::Ret_PTravelVelocity()
 
 bool Control_Dialog::Ret_PicSave()
 {
+    QByteArray bpst;
+    bpst.resize( REMOTE_CTRL_MSG_SIZE );
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;//??
+    bpst[2] = PULSES_PER_SEQ_1;
+    bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
+
+    QByteArray bpsf;
+    bpsf.resize( REMOTE_CTRL_MSG_SIZE );
+    bpsf[0] = REMOTE_CTRL_HEADER; bpsf[1] =  MSG_CODE_PULSE_FREQ;//??
+    bpsf[2] = PULSES_PER_SEQ_3;
+    bpsf[3] = MSG_CODE_FILL; bpsf[4] = REMOTE_CTRL_FOOTER;
+
     bool returnbool;
     int intvar = ui->comboBoxPicSave->currentIndex();
     returnbool = intvar == 0 ? true : false;
+    BufferPicSave = returnbool == true ? bpst : bpsf ;
     return(returnbool);
 }
 
@@ -868,14 +967,27 @@ DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
 
 DataSet::Wave Control_Dialog::Ret_comboBoxWaveType()
 {
+    QByteArray bpwave;
+    bpwave.resize( REMOTE_CTRL_MSG_SIZE );
+    bpwave[0] = REMOTE_CTRL_HEADER; bpwave[1] =  MSG_CODE_WAVE_TYPE;//??
+    bpwave[2] = MSG_CODE_COMPRESSION;
+    bpwave[3] = MSG_CODE_FILL; bpwave[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bswave;
+    bswave.resize( REMOTE_CTRL_MSG_SIZE );
+    bswave[0] = REMOTE_CTRL_HEADER; bswave[1] =  MSG_CODE_WAVE_TYPE;//??
+    bswave[2] = MSG_CODE_COMPRESSION;
+    bswave[3] = MSG_CODE_FILL; bpwave[4] = REMOTE_CTRL_FOOTER;
+
     int intvar;
     DataSet::Wave retwave;
     intvar = ui->comboBoxWaveType->currentIndex();
     switch (intvar) {
     case 0:
+        BufferWaveType = bpwave;
         retwave = DataSet::PWave;
         break;
     case 1:
+        BufferWaveType = bswave;
         retwave = DataSet::SWave;
         break;
     default:
@@ -884,7 +996,7 @@ DataSet::Wave Control_Dialog::Ret_comboBoxWaveType()
     }
     return(retwave);
 }
-
+/* Units have to be changed at V-Meter not in Remote
 DataSet::Units Control_Dialog::Ret_comboBoxUnits()
 {
     int intvar;
@@ -903,17 +1015,30 @@ DataSet::Units Control_Dialog::Ret_comboBoxUnits()
     }
     return(retunits);
 }
-
+*/
 DataSet::Voltage Control_Dialog::Ret_Voltage()
 {
+    QByteArray bvolthi;
+    bvolthi.resize( REMOTE_CTRL_MSG_SIZE );
+    bvolthi[0] = REMOTE_CTRL_HEADER; bvolthi[1] =  MSG_CODE_PULSER_VOLTAGE;//??
+    bvolthi[2] = MSG_CODE_HIVOLT ;
+    bvolthi[3] = MSG_CODE_FILL; bvolthi[4] = REMOTE_CTRL_FOOTER;
+    QByteArray bvoltlo;
+    bvoltlo.resize( REMOTE_CTRL_MSG_SIZE );
+    bvoltlo[0] = REMOTE_CTRL_HEADER; bvoltlo[1] =  MSG_CODE_PULSER_VOLTAGE;//??
+    bvoltlo[2] = MSG_CODE_LOVOLT;
+    bvoltlo[3] = MSG_CODE_FILL; bvoltlo[4] = REMOTE_CTRL_FOOTER;
+
     int intvar;
     DataSet::Voltage retvolt;
-    intvar = ui->comboBoxUnits->currentIndex();
+    intvar = ui->comboBoxVoltage->currentIndex();
     switch (intvar) {
     case 0:
+        BufferVolt = bvolthi;
         retvolt = DataSet::Hi;
         break;
     case 1:
+        BufferVolt = bvoltlo;
         retvolt = DataSet::Low;
         break;
     default:
@@ -1126,12 +1251,6 @@ void Control_Dialog::Set_comboBoxEMethod()
     ui->comboBoxEMethod->addItem("Arb. Mu");
 }
 
-void Control_Dialog::Set_comboBoxMeasMode()
-{
-    ui->comboBoxMeasMode->addItem("Velocity");
-    ui->comboBoxMeasMode->addItem("Distance");
-}
-
 void Control_Dialog::Set_PTravelDistance()
 {
     ui->PDistanceSpinBox->setMaximum( MAT_TRAVEL_DIST_MAX );
@@ -1186,9 +1305,10 @@ void Control_Dialog::Set_Voltage()
     ui->comboBoxVoltage->addItem("Low");
     ui->comboBoxVoltage->addItem("Hi");
 }
-
+/* might need to display current units
 void Control_Dialog::Set_comboBoxUnits()
 {
     ui->comboBoxUnits->addItem("Standard");
     ui->comboBoxUnits->addItem("Metric");
 }
+*/

@@ -70,7 +70,11 @@
 #define MSG_CODE_AMP_GAIN               0x10
 #define MSG_CODE_PICTURE_RATE           0x11
 #define MSG_CODE_PULSER_VOLTAGE         0x12
+#define MSG_CODE_HIVOLT                 0x01
+#define MSG_CODE_LOVOLT                 0x00
 #define MSG_CODE_WAVE_TYPE              0x20
+#define MSG_CODE_COMPRESSION            0x00
+#define MSG_CODE_SHEAR                  0x01
 #define MSG_CODE_DENSITY                0x21
 #define MSG_CODE_E_MU_CALC_METHOD       0x22
 #define MSG_CODE_REVIEW_TEST_NUM        0x30
@@ -92,13 +96,38 @@ public:
 
     DataSet::Prop Return_Control_Dialog();
     bool Set_Control_Dialog( const QByteArray );
+
     QByteArray BufferAmpGain;
     QByteArray BufferCalc;
     QByteArray BufferCaptureRate;
+    QByteArray BufferDataSave;
     QByteArray BufferEMethod;
+    QByteArray BufferPicSave;
     QByteArray BufferPulseRate;
+    QByteArray BufferVolt;
+    QByteArray BufferWaveType;
+
+    bool CheckAmpGain;
+    bool CheckCalc;
+    bool CheckCaptureRate;
+    bool CheckDataSave;
+    bool CheckEMethod;
+    bool CheckFormChange;
+    bool CheckPicSave;
+    bool CheckPulseRate;
+    bool CheckVolt;
+    bool CheckWaveType;
 
 private slots:
+    void EditAmpGain();
+    void EditCalc();
+    void EditCaptureRate();
+    void EditDataSave();
+    void EditEMethod();
+    void EditPicSave();
+    void EditPulseRate();
+    void EditVolt();
+    void EditWaveType();
 
 private:
     Ui::Control_Dialog *ui;
@@ -138,7 +167,7 @@ private:
     bool Ret_PicSave();
     DataSet::Pulse Ret_comboBoxPulseRate();
     DataSet::Wave Ret_comboBoxWaveType();
-    DataSet::Units Ret_comboBoxUnits();
+//    DataSet::Units Ret_comboBoxUnits();
     DataSet::Voltage Ret_Voltage();
 
     void Set_comboBoxAmpGain();
@@ -148,14 +177,13 @@ private:
     void Set_DataSave();
     void Set_Density();
     void Set_comboBoxEMethod();
-    void Set_comboBoxMeasMode();
     void Set_PTravelDistance();
     void Set_PTravelVelocity();
     void Set_PicSave();
     void Set_comboBoxPulseRate();
     void Set_comboBoxRun();
     void Set_comboBoxWaveType();
-    void Set_comboBoxUnits();
+//    void Set_comboBoxUnits();
     void Set_Voltage();
 
 //C++ #define
