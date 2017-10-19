@@ -622,6 +622,14 @@ void MainWindow::processSerialPort()
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramAmpGain()
+
+  Description:
+  ============
+
+******************************************************************************/
 void MainWindow::ProgramAmpGain(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -643,6 +651,14 @@ void MainWindow::ProgramAmpGain(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramCalc()
+
+  Description:
+  ============
+
+******************************************************************************/
 void MainWindow::ProgramCalc(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -664,6 +680,14 @@ void MainWindow::ProgramCalc(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramCaptureRate()
+
+  Description:
+  ============
+
+******************************************************************************/
 void MainWindow::ProgramCaptureRate(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -685,6 +709,14 @@ void MainWindow::ProgramCaptureRate(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramDataSave()
+
+  Description:
+  ============
+
+******************************************************************************/
 void MainWindow::ProgramDataSave(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -706,6 +738,15 @@ void MainWindow::ProgramDataSave(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramEMethod()
+
+  Description:
+  ============
+
+
+******************************************************************************/
 void MainWindow::ProgramEMethod(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -727,6 +768,14 @@ void MainWindow::ProgramEMethod(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramPicSave()
+
+  Description:
+  ============
+
+******************************************************************************/
 void MainWindow::ProgramPicSave(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -748,6 +797,14 @@ void MainWindow::ProgramPicSave(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramPulseRate()
+
+  Description:
+  ============
+
+******************************************************************************/
 void MainWindow::ProgramPulseRate(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -769,6 +826,14 @@ void MainWindow::ProgramPulseRate(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramVolt()
+
+  Description:
+  ============
+
+******************************************************************************/
 void MainWindow::ProgramVolt(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -790,6 +855,15 @@ void MainWindow::ProgramVolt(){
     }
 }
 
+/******************************************************************************
+
+  Function:ProgramWaveType()
+
+  Description:
+  ============
+    Can load P wave from S but not S from p :-(
+
+******************************************************************************/
 void MainWindow::ProgramWaveType(){
     const QByteArray no_change = "no change";
     QByteArray msg = no_change;
@@ -806,21 +880,35 @@ void MainWindow::ProgramWaveType(){
 #endif
         msg = CD->BufferWaveType;
     }
+
     if( msg != no_change ){
-        if( sendVmeterMsg( msg)){
+
+    if( sendVmeterMsg( msg )){
+    #ifdef QT_DEBUG
+            QMessageBox::information(this,"ProgramWaveType", "Accepted  Changed",QMessageBox::Ok);
+    #endif
+        }else{
+            QMessageBox::information(this,"ProgramWaveType", "Problem Programming WaveType",QMessageBox::Ok);
+        }
+/*               for( int i = 1; i <= 170; ++i){
+                    msg[2] = i;
+                    if(sendVmeterMsg( msg ) == true){
+                        QMessageBox::information(this,"ProgramWaveType",QString("Success: %1").arg(i,0,16), QMessageBox::Ok);
+                        break;
+                    }
+                    if( i == 170 ){
+                        QMessageBox::information(this,"ProgramWaveType",QString("Fail: %1").arg(i), QMessageBox::Ok);
+                    }
+                }*/
+        if( sendVmeterMsg( bedermu )){
 #ifdef QT_DEBUG
             QMessageBox::information(this,"ProgramWaveType", "Accepted EType Changed",QMessageBox::Ok);
 #endif
         }else{
-            QMessageBox::information(this,"ProgramWaveType", "Problem Programming EType ",QMessageBox::Ok);
+            QMessageBox::information(this,"ProgramWaveType", "Problem Programming EType",QMessageBox::Ok);
         }
-        if( sendVmeterMsg( bedermu )){
-#ifdef QT_DEBUG
-            QMessageBox::information(this,"ProgramWaveType", "Accepted WaveType Changed",QMessageBox::Ok);
-#endif
-        }else{
-            QMessageBox::information(this,"ProgramWaveType", "Problem Programming WaveType",QMessageBox::Ok);
-        }
+
+
     }
 }
 
@@ -900,6 +988,7 @@ bool MainWindow::saveFile(const QString &fileName)
   Description:
   ============
   Return QByteArray of CurrentSettings from V-Meter Serial Port
+
 ******************************************************************************/
 bool MainWindow::sendVmeterMsg( QByteArray msg )
 {

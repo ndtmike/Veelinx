@@ -635,23 +635,17 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QSpinBox" name="PDistanceSpinBox">
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>600</number>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QDoubleSpinBox" name="doubleSpinBoxDistance">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QSlider" name="horizontalSliderPDistance">
@@ -701,17 +695,14 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QSpinBox" name="PVelocitySpinBox">
-        <property name="minimum">
-         <number>1000</number>
-        </property>
-        <property name="maximum">
-         <number>40000</number>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QDoubleSpinBox" name="doubleSpinBoxVelocity">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QSlider" name="horizontalSliderPVelocity">

@@ -54,24 +54,31 @@ Control_Dialog::~Control_Dialog()
     delete ui;
 }
 
+/******************************************************************************
+
+  Function: void ConvertToMetric( void )
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::ConvertToMetric( void ){
     ui->DensitySpinBox->setMinimum( MAT_DENSITY_MIN * MAT_DENSITY_IMP_TO_MET );
     ui->DensitySpinBox->setMaximum( MAT_DENSITY_MAX * MAT_DENSITY_IMP_TO_MET );
     ui->horizontalSliderDensity->setMinimum( MAT_DENSITY_MIN * MAT_DENSITY_IMP_TO_MET );
     ui->horizontalSliderDensity->setMaximum( MAT_DENSITY_MAX * MAT_DENSITY_IMP_TO_MET );
 
-    ui->PVelocitySpinBox->setMaximum( MAT_TRAVEL_VEL_MAX
+    ui->doubleSpinBoxVelocity->setMaximum( MAT_TRAVEL_VEL_MAX
                                       *  MAT_TRAVEL_VEL_IMP_TO_MET );
-    ui->PVelocitySpinBox->setMinimum( MAT_TRAVEL_VEL_MIN
+    ui->doubleSpinBoxVelocity->setMinimum( MAT_TRAVEL_VEL_MIN
                                       *  MAT_TRAVEL_VEL_IMP_TO_MET );
     ui->horizontalSliderPVelocity->setMaximum( MAT_TRAVEL_VEL_MAX
                                                *  MAT_TRAVEL_VEL_IMP_TO_MET );
     ui->horizontalSliderPVelocity->setMinimum( MAT_TRAVEL_VEL_MIN
                                                *  MAT_TRAVEL_VEL_IMP_TO_MET );
 
-    ui->PDistanceSpinBox->setMaximum( MAT_TRAVEL_DIST_MAX
+    ui->doubleSpinBoxDistance->setMaximum( MAT_TRAVEL_DIST_MAX
                                       * MAT_TRAVEL_DIST_IMP_TO_MET );
-    ui->PDistanceSpinBox->setMinimum( MAT_TRAVEL_DIST_MIN
+    ui->doubleSpinBoxDistance->setMinimum( MAT_TRAVEL_DIST_MIN
                                       * MAT_TRAVEL_DIST_IMP_TO_MET );
     ui->horizontalSliderPDistance->setMaximum( MAT_TRAVEL_DIST_MAX
                                                * MAT_TRAVEL_DIST_IMP_TO_MET );
@@ -79,6 +86,13 @@ void Control_Dialog::ConvertToMetric( void ){
                                                * MAT_TRAVEL_DIST_IMP_TO_MET );
 }
 
+/******************************************************************************
+
+  Function: int CreateValue(QByteArray *working, bool *ok)
+  Description:
+  ============
+
+******************************************************************************/
 int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
 
     int result = -1;
@@ -93,26 +107,61 @@ int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
     return( result );
 }
 
+/******************************************************************************
+
+  Function: void EditAmpGain()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditAmpGain(){
     CheckAmpGain = true;
     CheckFormChange = true;
 }
 
+/******************************************************************************
+
+  Function: void EditCalc()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditCalc(){
     CheckCalc = true;
     CheckFormChange = true;
 }
 
+/******************************************************************************
+
+  Function: void EditCaptureRate()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditCaptureRate(){
     CheckCaptureRate = true;
     CheckFormChange = true;
 }
 
+/******************************************************************************
+
+  Function: void EditDataSave()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditDataSave(){
     CheckDataSave = true;
     CheckFormChange = true;
 }
 
+/******************************************************************************
+
+  Function: void EditEMethod()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditEMethod(){
     const int
     CheckEMethod = true;
@@ -125,21 +174,49 @@ void Control_Dialog::EditEMethod(){
     }
 }
 
+/******************************************************************************
+
+  Function: void EditPicSave()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditPicSave(){
     CheckPicSave = true;
     CheckFormChange = true;
 }
 
+/******************************************************************************
+
+  Function: void EditPulseRate()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditPulseRate(){
     CheckPulseRate = true;
     CheckFormChange = true;
 }
 
+/******************************************************************************
+
+  Function: void EditWaveType()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditWaveType(){
     CheckWaveType = true;
     CheckFormChange = true;
 }
 
+/******************************************************************************
+
+  Function: void EditVolt()
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::EditVolt(){
     CheckVolt = true;
     CheckFormChange = true;
@@ -395,19 +472,19 @@ DataSet::Calc Control_Dialog::IntToCalc( int data_in, bool* ok ){
     return( return_Calc );
 }
 
-//******************************************************************************
-//
-//  Function: unsigned IntToPTravelDistance( int data_in_hi, int data_in_lo)
-//
-//  Description:
-//  ============
-//  This routine initializes the cycle time between pulse sequences
-//
-//  data_in coded as follows:
-//  #define MAT_TRAVEL_DIST_MAX             600
-//  #define MAT_TRAVEL_DIST_MIN             0.1
-//  needs to be chhecked with equipment
-//******************************************************************************
+/******************************************************************************
+
+    Function: unsigned IntToPTravelDistance( int data_in_hi, int data_in_lo)
+
+    Description:
+    ============
+    This routine initializes the cycle time between pulse sequences
+
+    data_in coded as follows:
+    #define MAT_TRAVEL_DIST_MAX             600
+    #define MAT_TRAVEL_DIST_MIN             0.1
+    needs to be chhecked with equipment
+******************************************************************************/
 unsigned Control_Dialog::IntToPTravelDistance( int data_in_hi, int data_in_lo, bool* ok )
 {
     unsigned return_distance;
@@ -422,7 +499,7 @@ unsigned Control_Dialog::IntToPTravelDistance( int data_in_hi, int data_in_lo, b
         return_distance = MAT_TRAVEL_DIST_MAX;
     }
     *ok = true;
-    ui->PDistanceSpinBox->setValue( return_distance );
+    ui->doubleSpinBoxDistance->setValue( return_distance );
 
     return(return_distance);
 }
@@ -455,7 +532,7 @@ unsigned Control_Dialog::IntToPTravelVelocity( int data_in_hi, int data_in_lo, b
         return_velocity = MAT_TRAVEL_VEL_MAX;
     }
     *ok = true;
-    ui->PVelocitySpinBox->setValue( return_velocity );
+    ui->doubleSpinBoxVelocity->setValue( return_velocity );
 
     return(return_velocity);
 }
@@ -636,8 +713,16 @@ DataSet::Voltage Control_Dialog::IntToVoltage( int data_in, bool* ok )
     return( return_voltage );
 }
 
-DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
-{
+/******************************************************************************
+
+  Function: DataSet::AmpGain Ret_comboBoxAmpGain()
+  Description:
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain(){
+
     int intvar;
     DataSet::AmpGain retampgain;
     intvar = ui->comboBoxAmpGain->currentIndex();
@@ -724,8 +809,15 @@ DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain()
     return(retampgain);
 }
 
-DataSet::Calc Control_Dialog::Ret_comboBoxCalc()
-{
+/******************************************************************************
+
+  Function: DataSet::Calc Ret_comboBoxCalc()
+  Description:
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::Calc Control_Dialog::Ret_comboBoxCalc(){
     int intvar;
     DataSet::Calc retcalc;
 
@@ -757,8 +849,16 @@ DataSet::Calc Control_Dialog::Ret_comboBoxCalc()
     return(retcalc);
 }
 
-DataSet::Rate Control_Dialog::Ret_comboBoxCaptureRate()
-{
+/******************************************************************************
+
+  Function: DataSet::Rate Ret_comboBoxCaptureRate()
+  Description:
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::Rate Control_Dialog::Ret_comboBoxCaptureRate(){
+
     int intvar;
     DataSet::Rate retrate;
     QByteArray bpr250;
@@ -807,8 +907,16 @@ DataSet::Rate Control_Dialog::Ret_comboBoxCaptureRate()
     return(retrate);
 }
 
-unsigned Control_Dialog::Ret_CycleTime()
-{
+/******************************************************************************
+
+  Function: unsigned Ret_CycleTime()
+  Description:
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+unsigned Control_Dialog::Ret_CycleTime(){
+
     QByteArray bct;
     bct.resize( REMOTE_CTRL_MSG_SIZE );
     bct[0] = REMOTE_CTRL_HEADER; bct[1] =  MSG_CODE_PULSE_CYCLE_TIME;
@@ -821,6 +929,14 @@ unsigned Control_Dialog::Ret_CycleTime()
     return(returnui);
 }
 
+/******************************************************************************
+
+  Function: bool Ret_DataSave()
+  Description:
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
 bool Control_Dialog::Ret_DataSave()
 {
     QByteArray bdst;
@@ -842,14 +958,28 @@ bool Control_Dialog::Ret_DataSave()
     return(returnbool);
 }
 
-unsigned Control_Dialog::Ret_Density()
-{
+/******************************************************************************
+
+  Function: unsigned Ret_Density()
+  Description:
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+unsigned Control_Dialog::Ret_Density(){
+
     unsigned returnui = ui->DensitySpinBox->value();
     return(returnui);
 }
 
-DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
-{
+/******************************************************************************
+
+  Function: DataSet::EMethod Ret_comboBoxEMethod()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod(){
     int intvar;
     DataSet::EMethod retemethod;
     QByteArray bearbmu;
@@ -889,8 +1019,15 @@ DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod()
     return(retemethod);
 }
 
-DataSet::Prop Control_Dialog::Return_Control_Dialog()
-{
+/******************************************************************************
+
+  Function: DataSet::Prop Return_Control_Dialog()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::Prop Control_Dialog::Return_Control_Dialog(){
+
     DataSet::Prop returnprop;
 
     returnprop.PropAmpGain = Ret_comboBoxAmpGain();
@@ -911,20 +1048,41 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog()
     return(returnprop);
 }
 
-unsigned Control_Dialog::Ret_PTravelDistance()
-{
-    unsigned returnui = ui->PDistanceSpinBox->value();
+/******************************************************************************
+
+  Function: unsigned Ret_PTravelDistance()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+unsigned Control_Dialog::Ret_PTravelDistance(){
+
+    unsigned returnui = ui->doubleSpinBoxDistance->value();
     return(returnui);
 }
 
-unsigned Control_Dialog::Ret_PTravelVelocity()
-{
-    unsigned returnui = ui->PVelocitySpinBox->value();
+/******************************************************************************
+
+  Function: unsigned Ret_PTravelVelocity()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+unsigned Control_Dialog::Ret_PTravelVelocity(){
+
+    unsigned returnui = ui->doubleSpinBoxVelocity->value();
     return(returnui);
 }
 
-bool Control_Dialog::Ret_PicSave()
-{
+/******************************************************************************
+
+  Function: bool Ret_PicSave()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+bool Control_Dialog::Ret_PicSave(){
+
     QByteArray bpst;
     bpst.resize( REMOTE_CTRL_MSG_SIZE );
     bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;//??
@@ -944,8 +1102,14 @@ bool Control_Dialog::Ret_PicSave()
     return(returnbool);
 }
 
-DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
-{
+/******************************************************************************
+
+  Function: DataSet::Pulse Ret_comboBoxPulseRate()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate(){
     int intvar;
     DataSet::Pulse retpulse;
     QByteArray bpr1;
@@ -984,8 +1148,15 @@ DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate()
     return(retpulse);
 }
 
-DataSet::Wave Control_Dialog::Ret_comboBoxWaveType()
-{
+/******************************************************************************
+
+  Function: DataSet::Wave Ret_comboBoxWaveType()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::Wave Control_Dialog::Ret_comboBoxWaveType(){
+
     QByteArray bpwave;
     bpwave.resize( REMOTE_CTRL_MSG_SIZE );
     bpwave[0] = REMOTE_CTRL_HEADER; bpwave[1] =  MSG_CODE_WAVE_TYPE;//??
@@ -1036,9 +1207,15 @@ DataSet::Units Control_Dialog::Ret_comboBoxUnits()
 }
 */
 
+/******************************************************************************
 
-DataSet::Voltage Control_Dialog::Ret_Voltage()
-{
+  Function: DataSet::Voltage Ret_Voltage()
+  ============
+  This routine initializes the pulser voltage
+
+******************************************************************************/
+DataSet::Voltage Control_Dialog::Ret_Voltage(){
+
     QByteArray bvolthi;
     bvolthi.resize( REMOTE_CTRL_MSG_SIZE );
     bvolthi[0] = REMOTE_CTRL_HEADER; bvolthi[1] =  MSG_CODE_PULSER_VOLTAGE;//??
@@ -1069,7 +1246,6 @@ DataSet::Voltage Control_Dialog::Ret_Voltage()
     return(retvolt);
 }
 
-
 /******************************************************************************
 
   Function: Set_comboBoxAmpGain
@@ -1091,7 +1267,6 @@ void Control_Dialog::Set_comboBoxAmpGain(){
     ui->comboBoxAmpGain->addItem("500x Gain");
 }
 
-
 /******************************************************************************
 
   Function: Set_comboBoxCalc
@@ -1101,12 +1276,11 @@ void Control_Dialog::Set_comboBoxAmpGain(){
   Set Items
 
 ******************************************************************************/
-void Control_Dialog::Set_comboBoxCalc()
-{
+void Control_Dialog::Set_comboBoxCalc(){
+
     ui->comboBoxCalcVar->addItem("Distance");
     ui->comboBoxCalcVar->addItem("Velocity");
 }
-
 
 /******************************************************************************
 
@@ -1116,8 +1290,8 @@ void Control_Dialog::Set_comboBoxCalc()
   ============
   Set Items
 ******************************************************************************/
-void Control_Dialog::Set_comboBoxCaptureRate()
-{
+void Control_Dialog::Set_comboBoxCaptureRate(){
+
     ui->comboBoxCaptureRate->addItem("250 kHz");
     ui->comboBoxCaptureRate->addItem("500 kHz");
     ui->comboBoxCaptureRate->addItem("1.0 MHz");
@@ -1235,8 +1409,16 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
     return( ok );
 }
 
-void Control_Dialog::Set_CycleTime()
-{
+/******************************************************************************
+
+  Function: void Set_CycleTime()
+
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::Set_CycleTime(){
+
     ui->CycleTimeSpinBox->setMinimum( CYCLE_TIME_MIN );
     ui->CycleTimeSpinBox->setMaximum( CYCLE_TIME_MAX );
     ui->horizontalSliderCycleTime->setMinimum( CYCLE_TIME_MIN );
@@ -1247,14 +1429,29 @@ void Control_Dialog::Set_CycleTime()
             ui->CycleTimeSpinBox, SLOT(setValue(int)));
 }
 
-void Control_Dialog::Set_DataSave()
-{
+/******************************************************************************
+
+  Function: void Set_DataSave()
+
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::Set_DataSave(){
     ui->comboBoxDataSave->addItem("No");
     ui->comboBoxDataSave->addItem("Yes");
 }
 
-void Control_Dialog::Set_Density()
-{
+/******************************************************************************
+
+  Function: void Set_Density()
+
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::Set_Density(){
+
     ui->DensitySpinBox->setMinimum( MAT_DENSITY_MIN );
     ui->DensitySpinBox->setMaximum( MAT_DENSITY_MAX );
     ui->horizontalSliderDensity->setMinimum( MAT_DENSITY_MIN );
@@ -1265,62 +1462,123 @@ void Control_Dialog::Set_Density()
             ui->DensitySpinBox, SLOT(setValue(int)));
 }
 
-void Control_Dialog::Set_comboBoxEMethod()
-{
+/******************************************************************************
+
+  Function: void Set_comboBoxEMethod(){
+
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::Set_comboBoxEMethod(){
+
     ui->comboBoxEMethod->addItem("Simple E");
     ui->comboBoxEMethod->addItem("Derived Mu");
     ui->comboBoxEMethod->addItem("Arb. Mu");
 }
 
-void Control_Dialog::Set_PTravelDistance()
-{
-    ui->PDistanceSpinBox->setMaximum( MAT_TRAVEL_DIST_MAX );
-    ui->PDistanceSpinBox->setMinimum( MAT_TRAVEL_DIST_MIN );
+/******************************************************************************
+
+  Function: void Set_PTravelDistance()
+
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::Set_PTravelDistance(){
+
+    ui->doubleSpinBoxDistance->setMaximum( MAT_TRAVEL_DIST_MAX );
+    ui->doubleSpinBoxDistance->setMinimum( MAT_TRAVEL_DIST_MIN );
     ui->horizontalSliderPDistance->setMaximum( MAT_TRAVEL_DIST_MAX );
     ui->horizontalSliderPDistance->setMinimum( MAT_TRAVEL_DIST_MIN );
-    connect(ui->PDistanceSpinBox, SIGNAL(valueChanged(int)),
-            ui->horizontalSliderPDistance,SLOT(setValue(int)));
-    connect(ui->horizontalSliderPDistance, SIGNAL(valueChanged(int)),
-            ui->PDistanceSpinBox, SLOT(setValue(int)));
+    connect(ui->doubleSpinBoxDistance, SIGNAL(valueChanged( double )),
+            ui->horizontalSliderPDistance,SLOT(setValue( int )));
+    connect(ui->horizontalSliderPDistance, SIGNAL(valueChanged( int )),
+            ui->doubleSpinBoxDistance, SLOT(setValue( double )));
 }
 
-void Control_Dialog::Set_PTravelVelocity()
-{
-    ui->PVelocitySpinBox->setMaximum( MAT_TRAVEL_VEL_MAX );
-    ui->PVelocitySpinBox->setMinimum( MAT_TRAVEL_VEL_MIN );
+/******************************************************************************
+
+  Function: void Set_PTravelVelocity()
+
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::Set_PTravelVelocity(){
+
+    ui->doubleSpinBoxVelocity->setMaximum( MAT_TRAVEL_VEL_MAX );
+    ui->doubleSpinBoxVelocity->setMinimum( MAT_TRAVEL_VEL_MIN );
     ui->horizontalSliderPVelocity->setMaximum( MAT_TRAVEL_VEL_MAX );
     ui->horizontalSliderPVelocity->setMinimum( MAT_TRAVEL_VEL_MIN );
-    connect(ui->PVelocitySpinBox, SIGNAL( valueChanged( int )),
+    connect(ui->doubleSpinBoxVelocity, SIGNAL( valueChanged( double )),
             ui->horizontalSliderPVelocity,SLOT( setValue( int )));
     connect(ui->horizontalSliderPVelocity, SIGNAL( valueChanged( int )),
-            ui->PVelocitySpinBox, SLOT( setValue( int )));
+            ui->doubleSpinBoxVelocity, SLOT( setValue( double )));
 }
 
+/******************************************************************************
+
+  Function: void Set_PicSave()
+
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::Set_PicSave()
 {
     ui->comboBoxPicSave->addItem("No");
     ui->comboBoxPicSave->addItem("Yes");
 }
+/******************************************************************************
 
+  Function: void Set_comboBoxPulseRate()
+
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::Set_comboBoxPulseRate()
 {
     ui->comboBoxPulseRate->addItem("1");
     ui->comboBoxPulseRate->addItem("3");
     ui->comboBoxPulseRate->addItem("10");
 }
+/******************************************************************************
 
+  Function: void Set_comboBoxRun()
+
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::Set_comboBoxRun()
 {
     ui->comboBoxRun->addItem("No");
     ui->comboBoxRun->addItem("Yes");
 }
 
+/******************************************************************************
+
+  Function: void Set_comboBoxWaveType()
+
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::Set_comboBoxWaveType()
 {
     ui->comboBoxWaveType->addItem("P Wave");
     ui->comboBoxWaveType->addItem("S Wave");
 }
+/******************************************************************************
 
+  Function: void Set_Voltage()
+
+  Description:
+  ============
+
+******************************************************************************/
 void Control_Dialog::Set_Voltage()
 {
     ui->comboBoxVoltage->addItem("Low");

@@ -3,8 +3,9 @@
 
 #include <QDialog>
 #include <QMessageBox>
+#include "doubleslider.h"
 #include "inst_data.h"
-//#include "remotecontrol.h"
+
 //******************************************************************************
 //  Definitions
 //******************************************************************************
