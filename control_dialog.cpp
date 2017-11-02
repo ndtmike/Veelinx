@@ -1618,7 +1618,6 @@ void Control_Dialog::Set_PTravelDistance(){
 
     ui->doubleSpinBoxDistance->setMaximum( MAT_TRAVEL_DIST_MAX );
     ui->doubleSpinBoxDistance->setMinimum( MAT_TRAVEL_DIST_MIN );
-    //ui->doubleSpinBoxDistance->setSingleStep( 1.0 );
     ui->horizontalSliderPDistance->setMaximum( MAT_TRAVEL_DIST_MAX * convert_int );
     ui->horizontalSliderPDistance->setMinimum( MAT_TRAVEL_DIST_MIN * convert_int );
     ui->horizontalSliderPDistance->setSingleStep(1);
@@ -1638,7 +1637,7 @@ void Control_Dialog::Set_PTravelDistance(){
 ******************************************************************************/
 void Control_Dialog::Set_PTravelVelocity(){
 
-    const int convert_int = 10;
+    //const int convert_int = 10;
 
     ui->doubleSpinBoxVelocity->setMaximum( (double) (MAT_TRAVEL_VEL_MAX) );
     ui->doubleSpinBoxVelocity->setMinimum( (double) MAT_TRAVEL_VEL_MIN );
@@ -1663,6 +1662,7 @@ void Control_Dialog::Set_PicSave()
     ui->comboBoxPicSave->addItem("No");
     ui->comboBoxPicSave->addItem("Yes");
 }
+
 /******************************************************************************
 
   Function: void Set_comboBoxPulseRate()
@@ -1677,6 +1677,7 @@ void Control_Dialog::Set_comboBoxPulseRate()
     ui->comboBoxPulseRate->addItem("3");
     ui->comboBoxPulseRate->addItem("10");
 }
+
 /******************************************************************************
 
   Function: void Set_comboBoxRun()
@@ -1704,6 +1705,7 @@ void Control_Dialog::Set_comboBoxWaveType()
     ui->comboBoxWaveType->addItem("P Wave");
     ui->comboBoxWaveType->addItem("S Wave");
 }
+
 /******************************************************************************
 
   Function: void Set_Voltage()
