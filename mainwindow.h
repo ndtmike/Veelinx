@@ -181,9 +181,12 @@ private:
     void ProgramCalc();
     void ProgramCaptureRate();
     void ProgramDataSave();
+    void ProgramDensity();
+    void ProgramDistance();
     void ProgramEMethod();
     void ProgramPicSave();
     void ProgramPulseRate();
+    void ProgramVelocity();
     void ProgramVolt();
     void ProgramWaveType();
 

@@ -31,8 +31,7 @@ HEADERS += \
     splash.h \
     dataplot.h \
     inst_data.h \
-    control_dialog.h \
-    doubleslider.h
+    control_dialog.h
 
 
 FORMS += \

@@ -37,6 +37,8 @@ Control_Dialog::Control_Dialog(QWidget *parent) :
     BufferVolt = "";
 
     CheckAmpGain = false;
+    CheckDensity = false;
+    CheckDistance = false;
     CheckCalc = false;
     CheckCaptureRate = false;
     CheckDataSave = false;
@@ -44,6 +46,7 @@ Control_Dialog::Control_Dialog(QWidget *parent) :
     CheckPicSave = false;
     CheckPulseRate = false;
     CheckWaveType = false;
+    CheckVelocity = false;
     CheckVolt = false;
     CheckFormChange = false;
 
@@ -109,6 +112,32 @@ int Control_Dialog::CreateValue(QByteArray *working, bool *ok){
 
 /******************************************************************************
 
+  Function: void doubleSpinBoxDistance_valueChanged(double value)
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::doubleSpinBoxDistance_valueChanged(double value){
+
+    const int convert_int = 10;
+    ui->horizontalSliderPDistance->setValue( value * convert_int );
+}
+
+/******************************************************************************
+
+  Function: void doubleSpinBoxVelocity_valueChanged(double value)
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::doubleSpinBoxVelocity_valueChanged(double value){
+
+    const int convert_int = 1;
+    ui->horizontalSliderPVelocity->setValue( value * convert_int );
+}
+
+/******************************************************************************
+
   Function: void EditAmpGain()
   Description:
   ============
@@ -157,13 +186,37 @@ void Control_Dialog::EditDataSave(){
 
 /******************************************************************************
 
+  Function: void EditDensity()
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::EditDensity(){
+    CheckDensity = true;
+    CheckFormChange = true;
+}
+
+/******************************************************************************
+
+  Function: void EditDistance()
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::EditDistance(){
+    CheckDistance = true;
+    CheckFormChange = true;
+}
+
+/******************************************************************************
+
   Function: void EditEMethod()
   Description:
   ============
 
 ******************************************************************************/
 void Control_Dialog::EditEMethod(){
-    const int
+
     CheckEMethod = true;
     CheckFormChange = true;
     if(ui->comboBoxEMethod->currentIndex() == CALC_METHOD_SIMPLE_E ||
@@ -212,6 +265,18 @@ void Control_Dialog::EditWaveType(){
 
 /******************************************************************************
 
+  Function: void EditVelocity()
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::EditVelocity(){
+    CheckVelocity = true;
+    CheckFormChange = true;
+}
+
+/******************************************************************************
+
   Function: void EditVolt()
   Description:
   ============
@@ -220,6 +285,34 @@ void Control_Dialog::EditWaveType(){
 void Control_Dialog::EditVolt(){
     CheckVolt = true;
     CheckFormChange = true;
+}
+
+/******************************************************************************
+
+  Function: void horizontalSliderPDistance_valueChanged(int value)
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::horizontalSliderPDistance_valueChanged(int value){
+
+    const double convert_double = 10.0;
+    double val = value/convert_double; //i set the range of the slider from 0 to 10000
+    ui->doubleSpinBoxDistance->setValue(val);
+}
+
+/******************************************************************************
+
+  Function: void horizontalSliderPVelocity_valueChanged(int value)
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::horizontalSliderPVelocity_valueChanged(int value){
+
+    const double convert_double = 1.0;
+    double val = value/convert_double; //i set the range of the slider from 0 to 10000
+    ui->doubleSpinBoxVelocity->setValue(val);
 }
 
 /******************************************************************************
@@ -403,6 +496,7 @@ unsigned Control_Dialog::IntToDensity( char data_in_hi, char data_in_lo, bool* o
         return_density = MAT_DENSITY_MAX;
     }
     ui->DensitySpinBox->setValue( return_density );
+    connect(ui->DensitySpinBox, SIGNAL(valueChanged(int)), this, SLOT(EditDensity()));
     return( return_density );
 }
 
@@ -488,7 +582,7 @@ DataSet::Calc Control_Dialog::IntToCalc( int data_in, bool* ok ){
 unsigned Control_Dialog::IntToPTravelDistance( int data_in_hi, int data_in_lo, bool* ok )
 {
     unsigned return_distance;
-    return_distance =  (data_in_hi * 0x0100) + (data_in_lo);//move the hi-byte two places add the low byte
+    return_distance = (data_in_hi * 0x0100) + (data_in_lo);//move the hi-byte two places add the low byte
 
     if (return_distance < MAT_TRAVEL_DIST_MIN)
     {
@@ -500,23 +594,24 @@ unsigned Control_Dialog::IntToPTravelDistance( int data_in_hi, int data_in_lo, b
     }
     *ok = true;
     ui->doubleSpinBoxDistance->setValue( return_distance );
+    connect(ui->doubleSpinBoxDistance, SIGNAL(valueChanged(double)), this, SLOT( EditDistance()));
 
     return(return_distance);
 }
 
-//******************************************************************************
-//
-//  Function: unsigned IntToPTravelVelocity( int data_in_hi, int data_in_lo)
-//
-//  Description:
-//  ============
-//  This routine initializes the cycle time between pulse sequences
-//
-//  data_in coded as follows:
-//  #define MAT_TRAVEL_VEL_MAX              40000
-//  #define MAT_TRAVEL_VEL_MIN              1000
-//  needs to be checked with equipment
-//******************************************************************************
+/******************************************************************************
+
+   Function: unsigned IntToPTravelVelocity( int data_in_hi, int data_in_lo)
+
+   Description:
+   ============
+   This routine initializes the cycle time between pulse sequences
+
+   data_in coded as follows:
+   #define MAT_TRAVEL_VEL_MAX              40000
+   #define MAT_TRAVEL_VEL_MIN              1000
+   needs to be checked with equipment
+******************************************************************************/
 unsigned Control_Dialog::IntToPTravelVelocity( int data_in_hi, int data_in_lo, bool* ok )
 {
     unsigned return_velocity;
@@ -533,8 +628,9 @@ unsigned Control_Dialog::IntToPTravelVelocity( int data_in_hi, int data_in_lo, b
     }
     *ok = true;
     ui->doubleSpinBoxVelocity->setValue( return_velocity );
+    connect(ui->doubleSpinBoxVelocity, SIGNAL(valueChanged(double)), this, SLOT(EditVelocity()));
 
-    return(return_velocity);
+    return( return_velocity );
 }
 
 /******************************************************************************
@@ -580,6 +676,10 @@ bool Control_Dialog::IntToPicSave( int data_in, bool* ok )
 ******************************************************************************/
 DataSet::Pulse Control_Dialog::IntToPulse(int data_in , bool* ok )
 {
+    const int pulse_index1 = 0;
+    const int pulse_index3 = 1;
+    const int pulse_index10 = 2;
+
     DataSet::Pulse return_pulse = DataSet::PulsePerSeq_3;
     if(( data_in == PULSES_PER_SEQ_3 ) || ( data_in == PULSES_PER_SEQ_10 )
             || ( data_in == PULSES_PER_SEQ_1 )){
@@ -587,13 +687,13 @@ DataSet::Pulse Control_Dialog::IntToPulse(int data_in , bool* ok )
     // Initialize the pulses per sequence
         if (data_in == PULSES_PER_SEQ_3){
             return_pulse = DataSet::PulsePerSeq_3;
-            ui->comboBoxPulseRate->setCurrentIndex( Pulse_Index3() );
+            ui->comboBoxPulseRate->setCurrentIndex( pulse_index3 );
         } else if (data_in == PULSES_PER_SEQ_10){
             return_pulse = DataSet::PulsePerSeq_10;
-            ui->comboBoxPulseRate->setCurrentIndex( Pulse_Index10() );
+            ui->comboBoxPulseRate->setCurrentIndex( pulse_index10 );
         }else{
             return_pulse = DataSet::PulsePerSeq_1;
-            ui->comboBoxPulseRate->setCurrentIndex( Pulse_Index1() );
+            ui->comboBoxPulseRate->setCurrentIndex(  pulse_index1 );
         }
     }else{
         *ok = false;
@@ -602,18 +702,18 @@ DataSet::Pulse Control_Dialog::IntToPulse(int data_in , bool* ok )
     return( return_pulse );
 }
 
-//******************************************************************************
-//
-//  Function: unsigned IntToReview( int data_in_hi, int data_in_lo)
-//
-//  Description:
-//  ============
-//  This routine initializes the cycle time between pulse sequences
-//
-//  data_in coded as follows:
-// #define REVIEW_TEST_NUM_MAX             1800
-// #define REVIEW_TEST_NUM_MIN             1
-//******************************************************************************
+/******************************************************************************
+
+    Function: unsigned IntToReview( int data_in_hi, int data_in_lo)
+
+    Description:
+    ============
+    This routine initializes the cycle time between pulse sequences
+
+    data_in coded as follows:
+    #define REVIEW_TEST_NUM_MAX             1800
+    #define REVIEW_TEST_NUM_MIN             1
+*****************************************************************************/
 unsigned Control_Dialog::IntToReview( int data_in_hi, int data_in_lo, bool* ok )
 {
     unsigned return_velocity;
@@ -963,12 +1063,44 @@ bool Control_Dialog::Ret_DataSave()
   Function: unsigned Ret_Density()
   Description:
   ============
-  This routine initializes the pulser voltage
 
 ******************************************************************************/
 unsigned Control_Dialog::Ret_Density(){
 
+    const unsigned top_byte_divisor = 0x100; //divide by this to get the top byte
     unsigned returnui = ui->DensitySpinBox->value();
+
+    BufferDensity.resize( REMOTE_CTRL_MSG_SIZE);
+    BufferDensity[0] = REMOTE_CTRL_HEADER;
+    BufferDensity[1] = MSG_CODE_DENSITY;
+    BufferDensity[2] = (char) ( returnui / top_byte_divisor );
+    BufferDensity[3] = (char) ( returnui % top_byte_divisor );
+    BufferDensity[4] = REMOTE_CTRL_FOOTER;
+
+    return(returnui);
+}
+
+/******************************************************************************
+
+  Function: unsigned Ret_Distance()
+  Description:
+  ============
+
+
+******************************************************************************/
+unsigned Control_Dialog::Ret_Distance(){
+
+    const unsigned top_byte_divisor = 0x100; //divide by this to get the top byte
+    const double remove_decimal = 10.0;
+    unsigned returnui =(int) ( ui->doubleSpinBoxDistance->value() * remove_decimal);
+
+    BufferDistance.resize( REMOTE_CTRL_MSG_SIZE );
+    BufferDistance[0] = REMOTE_CTRL_HEADER;
+    BufferDistance[1] = MSG_CODE_CH_DISTANCE;
+    BufferDistance[2] = (char) ( returnui / top_byte_divisor );
+    BufferDistance[3] = (char) ( returnui % top_byte_divisor );
+    BufferDistance[4] = REMOTE_CTRL_FOOTER;
+
     return(returnui);
 }
 
@@ -1023,7 +1155,6 @@ DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod(){
 
   Function: DataSet::Prop Return_Control_Dialog()
   ============
-  This routine initializes the pulser voltage
 
 ******************************************************************************/
 DataSet::Prop Control_Dialog::Return_Control_Dialog(){
@@ -1037,8 +1168,8 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog(){
     returnprop.PropDataSave = Ret_DataSave();
     returnprop.PropDensity = Ret_Density();
     returnprop.PropEMethod = Ret_comboBoxEMethod();
-    returnprop.PropPTravelDistance = Ret_PTravelDistance();
-    returnprop.PropPTravelVelocity = Ret_PTravelVelocity();
+    returnprop.PropPTravelDistance = Ret_Distance();
+    returnprop.PropPTravelVelocity = Ret_Velocity();
     returnprop.PropPicSave = Ret_PicSave();
     returnprop.PropPulseRate = Ret_comboBoxPulseRate();
     returnprop.PropWave = Ret_comboBoxWaveType();
@@ -1046,32 +1177,6 @@ DataSet::Prop Control_Dialog::Return_Control_Dialog(){
     returnprop.PropVoltage = Ret_Voltage();
 
     return(returnprop);
-}
-
-/******************************************************************************
-
-  Function: unsigned Ret_PTravelDistance()
-  ============
-  This routine initializes the pulser voltage
-
-******************************************************************************/
-unsigned Control_Dialog::Ret_PTravelDistance(){
-
-    unsigned returnui = ui->doubleSpinBoxDistance->value();
-    return(returnui);
-}
-
-/******************************************************************************
-
-  Function: unsigned Ret_PTravelVelocity()
-  ============
-  This routine initializes the pulser voltage
-
-******************************************************************************/
-unsigned Control_Dialog::Ret_PTravelVelocity(){
-
-    unsigned returnui = ui->doubleSpinBoxVelocity->value();
-    return(returnui);
 }
 
 /******************************************************************************
@@ -1207,6 +1312,28 @@ DataSet::Units Control_Dialog::Ret_comboBoxUnits()
 }
 */
 
+/******************************************************************************
+
+  Function: unsigned Ret_Velocity()
+  Description:
+  ============
+
+
+******************************************************************************/
+unsigned Control_Dialog::Ret_Velocity(){
+
+    const unsigned top_byte_divisor = 0x100; //divide by this to get the top byte
+    unsigned returnui =(int) ui->doubleSpinBoxVelocity->value();
+
+    BufferVelocity.resize( REMOTE_CTRL_MSG_SIZE );
+    BufferVelocity[0] = REMOTE_CTRL_HEADER;
+    BufferVelocity[1] = MSG_CODE_CH_VELOCITY;
+    BufferVelocity[2] = (char) ( returnui / top_byte_divisor );
+    BufferVelocity[3] = (char) ( returnui % top_byte_divisor );
+    BufferVelocity[4] = REMOTE_CTRL_FOOTER;
+
+    return(returnui);
+}
 /******************************************************************************
 
   Function: DataSet::Voltage Ret_Voltage()
@@ -1487,14 +1614,18 @@ void Control_Dialog::Set_comboBoxEMethod(){
 ******************************************************************************/
 void Control_Dialog::Set_PTravelDistance(){
 
+    const int convert_int = 10;
+
     ui->doubleSpinBoxDistance->setMaximum( MAT_TRAVEL_DIST_MAX );
     ui->doubleSpinBoxDistance->setMinimum( MAT_TRAVEL_DIST_MIN );
-    ui->horizontalSliderPDistance->setMaximum( MAT_TRAVEL_DIST_MAX );
-    ui->horizontalSliderPDistance->setMinimum( MAT_TRAVEL_DIST_MIN );
-    connect(ui->doubleSpinBoxDistance, SIGNAL(valueChanged( double )),
-            ui->horizontalSliderPDistance,SLOT(setValue( int )));
-    connect(ui->horizontalSliderPDistance, SIGNAL(valueChanged( int )),
-            ui->doubleSpinBoxDistance, SLOT(setValue( double )));
+    //ui->doubleSpinBoxDistance->setSingleStep( 1.0 );
+    ui->horizontalSliderPDistance->setMaximum( MAT_TRAVEL_DIST_MAX * convert_int );
+    ui->horizontalSliderPDistance->setMinimum( MAT_TRAVEL_DIST_MIN * convert_int );
+    ui->horizontalSliderPDistance->setSingleStep(1);
+    connect(ui->doubleSpinBoxDistance, SIGNAL( valueChanged( double )),
+            this,SLOT( doubleSpinBoxDistance_valueChanged(double)));
+    connect(ui->horizontalSliderPDistance, SIGNAL(valueChanged(int)),
+            this, SLOT( horizontalSliderPDistance_valueChanged(int)));
 }
 
 /******************************************************************************
@@ -1507,14 +1638,16 @@ void Control_Dialog::Set_PTravelDistance(){
 ******************************************************************************/
 void Control_Dialog::Set_PTravelVelocity(){
 
-    ui->doubleSpinBoxVelocity->setMaximum( MAT_TRAVEL_VEL_MAX );
-    ui->doubleSpinBoxVelocity->setMinimum( MAT_TRAVEL_VEL_MIN );
+    const int convert_int = 10;
+
+    ui->doubleSpinBoxVelocity->setMaximum( (double) (MAT_TRAVEL_VEL_MAX) );
+    ui->doubleSpinBoxVelocity->setMinimum( (double) MAT_TRAVEL_VEL_MIN );
     ui->horizontalSliderPVelocity->setMaximum( MAT_TRAVEL_VEL_MAX );
     ui->horizontalSliderPVelocity->setMinimum( MAT_TRAVEL_VEL_MIN );
     connect(ui->doubleSpinBoxVelocity, SIGNAL( valueChanged( double )),
-            ui->horizontalSliderPVelocity,SLOT( setValue( int )));
-    connect(ui->horizontalSliderPVelocity, SIGNAL( valueChanged( int )),
-            ui->doubleSpinBoxVelocity, SLOT( setValue( double )));
+            this,SLOT( doubleSpinBoxVelocity_valueChanged(double)));
+    connect(ui->horizontalSliderPVelocity, SIGNAL(valueChanged(int)),
+            this, SLOT( horizontalSliderPVelocity_valueChanged(int)));
 }
 
 /******************************************************************************

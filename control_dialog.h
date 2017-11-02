@@ -34,11 +34,11 @@
 #define MAT_TRAVEL_DIST_IMP_TO_MET      254 / 10000
 #define MAT_TRAVEL_DIST_MIN             0.1
 #define MAT_TRAVEL_DIST_MIN_MET         0.002540
-#define MAT_TRAVEL_VEL_MAX              40000
+#define MAT_TRAVEL_VEL_MAX              4000
 #define MAT_TRAVEL_VEL_MAX_MET          12191
 #define MAT_TRAVEL_VEL_MET_TO_IMP       3.280851
 #define MAT_TRAVEL_VEL_IMP_TO_MET       3047 / 10000
-#define MAT_TRAVEL_VEL_MIN              1000
+#define MAT_TRAVEL_VEL_MIN              100
 #define MAT_TRAVEL_VEL_MIN_MET          304
 #define PICTURE_RATE_250MHZ             0
 #define PICTURE_RATE_500MHZ             1
@@ -65,6 +65,8 @@
 #define MSG_CODE_SAVE_TEST              0x02
 #define MSG_CODE_DISPLAY_SIG            0x03
 #define MSG_CODE_MSMT_MODE              0x04
+#define MSG_CODE_CH_DISTANCE            0x05
+#define MSG_CODE_CH_VELOCITY            0x06
 #define MSG_CODE_DISTANCE               0x00
 #define MSG_CODE_VELOCITY               0x01
 #define MSG_CODE_RUN_A_TEST             0x07
@@ -99,6 +101,8 @@ public:
     bool Set_Control_Dialog( const QByteArray );
 
     QByteArray BufferAmpGain;
+    QByteArray BufferDensity;
+    QByteArray BufferDistance;
     QByteArray BufferCalc;
     QByteArray BufferCaptureRate;
     QByteArray BufferCycleTime;
@@ -106,6 +110,7 @@ public:
     QByteArray BufferEMethod;
     QByteArray BufferPicSave;
     QByteArray BufferPulseRate;
+    QByteArray BufferVelocity;
     QByteArray BufferVolt;
     QByteArray BufferWaveType;
 
@@ -113,23 +118,35 @@ public:
     bool CheckCalc;
     bool CheckCaptureRate;
     bool CheckDataSave;
+    bool CheckDensity;
+    bool CheckDistance;
     bool CheckEMethod;
     bool CheckFormChange;
     bool CheckPicSave;
     bool CheckPulseRate;
+    bool CheckVelocity;
     bool CheckVolt;
     bool CheckWaveType;
 
 private slots:
+    void doubleSpinBoxDistance_valueChanged( double value );
+    void doubleSpinBoxVelocity_valueChanged( double value );
+
     void EditAmpGain();
     void EditCalc();
     void EditCaptureRate();
     void EditDataSave();
+    void EditDensity();
+    void EditDistance();
     void EditEMethod();
     void EditPicSave();
     void EditPulseRate();
+    void EditVelocity();
     void EditVolt();
     void EditWaveType();
+
+    void horizontalSliderPDistance_valueChanged( int value );
+    void horizontalSliderPVelocity_valueChanged( int value );
 
 private:
     Ui::Control_Dialog *ui;
@@ -163,13 +180,13 @@ private:
     unsigned Ret_CycleTime();
     bool Ret_DataSave();
     unsigned Ret_Density();
+    unsigned Ret_Distance();
     DataSet::EMethod Ret_comboBoxEMethod();
-    unsigned Ret_PTravelDistance();
-    unsigned Ret_PTravelVelocity();
     bool Ret_PicSave();
     DataSet::Pulse Ret_comboBoxPulseRate();
     DataSet::Wave Ret_comboBoxWaveType();
 //    DataSet::Units Ret_comboBoxUnits();
+    unsigned Ret_Velocity();
     DataSet::Voltage Ret_Voltage();
 
     void Set_comboBoxAmpGain();
@@ -189,9 +206,6 @@ private:
     void Set_Voltage();
 
 //C++ #define
-    static int Pulse_Index1(void) {return(0);}
-    static int Pulse_Index3(void) {return(1);}
-    static int Pulse_Index10(void) {return(2);}
     static int DataSave_Index_Off(void) {return(0);}
     static int DataSave_Index_On(void) {return(1);}
 

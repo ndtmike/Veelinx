@@ -649,6 +649,7 @@ void MainWindow::ProgramAmpGain(){
             QMessageBox::information(this,"showControl", "Problem Programming AmpGain",QMessageBox::Ok);
         }
     }
+    CD->CheckAmpGain = false;
 }
 
 /******************************************************************************
@@ -678,6 +679,7 @@ void MainWindow::ProgramCalc(){
             QMessageBox::information(this,"showControl", "Problem Programming Calc",QMessageBox::Ok);
         }
     }
+    CD->CheckCalc = false;
 }
 
 /******************************************************************************
@@ -707,6 +709,7 @@ void MainWindow::ProgramCaptureRate(){
             QMessageBox::information(this,"showControl", "Problem Programming CaptureRate",QMessageBox::Ok);
         }
     }
+    CD->CheckCaptureRate = false;
 }
 
 /******************************************************************************
@@ -736,6 +739,67 @@ void MainWindow::ProgramDataSave(){
             QMessageBox::information(this,"showControl", "Problem Programming DataSave",QMessageBox::Ok);
         }
     }
+    CD->CheckDataSave = false;
+}
+
+/******************************************************************************
+
+  Function:ProgramDensity()
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::ProgramDensity(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckDensity == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "Density Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferDensity;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted Density Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming Density",QMessageBox::Ok);
+        }
+    }
+    CD->CheckDensity = false;
+}
+
+/******************************************************************************
+
+  Function:ProgramDistance()
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::ProgramDistance(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckDistance == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "Distance Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferDistance;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted Distance Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming Distance",QMessageBox::Ok);
+        }
+    }
+    CD->CheckDistance = false;
 }
 
 /******************************************************************************
@@ -766,6 +830,7 @@ void MainWindow::ProgramEMethod(){
             QMessageBox::information(this,"showControl", "Problem Programming EMethod",QMessageBox::Ok);
         }
     }
+    CD->CheckEMethod = false;
 }
 
 /******************************************************************************
@@ -795,6 +860,7 @@ void MainWindow::ProgramPicSave(){
             QMessageBox::information(this,"showControl", "Problem Programming PicSave",QMessageBox::Ok);
         }
     }
+    CD->CheckPicSave = false;
 }
 
 /******************************************************************************
@@ -824,6 +890,38 @@ void MainWindow::ProgramPulseRate(){
             QMessageBox::information(this,"showControl", "Problem Programming PulseRate",QMessageBox::Ok);
         }
     }
+    CD->CheckPulseRate = false;
+}
+
+/******************************************************************************
+
+  Function:ProgramVelocity()
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::ProgramVelocity(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckVelocity == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information(this, "showControl", "Velocity Changed", QMessageBox::Ok);
+#endif
+        msg = CD->BufferVelocity;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted Velocity Changed",QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"showControl", "Problem Programming Velocity"
+                                                         "",QMessageBox::Ok);
+        }
+    }
+    CD->CheckVelocity = false;
 }
 
 /******************************************************************************
@@ -853,6 +951,7 @@ void MainWindow::ProgramVolt(){
             QMessageBox::information(this,"showControl", "Problem Programming Volt",QMessageBox::Ok);
         }
     }
+    CD->CheckVolt = false;
 }
 
 /******************************************************************************
@@ -907,9 +1006,8 @@ void MainWindow::ProgramWaveType(){
         }else{
             QMessageBox::information(this,"ProgramWaveType", "Problem Programming EType",QMessageBox::Ok);
         }
-
-
     }
+    CD->CheckWaveType = false;
 }
 
 /******************************************************************************
@@ -1037,11 +1135,15 @@ void MainWindow::showControl()
                 ProgramCalc();
                 ProgramCaptureRate();
                 ProgramDataSave();
+                ProgramDensity();
+                ProgramDistance();
                 ProgramEMethod();
                 ProgramPicSave();
                 ProgramPulseRate();
+                ProgramVelocity();
                 ProgramVolt();
                 ProgramWaveType();
+                CD->CheckFormChange = false;
             }
         }
     }else{
