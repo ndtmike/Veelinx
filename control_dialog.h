@@ -110,6 +110,7 @@ public:
     QByteArray BufferEMethod;
     QByteArray BufferPicSave;
     QByteArray BufferPulseRate;
+    QByteArray BufferRun;
     QByteArray BufferVelocity;
     QByteArray BufferVolt;
     QByteArray BufferWaveType;
@@ -124,6 +125,7 @@ public:
     bool CheckFormChange;
     bool CheckPicSave;
     bool CheckPulseRate;
+    bool CheckRun;
     bool CheckVelocity;
     bool CheckVolt;
     bool CheckWaveType;
@@ -141,6 +143,7 @@ private slots:
     void EditEMethod();
     void EditPicSave();
     void EditPulseRate();
+    void EditRun();
     void EditVelocity();
     void EditVolt();
     void EditWaveType();

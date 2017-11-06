@@ -45,6 +45,7 @@ Control_Dialog::Control_Dialog(QWidget *parent) :
     CheckEMethod = false;
     CheckPicSave = false;
     CheckPulseRate = false;
+    CheckRun = false;
     CheckWaveType = false;
     CheckVelocity = false;
     CheckVolt = false;
@@ -249,6 +250,27 @@ void Control_Dialog::EditPicSave(){
 void Control_Dialog::EditPulseRate(){
     CheckPulseRate = true;
     CheckFormChange = true;
+}
+
+/******************************************************************************
+
+  Function: void EditPulseRate()
+  Description:
+  ============
+
+******************************************************************************/
+void Control_Dialog::EditRun(){
+
+    QByteArray ba500;
+    ba500.resize( REMOTE_CTRL_MSG_SIZE );
+    ba500[0] = REMOTE_CTRL_HEADER; ba500[1] =  MSG_CODE_RUN_A_TEST;
+    ba500[2] = MSG_CODE_VELOCITY;
+    ba500[3] = MSG_CODE_FILL; ba500[4] = REMOTE_CTRL_FOOTER;
+
+    CheckRun = true;
+    CheckFormChange = true;
+
+    BufferRun = ba500;
 }
 
 /******************************************************************************
@@ -1533,6 +1555,9 @@ bool Control_Dialog::Set_Control_Dialog( const QByteArray header )
         }
     }
     }
+
+    connect(ui->comboBoxRun, SIGNAL(currentIndexChanged( int )),this, SLOT( EditRun()));
+
     return( ok );
 }
 

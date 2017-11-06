@@ -186,6 +186,7 @@ private:
     void ProgramEMethod();
     void ProgramPicSave();
     void ProgramPulseRate();
+    void ProgramRun();
     void ProgramVelocity();
     void ProgramVolt();
     void ProgramWaveType();

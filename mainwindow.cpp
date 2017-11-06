@@ -895,6 +895,36 @@ void MainWindow::ProgramPulseRate(){
 
 /******************************************************************************
 
+  Function:ProgramRun()
+
+  Description:
+  ============
+
+******************************************************************************/
+void MainWindow::ProgramRun(){
+    const QByteArray no_change = "no change";
+    QByteArray msg = no_change;
+
+    if( CD->CheckRun == true ){
+#ifdef QT_DEBUG
+        QMessageBox::information( this, "showControl", "Run Changed", QMessageBox::Ok );
+#endif
+        msg = CD->BufferRun;
+    }
+    if( msg != no_change ){
+        if( sendVmeterMsg( msg )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"showControl", "Accepted Run Changed",QMessageBox::Ok);
+#endif
+        }else{
+//            QMessageBox::information(this,"showControl", "Problem Programming Run",QMessageBox::Ok);
+        }
+    }
+    CD->CheckRun = false;
+}
+
+/******************************************************************************
+
   Function:ProgramVelocity()
 
   Description:
@@ -1104,7 +1134,7 @@ bool MainWindow::sendVmeterMsg( QByteArray msg )
 
     QByteArray confirm_msg = Data;
 
-    if(confirm_msg[0] == 'Z') return_result = true;
+    if( confirm_msg[0] == 'Z'  ) return_result = true;
 
     return(return_result);
 }
@@ -1125,8 +1155,7 @@ void MainWindow::showControl()
 
     serialTimeOut->stop();
 
-    if( current_settings == true ){
-        DataSet::Prop proptest;
+    if( current_settings == true ){        DataSet::Prop proptest;
         CD->setModal( true );
         if( CD->exec() == QDialog::Accepted ){
             if(CD->CheckFormChange == true){
@@ -1140,6 +1169,7 @@ void MainWindow::showControl()
                 ProgramEMethod();
                 ProgramPicSave();
                 ProgramPulseRate();
+                ProgramRun();
                 ProgramVelocity();
                 ProgramVolt();
                 ProgramWaveType();
