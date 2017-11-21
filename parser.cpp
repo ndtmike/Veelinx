@@ -64,23 +64,23 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     n = sl.indexOf(QRegExp(".*Gain:.*")); // .* wildcard for QRegExp
     return_prop.PropAmpGain = QStringtoAmpGain( sl.at(n));
 
-    n=sl.indexOf(QRegExp(".*Measured.*"));
+    n = sl.indexOf(QRegExp(".*Measured.*"));
 //    return_prop.PropCalc = QStringtoCalc( sl.at(n));
 
-    n=sl.indexOf(QRegExp(".*Young's modulus:.*"));
+    n = sl.indexOf(QRegExp(".*Young's modulus:.*"));
     return_prop.PropEMethod = QStringtoEMethod(sl.at(n));
 
-    n=sl.indexOf(QRegExp(".*Rate:.*"));
+    n = sl.indexOf(QRegExp(".*Rate:.*"));
     return_prop.PropCaptureRate = QStringtoRate(sl.at(n));
 
-    n=sl.indexOf(QRegExp(".*feet/second"));
+    n = sl.indexOf(QRegExp(".*feet/second"));
     if(n != -1 ){
         return_prop.PropUnits = DataSet::Imperial;
     }else{
         return_prop.PropUnits = DataSet::Metric;
     }
 
-    n=sl.indexOf(QRegExp("Measured P-VELOCITY:.*"));
+    n = sl.indexOf(QRegExp("Measured P-VELOCITY:.*"));
     if(n != -1 ){
         return_prop.PropMeaseMode = DataSet::Velocity;
     }else{
@@ -102,11 +102,13 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
 DataSet::Test Parser::CreateTest(QStringList sl)
 {
     DataSet::Test return_test;
-    int n;//index
+    int n = 0;//index
     bool ok = true;
 
-    QStringList header = sl.mid(0,8);
-    QStringList adc_data = sl.mid(8,sl.size()-8);
+    n = FindADC( sl );
+
+    QStringList header = sl.mid( 0, n );
+    QStringList adc_data = sl.mid( n, sl.size() - n );
 
     return_test.TestProp = CreateProp( header);
 
@@ -121,6 +123,19 @@ DataSet::Test Parser::CreateTest(QStringList sl)
     return(return_test);
 }
 
+int Parser::FindADC( QStringList sl ){
+
+    int x;
+    for( x = 0; x < sl.size(); ++x ){
+        bool ok = false;
+        QString teststring = sl.at(x);
+        teststring.toInt( &ok );
+        if( ok == true){
+            break;
+        }
+    }
+    return(x);
+}
 
 QByteArray Parser::RemoveAscii(QByteArray &in){
 

@@ -261,16 +261,26 @@ void Control_Dialog::EditPulseRate(){
 ******************************************************************************/
 void Control_Dialog::EditRun(){
 
-    QByteArray ba500;
-    ba500.resize( REMOTE_CTRL_MSG_SIZE );
-    ba500[0] = REMOTE_CTRL_HEADER; ba500[1] =  MSG_CODE_RUN_A_TEST;
-    ba500[2] = MSG_CODE_VELOCITY;
-    ba500[3] = MSG_CODE_FILL; ba500[4] = REMOTE_CTRL_FOOTER;
+    const char yes = 0x01;
+    const char no = 0x00;
+
+    QByteArray bayes;
+    bayes.resize( REMOTE_CTRL_MSG_SIZE );
+    bayes[0] = REMOTE_CTRL_HEADER; bayes[1] =  MSG_CODE_RUN_A_TEST;
+    bayes[2] = yes;
+    bayes[3] = MSG_CODE_FILL; bayes[4] = REMOTE_CTRL_FOOTER;
+
+    QByteArray bano;
+    bano.resize( REMOTE_CTRL_MSG_SIZE );
+    bano[0] = REMOTE_CTRL_HEADER; bano[1] = MSG_CODE_RUN_A_TEST;
+    bano[2] = no;
+    bano[3] = MSG_CODE_FILL; bano[4] = REMOTE_CTRL_FOOTER;
 
     CheckRun = true;
     CheckFormChange = true;
 
-    BufferRun = ba500;
+    BufferRun = ui->comboBoxRun->currentText() == QString( "Yes" )
+            ? bayes : bano ;
 }
 
 /******************************************************************************

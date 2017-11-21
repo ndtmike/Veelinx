@@ -51,8 +51,6 @@ public:
     std::vector<DataSet::Test>::iterator GetBeginItr();
     std::vector<DataSet::Test>::iterator GetEndItr();
 
-    DataSet::Test CreateTest( QStringList sl);
-
     QPolygonF ToQPFADC(std::vector<DataSet::Test>::iterator itr_test);
     QStringList ToQSLADC( std::vector<DataSet::Test>::iterator itr_test );
     QString ToQStrAmpGain(std::vector<DataSet::Test>::iterator itr_test);
@@ -71,6 +69,8 @@ private:
 
     std::vector<long> CreateADC( QStringList sl );
     DataSet::Prop CreateProp(QStringList sl);
+    DataSet::Test CreateTest( QStringList sl);
+    int FindADC( QStringList sl );
     qint64 HexQByteArraytoInt(QByteArray &in);
     QByteArray RemoveAscii(QByteArray &in);
 
