@@ -1158,7 +1158,7 @@ void MainWindow::showControl()
     if( current_settings == true ){        DataSet::Prop proptest;
         CD->setModal( true );
         if( CD->exec() == QDialog::Accepted ){
-            if(CD->CheckFormChange == true){
+            if( CD->CheckFormChange == true ){
                 proptest = CD->Return_Control_Dialog();
                 ProgramAmpGain();
                 ProgramCalc();

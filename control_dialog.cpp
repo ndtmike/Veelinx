@@ -497,6 +497,7 @@ bool Control_Dialog::IntToDataSave( int data_in, bool* ok )
         returndatasave = false;
         *ok = true;
     }
+    connect(ui->comboBoxDataSave, SIGNAL(currentIndexChanged( int )),this, SLOT( EditDataSave()));
     return( returndatasave );
 }
 
@@ -688,7 +689,6 @@ bool Control_Dialog::IntToPicSave( int data_in, bool* ok )
         returnpicsave = false;
         *ok = true;
     }
-
     connect(ui->comboBoxPicSave, SIGNAL(currentIndexChanged( int )),this, SLOT( EditPicSave()));
     return( returnpicsave );
 }
@@ -1073,18 +1073,18 @@ bool Control_Dialog::Ret_DataSave()
 {
     QByteArray bdst;
     bdst.resize( REMOTE_CTRL_MSG_SIZE );
-    bdst[0] = REMOTE_CTRL_HEADER; bdst[1] =  MSG_CODE_E_MU_CALC_METHOD;
-    bdst[2] = CALC_METHOD_ARB_MU;
+    bdst[0] = REMOTE_CTRL_HEADER; bdst[1] =  MSG_CODE_SAVE_TEST;
+    bdst[2] = MSG_CODE_ON;
     bdst[3] = MSG_CODE_FILL; bdst[4] = REMOTE_CTRL_FOOTER;
     QByteArray bdsf;
     bdsf.resize( REMOTE_CTRL_MSG_SIZE );
-    bdsf[0] = REMOTE_CTRL_HEADER; bdsf[1] =  MSG_CODE_E_MU_CALC_METHOD;
-    bdsf[2] = CALC_METHOD_ARB_MU;
+    bdsf[0] = REMOTE_CTRL_HEADER; bdsf[1] =  MSG_CODE_SAVE_TEST;
+    bdsf[2] = MSG_CODE_OFF;
     bdsf[3] = MSG_CODE_FILL; bdsf[4] = REMOTE_CTRL_FOOTER;
 
     bool returnbool;
     int intvar = ui->comboBoxDataSave->currentIndex();
-    returnbool = intvar == 0 ? true : false;
+    returnbool = intvar == 0 ? false : true;
     BufferDataSave = returnbool == true ? bdst : bdsf ;
 
     return(returnbool);
@@ -1222,19 +1222,19 @@ bool Control_Dialog::Ret_PicSave(){
 
     QByteArray bpst;
     bpst.resize( REMOTE_CTRL_MSG_SIZE );
-    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_PULSE_FREQ;//??
-    bpst[2] = PULSES_PER_SEQ_1;
+    bpst[0] = REMOTE_CTRL_HEADER; bpst[1] =  MSG_CODE_DISPLAY_SIG;//??
+    bpst[2] = MSG_CODE_ON;
     bpst[3] = MSG_CODE_FILL; bpst[4] = REMOTE_CTRL_FOOTER;
 
     QByteArray bpsf;
     bpsf.resize( REMOTE_CTRL_MSG_SIZE );
-    bpsf[0] = REMOTE_CTRL_HEADER; bpsf[1] =  MSG_CODE_PULSE_FREQ;//??
-    bpsf[2] = PULSES_PER_SEQ_3;
+    bpsf[0] = REMOTE_CTRL_HEADER; bpsf[1] =  MSG_CODE_DISPLAY_SIG;//??
+    bpsf[2] = MSG_CODE_OFF;
     bpsf[3] = MSG_CODE_FILL; bpsf[4] = REMOTE_CTRL_FOOTER;
 
     bool returnbool;
     int intvar = ui->comboBoxPicSave->currentIndex();
-    returnbool = intvar == 0 ? true : false;
+    returnbool = intvar == 0 ? false : true;
     BufferPicSave = returnbool == true ? bpst : bpsf ;
     return(returnbool);
 }

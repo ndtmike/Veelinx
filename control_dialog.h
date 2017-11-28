@@ -84,6 +84,8 @@
 #define MSG_CODE_INITIAL_SETTINGS       0x40
 #define MSG_CODE_WATCHDOG_RESET         0x50
 #define MSG_CODE_FILL                   0xFF
+#define MSG_CODE_OFF                    0x00
+#define MSG_CODE_ON                     0x01
 
 namespace Ui {
 class Control_Dialog;
