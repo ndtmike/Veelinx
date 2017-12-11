@@ -255,9 +255,10 @@ void MainWindow::displayData()//main function that takes raw data and transforms
                 << tr("E Method: ")<< p.ToQStrEMethod(itr) << '\t'
                 << '\n'<<'\n'
                 << p.ToQSLADC(itr).join('\n');
-
-        GraphData->SetData(p.ToQPFADC(itr));
+                GraphData->SetData(p.ToQPFADC(itr));
     }
+
+    GraphData->show();
 
     console->setPlainText( buffer );
     DataUpload = true;
@@ -317,7 +318,6 @@ void MainWindow::endUpload()
         QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
         if( header == init ){
-//            ControlDialogData = true; //got ControlDialogData V-Meter is on
             if(!CD->Set_Control_Dialog( Data )){
                 QMessageBox::warning(this, "endUpload", tr("Check V-Meter Connected to PC and Turned on!"));
                 close();

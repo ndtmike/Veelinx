@@ -40,8 +40,8 @@ DataPlot::DataPlot(QWidget *parent )
 DataPlot::~DataPlot()
 {
 //delete symbol creates a problem.
-//    delete Curve;
-//    delete Grid;
+    delete Curve;
+    delete Grid;
 }
 
 /*
@@ -52,10 +52,11 @@ void DataPlot::createClasses()
 {
     Curve = new QwtPlotCurve;
     Grid = new QwtPlotGrid;
-//    Symbol = new QwtSymbol( QwtSymbol::Ellipse,
-//                QBrush( Qt::red ),
-//                QPen( Qt::red, 2 ),
-//                QSize( 4, 4 ) );
+    Symbol = new QwtSymbol( QwtSymbol::Ellipse,
+                QBrush( Qt::red ),
+                QPen( Qt::red, 2 ),
+                QSize( 4, 4 ) );
+    Curve->setSymbol( Symbol );
 }
 
 /*
