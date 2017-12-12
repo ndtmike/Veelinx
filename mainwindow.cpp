@@ -217,7 +217,7 @@ bool MainWindow::checkSerialPort()
 
 /******************************************************************************
 
-  Function: cleanData()
+  Function: displayData()
 
   Description:
   ============
@@ -227,11 +227,11 @@ bool MainWindow::checkSerialPort()
 
 void MainWindow::displayData()//main function that takes raw data and transforms to usable
 {
+    Parser p( this, Data );
+
     QString buffer = "";
     QTextStream display( &buffer );
     QStringList datalist;
-
-    Parser p( this, Data );
 
     qint64 i = 0;
 
@@ -245,7 +245,7 @@ void MainWindow::displayData()//main function that takes raw data and transforms
                 << tr("Test Number: ")<< i+1 <<'\t'
                 << tr("Test Date/Time: ")
                 << p.ToQDateTime(itr).toString(CurrentLocale.timeFormat(QLocale::ShortFormat))<<' '
-                << p.ToQDateTime(itr).toString(CurrentLocale.dateFormat(QLocale::ShortFormat))/*("MM/dd/yyyy hh:mm")*/ <<'\n'
+                << p.ToQDateTime(itr).toString(CurrentLocale.dateFormat(QLocale::ShortFormat))<<'\n' /*("MM/dd/yyyy hh:mm")*/
                 << tr("Transit Time: ")<< p.ToQStrTransitTime(itr) << ' ' << QChar(0xB5) << 's' << '\n'
                 << tr("Capture Rate: ")<< p.ToQStrRate(itr) << '\t'
                 << tr("Amplifier Gain ") << p.ToQStrAmpGain(itr) << '\t'
@@ -257,8 +257,6 @@ void MainWindow::displayData()//main function that takes raw data and transforms
                 << p.ToQSLADC(itr).join('\n');
                 GraphData->SetData(p.ToQPFADC(itr));
     }
-
-    GraphData->show();
 
     console->setPlainText( buffer );
     DataUpload = true;
@@ -438,7 +436,7 @@ void MainWindow::initActionsConnections()
     connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(help()));
     connect(ui->action_Open, SIGNAL(triggered()), this, SLOT(openFile()));
-    connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(displayData()));
+    connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(showGraphData()));
 
     connect(ui->actionDeutche, SIGNAL(triggered()), this, SLOT(lngDeutche()));
     connect(ui->actionEnglish, SIGNAL(triggered()), this, SLOT(lngEnglish()));
@@ -1077,6 +1075,23 @@ bool MainWindow::saveAs()
         return false;
     saveFileName = files.at(0);
     return saveFile(files.at(0));
+}
+
+/******************************************************************************
+
+  Function: showGraphData()
+
+  Description:
+  ============
+  Displays the Graph (slot)
+******************************************************************************/
+void MainWindow::showGraphData()
+{
+    if( DataUpload == true ){
+        GraphData->show();
+    }else{
+        QMessageBox::information( this, "Veelinx", tr("Upload Data Please"));
+    }
 }
 
 /******************************************************************************

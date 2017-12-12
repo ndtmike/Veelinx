@@ -155,6 +155,7 @@ private slots:
     void openSerialPort();
     void processSerialPort();
     void readData();
+    void showGraphData();
     bool saveAs();
     void showSplash();
     void showControl();

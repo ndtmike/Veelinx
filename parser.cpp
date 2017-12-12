@@ -20,28 +20,28 @@ Parser::Parser( QWidget*, const QByteArray &in ) //no parameter for QWidget Poin
 {
     QString strcopy( in );
     QStringList strlistcopy = strcopy.split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-
+    const QString const_james = "James Instruments V-METER MK IV";
+    const QString const_end = "End";
     Data = new DataSet;
+    QStringList working;
 
-    DataSet::Test newtest = CreateTest(strlistcopy);
-
-    Data->AddTest(newtest);
+    QStringList::const_iterator constIterator;
+    for( constIterator = strlistcopy.constBegin(); constIterator != strlistcopy.constEnd(); ++constIterator ){
+        if( (*constIterator) == const_james ){
+            working << (*constIterator);
+            for(;(*constIterator) != const_end; ++constIterator){
+                working << (*constIterator);
+            }
+            DataSet::Test newtest = CreateTest(working);
+            Data->AddTest(newtest);
+        }
+        working.clear();
+    }
 }
 
 Parser::~Parser()
 {
 }
-
-std::vector<DataSet::Test>::iterator Parser::GetBeginItr()
-{
-    return(Data->GetBeginItr());
-}
-
-std::vector<DataSet::Test>::iterator Parser::GetEndItr()
-{
-    return(Data->GetEndItr());
-}
-
 
 std::vector<long> Parser::CreateADC(QStringList sl)
 {
@@ -98,7 +98,6 @@ DataSet::Prop Parser::CreateProp(QStringList sl)
     return(return_prop);
 }
 
-
 DataSet::Test Parser::CreateTest(QStringList sl)
 {
     DataSet::Test return_test;
@@ -123,6 +122,27 @@ DataSet::Test Parser::CreateTest(QStringList sl)
     return(return_test);
 }
 
+std::vector<DataSet::Test>::iterator Parser::GetBeginItr()
+{
+    return(Data->GetBeginItr());
+}
+
+std::vector<DataSet::Test>::iterator Parser::GetEndItr()
+{
+    return(Data->GetEndItr());
+}
+
+qint64 Parser::HexQByteArraytoInt(QByteArray &in)
+{
+    QByteArray data = in;
+    bool ok;
+    qint64 out;
+
+    data = data.toHex(); //convert to hex string
+    out = data.toInt( &ok, 16 );
+    return(out);
+}
+
 int Parser::FindADC( QStringList sl ){
 
     int x;
@@ -144,17 +164,6 @@ QByteArray Parser::RemoveAscii(QByteArray &in){
     for(qint16 i=0; i<in.size();++i){
         out[i]=in[i]-48;//removes ascii offset
     }
-    return(out);
-}
-
-qint64 Parser::HexQByteArraytoInt(QByteArray &in)
-{
-    QByteArray data = in;
-    bool ok;
-    qint64 out;
-
-    data = data.toHex(); //convert to hex string
-    out = data.toInt( &ok, 16 );
     return(out);
 }
 
@@ -499,5 +508,3 @@ QString Parser::ToQStrTransitTime(std::vector<DataSet::Test>::iterator itr_test)
 
     return( return_string );
 }
-
-

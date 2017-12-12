@@ -45,6 +45,7 @@ class Parser:QWidget
 {
     Q_OBJECT
 public:
+
     Parser( QWidget* parent = 0 , const QByteArray &in = "");
     ~Parser();
 
