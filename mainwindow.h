@@ -48,18 +48,21 @@
 #define MAINWINDOW_H
 
 #include <QtCore/QtGlobal>
-#include <QIODevice>
-#include <QMainWindow>
-#include <QTextStream>
-#include <QMessageBox>
 #include <QFileDialog>
+#include <QInputDialog>
+#include <QIODevice>
+#include <QList>
 #include <QLocale>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QProcess>
 #include <QtSerialPort/QSerialPort>
 #include <QSerialPortInfo>
+#include <QTextStream>
 #include <QTranslator>
 #include <QTimer>
-#include <QList>
-#include <QProcess>
+
+
 
 #include <vector>
 
@@ -160,6 +163,7 @@ private slots:
     bool saveAs();
     void showSplash();
     void showControl();
+    void uploadData();
 
 private:
 
@@ -190,6 +194,7 @@ private:
     void ProgramPicSave();
     void ProgramPulseRate();
     void ProgramRun();
+    void ProgramUpload(int test_number );
     void ProgramVelocity();
     void ProgramVolt();
     void ProgramWaveType();

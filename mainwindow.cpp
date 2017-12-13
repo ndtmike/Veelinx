@@ -229,6 +229,7 @@ bool MainWindow::checkSerialPort()
 void MainWindow::displayData()//main function that takes raw data and transforms to usable
 {
     Parser p( this, Data );
+    console->setPlainText("");
 
     QString buffer = "";
     QTextStream display( &buffer );
@@ -439,6 +440,7 @@ void MainWindow::initActionsConnections()
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(help()));
     connect(ui->action_Open, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(ui->actionPlot, SIGNAL(triggered()), this, SLOT(showGraphData()));
+    connect(ui->actionUpload_Data, SIGNAL(triggered()), this, SLOT(uploadData()));
 
     connect(ui->actionDeutche, SIGNAL(triggered()), this, SLOT(lngDeutche()));
     connect(ui->actionEnglish, SIGNAL(triggered()), this, SLOT(lngEnglish()));
@@ -1042,6 +1044,37 @@ void MainWindow::ProgramWaveType(){
 
 /******************************************************************************
 
+  Function:ProgramUpload()
+
+  Description:
+  ============
+
+
+******************************************************************************/
+void MainWindow::ProgramUpload( int test_number){
+
+    QByteArray b;
+    b.resize( REMOTE_CTRL_MSG_SIZE );
+    b[0] = REMOTE_CTRL_HEADER; b[1] =  MSG_CODE_REVIEW_TEST_NUM;
+    b[2] = test_number / 0xff; //make it a char
+    b[3] = test_number & 0xff;
+    b[4] = REMOTE_CTRL_FOOTER;
+//    if( GetCurrentSettings() ){//reset V-Meter
+//        Data = ""; //clear data
+        if( sendVmeterMsg( b )){
+#ifdef QT_DEBUG
+            QMessageBox::information(this,"ProgramUpload", "Accepted Test Changed", QMessageBox::Ok);
+#endif
+        }else{
+            QMessageBox::information(this,"ProgramUpload", "Problem Programming Test", QMessageBox::Ok);
+        }
+//    }else{
+//        QMessageBox::information(this,"ProgramUpload", "Problem Getting Current Settings", QMessageBox::Ok);
+//    }
+}
+
+/******************************************************************************
+
   Function: readData()
 
   Description:
@@ -1145,14 +1178,18 @@ bool MainWindow::sendVmeterMsg( QByteArray msg )
             serial->putChar(msg[i]);
         }
     }
-
-    QTime dieTime = QTime::currentTime().addSecs(2); // wait one second
+    QTime dieTime;
+    if(msg[1] ==  MSG_CODE_REVIEW_TEST_NUM ){
+        dieTime = QTime::currentTime().addSecs(5); // wait five second
+    }else{
+        dieTime = QTime::currentTime().addSecs(2); // wait two second
+    }
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     QByteArray confirm_msg = Data;
 
-    if( confirm_msg[0] == 'Z'  ) return_result = true;
+    if( confirm_msg[0] == 'Z' || confirm_msg[0] == '\r'  ) return_result = true;
 
     return(return_result);
 }
@@ -1226,4 +1263,32 @@ void MainWindow::showSplash()
     QTimer* init_timer = new QTimer(this);
     init_timer->singleShot(five_sec, this, SLOT(processSerialPort()));
 #endif
+}
+
+/******************************************************************************
+
+  Function: uploadData
+
+  Description:
+  ============
+  Get Data File to Upload
+
+******************************************************************************/
+void MainWindow::uploadData()
+{
+    const int max_test_number = 1800;
+    const int min_test_number = 0;
+    const int step = 1;
+    int test_number;
+    bool ok = false;
+
+    QInputDialog input;
+    test_number = input.getInt(this, tr("Test Number"), tr("Please Enter the Test Number (between 0 and 1800):"),
+                               1,min_test_number,max_test_number, step, &ok);
+    if(ok == true){
+#ifdef QT_DEBUG
+        QMessageBox::information((this), tr("Test Number"), tr("Test Number OK!"));
+#endif
+        ProgramUpload( test_number );
+    }
 }

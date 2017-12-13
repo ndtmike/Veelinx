@@ -69,6 +69,7 @@
     <addaction name="menuLanguage"/>
     <addaction name="actionPlot"/>
     <addaction name="actionControl"/>
+    <addaction name="actionUpload_Data"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
@@ -193,6 +194,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionUpload_Data">
+   <property name="text">
+    <string>&amp;Upload Data</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
  </widget>
