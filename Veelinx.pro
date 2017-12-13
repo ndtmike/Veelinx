@@ -21,7 +21,8 @@ SOURCES += \
     splash.cpp \
     dataplot.cpp \
     inst_data.cpp \
-    control_dialog.cpp
+    control_dialog.cpp \
+    uploadmsg.cpp
 
 
 HEADERS += \
@@ -31,13 +32,15 @@ HEADERS += \
     splash.h \
     dataplot.h \
     inst_data.h \
-    control_dialog.h
+    control_dialog.h \
+    uploadmsg.h
 
 
 FORMS += \
     mainwindow.ui \
     splash.ui \
-    control_dialog.ui
+    control_dialog.ui \
+    uploadmsg.ui
 
 RESOURCES += \
     terminal.qrc

@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     GraphData = new DataPlot(this);
     CD = new Control_Dialog(this);
     Splash = new SplashDialog();
+    UploadProgress = new UploadMsg(this);
 
     CurrentLocale = QLocale::system(); //standardized number strings
     QString systemlocale = CurrentLocale.name();
@@ -241,7 +242,7 @@ void MainWindow::displayData()//main function that takes raw data and transforms
         QLocale::setDefault(CurrentLocale);
         LNGLoadTranslator();
 
-        display << "James Instruments Inc. V-Meter MK IV Veelinx 1.0"<< '\n'
+        display << '\n' << "James Instruments Inc. V-Meter MK IV Veelinx 1.0"<< '\n'
                 << tr("Test Number: ")<< i+1 <<'\t'
                 << tr("Test Date/Time: ")
                 << p.ToQDateTime(itr).toString(CurrentLocale.timeFormat(QLocale::ShortFormat))<<' '
@@ -254,7 +255,7 @@ void MainWindow::displayData()//main function that takes raw data and transforms
                 << tr("Calculate: ") << p.ToQStrCalc(itr) << '\t'
                 << tr("E Method: ")<< p.ToQStrEMethod(itr) << '\t'
                 << '\n'<<'\n'
-                << p.ToQSLADC(itr).join('\n');
+                << p.ToQSLADC(itr).join('\n')<< '\n';
                 GraphData->SetData(p.ToQPFADC(itr));
     }
 
@@ -324,6 +325,7 @@ void MainWindow::endUpload()
             DataUpload = false;
         }else if( header[0] == init[0] ){ //confirming change
         }else if(Data != "" ){        //uploading data
+            UploadProgress->hide();
             QMessageBox::information(this, "endUpload", tr("Upload Complete"));
             displayData();
             ui->actionSaveAs->setEnabled(true);
@@ -1051,6 +1053,7 @@ void MainWindow::readData()
 {
     serialTimeOut->start(500);
     Data += serial->readAll();
+    UploadProgress->show();
 }
 
 

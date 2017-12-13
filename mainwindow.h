@@ -69,6 +69,7 @@
 #include "inst_data.h"
 #include "parser.h"
 #include "splash.h"
+#include "uploadmsg.h"
 
 //test Regular Operation
 #define TEST_REG
@@ -175,6 +176,7 @@ private:
     QTimer *serialTimeOut;
     QTranslator* Translator;
     Ui::MainWindow *ui;
+    UploadMsg* UploadProgress;
 
     bool checkSerialPort();
     bool GetCurrentSettings();
