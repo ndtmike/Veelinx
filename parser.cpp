@@ -185,7 +185,7 @@ DataSet::AmpGain Parser::QStringtoAmpGain(QString in)
         return_value = DataSet::Gain_100;
     }else if( in.contains(" 250 ")){
         return_value = DataSet::Gain_250;
-    }else if( in.contains(" 500 ")){
+    }else/*if( in.contains(" 500 "))*/{
         return_value = DataSet::Gain_500;
     }
 
@@ -268,7 +268,7 @@ DataSet::EMethod Parser::QStringtoEMethod(QString in)
         return_value = DataSet::SimpleE;
     }else if( in.contains("ARBITRARY")){
         return_value = DataSet::ArbMu;
-    }else if( in.contains("DERIVED")){
+    }else/*if( in.contains("DERIVED"))*/{
         return_value = DataSet::DerivedMu;
     }
 
@@ -286,7 +286,7 @@ DataSet::Rate Parser::QStringtoRate(QString in)
         return_value = DataSet::RATE_500KHZ;
     }else if( in.contains(tr(" 1.0 mHz "))){
         return_value = DataSet::RATE_1000KHZ;
-    }else if( in.contains(tr(" 2.0 mHz "))){
+    }else/* if( in.contains(tr(" 2.0 mHz ")))*/{
         return_value = DataSet::RATE_2000KHZ;
     }
 
@@ -299,7 +299,7 @@ DataSet::Wave Parser::QStringtoWave(QString in)
 
     if( in.contains("'P'")){
         return_value = DataSet::PWave;
-    }else if( in.contains("'S'")){
+    }else /*if( in.contains("'S'"))*/{
         return_value = DataSet::SWave;
     }
 

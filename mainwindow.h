@@ -48,18 +48,21 @@
 #define MAINWINDOW_H
 
 #include <QtCore/QtGlobal>
-#include <QIODevice>
-#include <QMainWindow>
-#include <QTextStream>
-#include <QMessageBox>
 #include <QFileDialog>
+#include <QInputDialog>
+#include <QIODevice>
+#include <QList>
 #include <QLocale>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QProcess>
 #include <QtSerialPort/QSerialPort>
 #include <QSerialPortInfo>
+#include <QTextStream>
 #include <QTranslator>
 #include <QTimer>
-#include <QList>
-#include <QProcess>
+
+
 
 #include <vector>
 
@@ -72,7 +75,7 @@
 #include "uploadmsg.h"
 
 //test Regular Operation
-#define TEST_REG
+//#define TEST_REG
 
 //test Graph
 //#define TEST_GRAPH
@@ -101,7 +104,7 @@
 #define MSG_CODE_WAVE_TYPE              0x20
 #define MSG_CODE_DENSITY                0x21
 #define MSG_CODE_E_MU_CALC_METHOD       0x22
-#define MSG_CODE_REVIEW_TEST_NUM        0x30
+//#define MSG_CODE_REVIEW_TEST_NUM        (0x30)
 #define MSG_CODE_INITIAL_SETTINGS       0x40
 #define MSG_CODE_WATCHDOG_RESET         0x50
 #define MSG_CODE_FILL                   0xFF
@@ -160,6 +163,7 @@ private slots:
     bool saveAs();
     void showSplash();
     void showControl();
+    void uploadData();
 
 private:
 
@@ -190,6 +194,7 @@ private:
     void ProgramPicSave();
     void ProgramPulseRate();
     void ProgramRun();
+    void ProgramUpload(int test_number );
     void ProgramVelocity();
     void ProgramVolt();
     void ProgramWaveType();

@@ -80,7 +80,7 @@
 #define MSG_CODE_SHEAR                  0x01
 #define MSG_CODE_DENSITY                0x21
 #define MSG_CODE_E_MU_CALC_METHOD       0x22
-#define MSG_CODE_REVIEW_TEST_NUM        0x30
+#define MSG_CODE_REVIEW_TEST_NUM        (0x30)
 #define MSG_CODE_INITIAL_SETTINGS       0x40
 #define MSG_CODE_WATCHDOG_RESET         0x50
 #define MSG_CODE_FILL                   0xFF

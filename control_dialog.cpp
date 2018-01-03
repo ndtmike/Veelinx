@@ -548,7 +548,7 @@ unsigned Control_Dialog::IntToDensity( char data_in_hi, char data_in_lo, bool* o
 ******************************************************************************/
 DataSet::EMethod Control_Dialog::IntToEMethod( int data_in , bool* ok ){
 
-    DataSet::EMethod return_e;
+    DataSet::EMethod return_e = DataSet::SimpleE;
     *ok = false;
     if( data_in >= CALC_METHOD_SIMPLE_E && data_in <= CALC_METHOD_ARB_MU ){
         switch (data_in){
@@ -583,7 +583,7 @@ DataSet::EMethod Control_Dialog::IntToEMethod( int data_in , bool* ok ){
 ******************************************************************************/
 DataSet::Calc Control_Dialog::IntToCalc( int data_in, bool* ok ){
 
-    DataSet::Calc return_Calc;
+    DataSet::Calc return_Calc = DataSet::Distance;
     *ok = false;
 
     if( data_in == PULSE_CALC_DISTANCE ){
@@ -856,7 +856,7 @@ DataSet::Voltage Control_Dialog::IntToVoltage( int data_in, bool* ok )
 DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain(){
 
     int intvar;
-    DataSet::AmpGain retampgain;
+    DataSet::AmpGain retampgain = DataSet::Gain_1;
     intvar = ui->comboBoxAmpGain->currentIndex();
 
 
@@ -951,7 +951,7 @@ DataSet::AmpGain Control_Dialog::Ret_comboBoxAmpGain(){
 ******************************************************************************/
 DataSet::Calc Control_Dialog::Ret_comboBoxCalc(){
     int intvar;
-    DataSet::Calc retcalc;
+    DataSet::Calc retcalc = DataSet::Velocity;
 
     QByteArray bdistance;
     bdistance.resize( REMOTE_CTRL_MSG_SIZE );
@@ -992,7 +992,7 @@ DataSet::Calc Control_Dialog::Ret_comboBoxCalc(){
 DataSet::Rate Control_Dialog::Ret_comboBoxCaptureRate(){
 
     int intvar;
-    DataSet::Rate retrate;
+    DataSet::Rate retrate = DataSet::RATE_250KHZ;
     QByteArray bpr250;
     bpr250.resize( REMOTE_CTRL_MSG_SIZE );
     bpr250[0] = REMOTE_CTRL_HEADER; bpr250[1] =  MSG_CODE_PICTURE_RATE;
@@ -1145,7 +1145,7 @@ unsigned Control_Dialog::Ret_Distance(){
 ******************************************************************************/
 DataSet::EMethod Control_Dialog::Ret_comboBoxEMethod(){
     int intvar;
-    DataSet::EMethod retemethod;
+    DataSet::EMethod retemethod = DataSet::SimpleE;
     QByteArray bearbmu;
     bearbmu.resize( REMOTE_CTRL_MSG_SIZE );
     bearbmu[0] = REMOTE_CTRL_HEADER; bearbmu[1] =  MSG_CODE_E_MU_CALC_METHOD;
@@ -1248,7 +1248,7 @@ bool Control_Dialog::Ret_PicSave(){
 ******************************************************************************/
 DataSet::Pulse Control_Dialog::Ret_comboBoxPulseRate(){
     int intvar;
-    DataSet::Pulse retpulse;
+    DataSet::Pulse retpulse = DataSet::PulsePerSeq_3;
     QByteArray bpr1;
     bpr1.resize( REMOTE_CTRL_MSG_SIZE );
     bpr1[0] = REMOTE_CTRL_HEADER; bpr1[1] =  MSG_CODE_PULSE_FREQ;//??
@@ -1306,7 +1306,7 @@ DataSet::Wave Control_Dialog::Ret_comboBoxWaveType(){
     bswave[3] = MSG_CODE_FILL; bpwave[4] = REMOTE_CTRL_FOOTER;
 
     int intvar;
-    DataSet::Wave retwave;
+    DataSet::Wave retwave = DataSet::PWave;
     intvar = ui->comboBoxWaveType->currentIndex();
     switch (intvar) {
     case 0:
@@ -1387,7 +1387,7 @@ DataSet::Voltage Control_Dialog::Ret_Voltage(){
     bvoltlo[3] = MSG_CODE_FILL; bvoltlo[4] = REMOTE_CTRL_FOOTER;
 
     int intvar;
-    DataSet::Voltage retvolt;
+    DataSet::Voltage retvolt = DataSet::Hi;
     intvar = ui->comboBoxVoltage->currentIndex();
     switch (intvar) {
     case 0:
